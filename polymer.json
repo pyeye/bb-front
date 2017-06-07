@@ -1,0 +1,24 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/md-app.html",
+  "fragments": [
+    "src/md-reservation.html",
+    "src/md-about.html"
+  ],
+  "sourceGlobs": [
+    "src/**/*",
+    "images/**/*",
+    "assets/**/*",
+    "fonts/**/*",
+    "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "app.js",
+    "bower_components/lightgallery.js/dist/**/*",
+    "bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js",
+    "bower_components/lightgallery.js/dist/css/lightgallery.min.css",
+    "bower_components/particles.js/particles.min.js",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}

@@ -1,0 +1,345 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+
+
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
+
+<link rel="import" href="bb-icons.html">
+
+<dom-module id="bb-home">
+
+  <template>
+
+  <style>
+  :host {
+    height: 100vh;
+    margin 0;
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  [main-title] {
+    margin-left: -40px;
+    font-weight: normal;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+  }
+
+  [main-title] .title-label {
+    @apply(--paper-font-display1);
+    font-size: 24px;
+    margin-left: 16px;
+    margin-right: 16px;
+    letter-spacing: 4px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+  }
+
+  [main-title] iron-icon {
+    --iron-icon-fill-color: #FFFFFF;
+    --iron-icon-height: 29px;
+    --iron-icon-width: 18px;
+  }
+
+  .container {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .item {
+    position: relative;
+    -webkit-transition: all 0.6s ease 0.15s;
+    transition: all 0.6s ease 0.15s;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    width: 80%;
+    height: 23.3%;
+    min-height: 1px;
+    margin: 8px auto;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                0 5px 5px -3px rgba(0, 0, 0, 0.4);
+  }
+
+  .image {
+    position: relative;
+    min-height: 1px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .item-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #fff;
+    @apply(--paper-font-display1);
+    z-index: 2;
+    letter-spacing: 4px;
+    font-family: 'Raleway', 'Roboto', sans-serif;
+  }
+
+  .item-cover {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: var(--app-accent-color);
+    opacity: 0.5;
+    -webkit-transition: opacity 0.6s ease 0.15s;
+    transition: opacity 0.6s ease 0.15s;
+  }
+
+  app-header {
+    background-color: var(--app-primary-color);
+    color: #FFFFFF;
+  }
+
+  app-header-layout {
+    height: 100vh;
+  }
+
+  paper-ripple {
+    color: var(--app-primary-color);
+  }
+
+  @media (min-width: 1450px) {
+    [main-title] {
+      margin-left: 0px;
+    }
+
+  }
+
+  @media (min-width: 1050px) {
+    .container {
+      top: 0;
+    }
+
+    .item:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1) ;
+      z-index: 1;
+    }
+
+    .item:hover .item-cover {
+      -webkit-transition: opacity 0.6s ease 0.15s;
+      transition: opacity 0.6s ease 0.15s;
+      opacity: 0.1;
+    }
+
+    .item:last-of-type:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(0px, -10px, 0px);
+      transform: scale3d(1.1, 1.1, 1) translate3d(0px, -10px, 0px);
+      z-index: 1;
+    }
+
+    #events:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(0px, 10px, 0px);
+      transform: scale3d(1.1, 1.1, 1) translate3d(0px, 10px, 0px);
+      z-index: 1;
+    }
+
+  }
+
+  @media (max-width: 550px) {
+    .item {
+      width: 100%;
+      margin: 0;
+      height: 24.9%;
+    }
+
+  }
+
+    </style>
+
+    <iron-media-query query="max-width: 1050px" query-matches="{{smallScreen}}"></iron-media-query>
+
+
+        <app-header id="header" effects="waterfall fade-background" reveals hidden$="[[!smallScreen]]">
+          <app-toolbar>
+            <slot select="[drawer-toggle]"></slot>
+            <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">Boris Bar</div><iron-icon icon="foot-right"></iron-icon></div>
+          </app-toolbar>
+        </app-header>
+
+        <div class="container">
+
+
+          <div class="item" id="events">
+            <a href="/events">
+              <iron-image  class="image" sizing="cover" preload fade placeholder="[[base64img.events]]" src="http://localhost/img/static/homepage/events.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">АФИША</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]" ></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/sales">
+              <iron-image id="sales" class="image" sizing="cover" preload fade placeholder="[[base64img.sales]]" src="http://localhost/img/static/homepage/news.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">АКЦИИ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/menu">
+              <iron-image id="menu" class="image" sizing="cover" preload fade placeholder="[[base64img.menu]]" src="http://localhost/img/static/homepage/menu.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">МЕНЮ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/gallery">
+              <iron-image id="gallery" class="image" sizing="cover" preload fade placeholder="[[base64img.gallery]]" src="http://localhost/img/static/homepage/gallery.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">ГАЛЕРЕЯ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
+        </div>
+
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'bb-home',
+
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior],
+
+      properties: {
+        base64img: {
+          type: Object,
+          value: function () {
+            return {
+              'sales': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAFAA0DAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABv/EABYBAQEBAAAAAAAAAAAAAAAAAAUBA//aAAwDAQACEAMQAAABBkKMcr//xAAXEAADAQAAAAAAAAAAAAAAAAADBAUC/9oACAEBAAEFAoc/LKklMJAf/8QAGREBAAMBAQAAAAAAAAAAAAAAAQACEgMi/9oACAEDAQE/Aa2TlkiY8k//xAAaEQACAgMAAAAAAAAAAAAAAAABAgADESJB/9oACAECAQE/AbG3OYWY9n//xAAfEAABAwMFAAAAAAAAAAAAAAABAAIRAxIxBBMhIkH/2gAIAQEABj8CkO2xp2XGMv7RlEmm26efF//EABgQAQEBAQEAAAAAAAAAAAAAAAERADFR/9oACAEBAAE/IbGgEegjhNfeUwhfYQN//9oADAMBAAIAAwAAABB//8QAGhEAAgMBAQAAAAAAAAAAAAAAAREAIVExYf/aAAgBAwEBPxBu0D3ShuRgqQ8DtG6uf//EABgRAAMBAQAAAAAAAAAAAAAAAAABESHw/9oACAECAQE/EJSXkMMH/8QAFxABAQEBAAAAAAAAAAAAAAAAAREhAP/aAAgBAQABPxBEbwoCTEMVpWzYTns17c0RuIWFXVe//9k=',
+              'events': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAHABMDAREAAhEBAxEB/8QAFgAAAwAAAAAAAAAAAAAAAAAAAQUG/8QAFwEBAAMAAAAAAAAAAAAAAAAABQIDBP/aAAwDAQACEAMQAAABNkUmk+qLW//EABkQAAIDAQAAAAAAAAAAAAAAAAMFAQIEBv/aAAgBAQABBQJuxnIjVN9TU1uUNJP/xAAcEQACAgIDAAAAAAAAAAAAAAABAgADEmETIeH/2gAIAQMBAT8BNOaNoeSoOG7M4tz/xAAbEQABBAMAAAAAAAAAAAAAAAAAAQIDERMxUf/aAAgBAgEBPwGN1PJKrRm6h//EACAQAAIBBAEFAAAAAAAAAAAAAAIDAQAEERIhE1FhgdH/2gAIAQEABj8CVo4o4EZ1ksiXPyn3AXRmK1QtgkU5x3j3TencsENyxG/mv//EABoQAQACAwEAAAAAAAAAAAAAAAEAESExYcH/2gAIAQEAAT8hcCRbiHWvEGmuHgo6IuMTPXsX5P/aAAwDAQACAAMAAAAQt/8A/8QAGhEBAAIDAQAAAAAAAAAAAAAAARExAEFRIf/aAAgBAwEBPxB0KRsW3SOLPPN1jlkIC2eYBp5//8QAHBEBAAICAwEAAAAAAAAAAAAAAQAxEUEhUXGB/9oACAECAQE/EBLjbor73UbwAW1Ejgc+T//EABoQAQEBAAMBAAAAAAAAAAAAAAERIQAxQWH/2gAIAQEAAT8QkrUoMZpSfuohZEsihM7lJVdbsXVWrdaR6Qivb9ef/9k=',
+              'gallery': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAGABEDAREAAhEBAxEB/8QAFgAAAwAAAAAAAAAAAAAAAAAABAYH/8QAGAEAAgMAAAAAAAAAAAAAAAAAAgQDBQf/2gAMAwEAAhADEAAAAZVRaY4rASrD/8QAGhAAAgIDAAAAAAAAAAAAAAAABAUAAwECFv/aAAgBAQABBQJUqp3w1pHWn9ILP//EAB0RAAEEAwEBAAAAAAAAAAAAAAEAAgMEEyIxEWH/2gAIAQMBAT8BqR04WFzI/Xbd+JguWiDk1J4VhkX/xAAfEQACAQIHAAAAAAAAAAAAAAACAwABEQQSFCExUfD/2gAIAQIBAT8BxD2Xy39zFtFi6hUd5pT7n//EAB8QAAIBAwUBAAAAAAAAAAAAAAECEgADESEyUZHR8P/aAAgBAQAGPwJbzLK2BM84nGkdZqpAaIA0+xWy70Pa/8QAHBABAAIBBQAAAAAAAAAAAAAAAREhMQAQQVGh/9oACAEBAAE/IQBiCtsU4mfNQuh1yqVJ3LOw3//aAAwDAQACAAMAAAAQZ3//xAAcEQEBAAICAwAAAAAAAAAAAAABEQAhMfBBYYH/2gAIAQMBAT8QhXIGWJ5nG+zNscDTxFCaBGcOew78z//EAB8RAAEDAwUAAAAAAAAAAAAAAAEAETEhQZFRYXGB0f/aAAgBAgEBPxAIhYYpx2hXmUO5Gk5W0yfF/8QAGRABAQADAQAAAAAAAAAAAAAAAREAIYEx/9oACAEBAAE/EFFTvd4CQivDbrAfCQY6IVWi+njkz//Z',
+              'menu': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAIABMDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABAX/xAAXAQADAQAAAAAAAAAAAAAAAAAAAgME/9oADAMBAAIQAxAAAAGWDLZSpX//xAAaEAACAgMAAAAAAAAAAAAAAAABAgADBBIj/9oACAEBAAEFAk5mvJ1j2At//8QAGxEAAgEFAAAAAAAAAAAAAAAAAAIRARIxQVH/2gAIAQMBAT8BjZD0wWt0/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAgBAgEBPwFM2TZP/8QAHBAAAgEFAQAAAAAAAAAAAAAAAAERAjFBYXGR/9oACAEBAAY/AlXjRdTwbjxn/8QAGRABAQEAAwAAAAAAAAAAAAAAEQEAMUGR/9oACAEBAAE/IUoVwnAJCvWpSG3sN//aAAwDAQACAAMAAAAQB3//xAAaEQEAAQUAAAAAAAAAAAAAAAABABEhQWGB/9oACAEDAQE/EKyyLzGGtwn/xAAYEQADAQEAAAAAAAAAAAAAAAAAARExUf/aAAgBAgEBPxBLcK6Pkf/EABoQAQEAAwEBAAAAAAAAAAAAAAERADFBUfD/2gAIAQEAAT8QTZVWSOx82bwk+CC5XyCx12Gf/9k=',
+            }
+          }
+        },
+        animationConfig: {
+          value: function() {
+            var items = Polymer.dom(this.root).querySelectorAll('.item');
+            var itemsArray = Array.prototype.slice.call(items);
+            return {
+              'entry': [
+                {
+                  name: 'fade-in-animation',
+                  node: this,
+                }, {
+                  name: 'cascaded-animation',
+                  animation: 'fade-in-animation',
+                  nodes: itemsArray,
+                }],
+              'exit': [
+                {
+                  name: 'hero-animation',
+                  id: 'events-hero',
+                  fromPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'menu-hero',
+                  fromPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'gallery-hero',
+                  fromPage: this,
+                },{
+                  name: 'hero-animation',
+                  id: 'sales-hero',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'events-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'menu-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'gallery-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'sales-ripple',
+                  fromPage: this,
+                },{
+                  name: 'fade-out-animation',
+                  node: this,
+              }]
+            }
+          }
+        },
+
+        sharedElements: {
+          value: function() {
+            return {
+              'menu-hero': this.$.menu,
+              'menu-ripple': this.$.menu,
+              'events-hero': this.$.events,
+              'events-ripple': this.$.events,
+              'gallery-hero': this.$.gallery,
+              'gallery-ripple': this.$.gallery,
+              'sales-hero': this.$.sales,
+              'sales-ripple': this.$.sales,
+            }
+          }
+        },
+
+      },
+
+    });
+
+  </script>
+
+  <script>
+  </script>
+
+</dom-module>

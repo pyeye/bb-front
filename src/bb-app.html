@@ -1,0 +1,366 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+
+<link rel="import" href="bb-home.html">
+<link rel="import" href="bb-events.html">
+<link rel="import" href="bb-event.html">
+<link rel="import" href="bb-menu.html">
+<link rel="import" href="bb-gallery.html">
+<link rel="import" href="bb-album.html">
+<link rel="import" href="bb-icons.html">
+<link rel="import" href="bb-news.html">
+<link rel="import" href="bb-article.html">
+
+<dom-module id="bb-app">
+
+  <template>
+
+  <style>
+
+  :host {
+    overflow: hidden;
+    @apply(--layout-fullbleed);
+    --app-primary-color: #F44336;
+    --app-secondary-color: #212121;
+    --app-lower-layer-color: #202020;
+    --app-upper-layer-color: #252525;
+    --app-accent-color: #37474F;
+    --paper-button-ink-color: var(--app-accent-color);
+    --paper-icon-button-ink-color: var(--app-accent-color);
+    --paper-spinner-color: var(--app-accent-color);
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  app-drawer {
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                0  8px 10px -5px rgba(0, 0, 0, 0.4);
+    --app-drawer-width: 260px;
+    --app-drawer-content-container: {
+      background-color: var(--app-upper-layer-color);
+    }
+  }
+
+  app-drawer a {
+    text-decoration: none;
+  }
+
+  .flex-drawer {
+    @apply(--layout-vertical);
+    height: 100%;
+  }
+
+  .flex-nav {
+    @apply(--layout-flex);
+  }
+
+  .social {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .social-icon {
+    --iron-icon-height: 26px;
+    --iron-icon-width: 26px;
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+
+  .social-icon-container {
+    display: inline-block;
+    transition: color 0.5s;
+    color: #FFFFFF;
+  }
+
+  .social-icon-container a {
+    transition: color 0.5s;
+    color: #FFFFFF;
+  }
+
+  .social-icon-container:hover a {
+    color: var(--app-primary-color);
+  }
+
+  app-header paper-icon-button {
+    --paper-icon-button-ink-color: #fff;
+  }
+
+  .drawer-list {
+    margin: 0 8px;
+  }
+
+  .drawer-container {
+    height: 100%;
+    overflow: auto;
+  }
+
+  .drawer-list a {
+    display: block;
+    padding: 0 10px;
+    margin-left: 4px;
+    line-height: 36px;
+    text-decoration: none;
+    color: #fff;
+    @apply(--paper-font-subhead);
+    line-height: 36px;
+  }
+
+  .drawer-list a.iron-selected {
+    margin-left: 0px;
+    border-left: 4px solid var(--app-primary-color);
+    color: var(--app-primary-color);
+    --iron-icon-fill-color: #FFFFFF;
+  }
+
+  .drawer-list a:hover {
+    color: var(--app-primary-color);
+  }
+
+  .drawer-list a.subroute {
+    padding-left: 32px;
+  }
+
+  .contacts {
+    color: #fff;
+    margin-left: 6px;
+    font-size: 14px;
+  }
+
+  .contact-logo {
+    font-size: 18px;
+  }
+
+  .contact-info {
+    margin: 0 16px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255, 0.5);
+    letter-spacing: 1.5px;
+  }
+
+  .contacts iron-icon {
+    --iron-icon-fill-color: #FFFFFF;
+    --iron-icon-height: 21px;
+    --iron-icon-width: 21px;
+  }
+
+  .logo {
+    position: relative;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    color: var(--app-primary-color);
+  }
+
+  .nav-icons {
+    margin: 0 8px;
+  }
+
+  .logo img {
+    width: 180px;
+  }
+
+  .nav-links {
+    position: relative;
+  }
+
+  paper-ripple {
+    color: var(--app-primary-color);
+  }
+
+  </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+
+    <app-drawer-layout responsive-width="1050px">
+
+      <!-- Drawer content -->
+      <app-drawer id="drawer" no-focus-trap>
+        <div class="drawer-container">
+          <div class="flex-drawer">
+            <div class="flex-logo">
+              <a href="/home">
+                <div class="logo">
+                  <img src="http://localhost/img/static/logo_s.jpg" alt="" />
+                  <paper-ripple></paper-ripple>
+                </div>
+              </a>
+            </div>
+            <div class="flex-nav">
+              <iron-selector selected="[[pageSection]]"
+                             attr-for-selected="name"
+                             class="drawer-list"
+                             role="navigation">
+
+                <a class="nav-links" name="home" href="/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="gallery" href="/gallery"><iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="reservation" href="/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Бронь<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="about" href="/about"><iron-icon class="nav-icons" icon="message"></iron-icon>О Борисе<paper-ripple></paper-ripple></a>
+              </iron-selector>
+            </div>
+
+            <div class="flex-contact">
+              <div class="contact-info">
+                <span class="contacts contact-logo"> Boris Bar</span><br>
+                <span class="contacts"> Drinks and Food</span><br>
+                <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp 16:00 - 06:00</span><br>
+                <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp 8 (351) 220 - 20 - 20</span>
+              </div>
+            </div>
+            <div class="social">
+              <div class="social-icon-container">
+                <a target="_blank" href="https://vk.com/boris_bar"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
+              </div>
+              <div class="social-icon-container">
+                <a target="_blank" href="https://www.instagram.com/boris_bar/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </app-drawer>
+
+      <!-- Main content -->
+
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="home">
+          <bb-home name="home">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-home>
+          <bb-menu name="menu">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-menu>
+          <bb-events name="events" page=[[page]]>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-events>
+          <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
+          <bb-news name="sales" page=[[page]]>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-news>
+          <bb-article route={{subroute}} name="article" page=[[page]]></bb-article>
+          <bb-gallery name="gallery" page=[[page]]>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-gallery>
+          <bb-album route={{subroute}} name="album" page=[[page]]></bb-album>
+          <bb-reservation name="reservation">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-reservation>
+          <bb-about name="about">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </bb-about>
+        </neon-animated-pages>
+
+    </app-drawer-layout>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'bb-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      listeners: {
+        'redirect-to-album': '_redirectToAlbum',
+      },
+
+      _neonPageChanged: function(e) {
+        this.fire('bb-render-neon-page', {},{
+          node: e.detail.item,
+          bubbles: false,
+        });
+      },
+
+      _redirectToAlbum: function(e) {
+        this.set('route.path', "/album/" + e.detail.pk)
+      },
+
+      _routePageChanged: function(page) {
+        this.page = page || 'home';
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
+        this.async(this._scroll, 200);
+      },
+
+      _scroll: function() {
+        scroll(0,0);
+      },
+
+      _pageChanged: function(page) {
+        if (page === 'reservation') {
+          this.importHref(this.resolveUrl('bb-reservation.html'), null, null, true);
+        }
+        if (page === 'about') {
+          this.importHref(this.resolveUrl('bb-about.html'), null, null, true);
+        }
+        this._changeSection(page);
+      },
+
+      _changeSection: function(category) {
+        category = category === 'album' ? 'gallery' : category;
+        category = category === 'event' ? 'events' : category;
+        category = category === 'article' ? 'sales' : category;
+        this.pageSection = category;
+      },
+
+    });
+  </script>
+
+</dom-module>
