@@ -265,7 +265,7 @@
                <div class="event-row">
                  <div class="event-label event-date">
                      <div class="event-date-day">[[event.date.day]]</div>
-                     <div class="event-date-month">[[event.date.month]]</div>
+                     <div class="event-date-month">[[event.date.month_long]]</div>
                      <div class="event-date-weekday">[[event.date.weekday]]</div>
                  </div>
                  <div class="event-content event-name">[[event.name]]</div>
@@ -280,7 +280,7 @@
                  </div>
                </div>
                <div class="event-row">
-                 <div class="event-label">Артисты:</div>
+                 <div class="event-label">В деле:</div>
                  <div class="event-content event-artists">
                    <template is="dom-repeat" items="[[event.artists]]" as="artist">
                      <div class="event-content-column">

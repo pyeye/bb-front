@@ -35,8 +35,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="bb-gallery.html">
 <link rel="import" href="bb-album.html">
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-news.html">
-<link rel="import" href="bb-article.html">
+<link rel="import" href="bb-sales.html">
+
 
 <dom-module id="bb-app">
 
@@ -49,8 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-fullbleed);
     --app-primary-color: #F44336;
     --app-secondary-color: #212121;
-    --app-lower-layer-color: #202020;
-    --app-upper-layer-color: #252525;
+    --app-lower-layer-color: #191919;
+    --app-upper-layer-color: #232323;
     --app-accent-color: #37474F;
     --paper-button-ink-color: var(--app-accent-color);
     --paper-icon-button-ink-color: var(--app-accent-color);
@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
                 0  6px 30px 5px rgba(0, 0, 0, 0.12),
                 0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    --app-drawer-width: 260px;
+    --app-drawer-width: 256px;
     --app-drawer-content-container: {
       background-color: var(--app-upper-layer-color);
     }
@@ -178,8 +178,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .logo {
     position: relative;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 18px;
+    padding-bottom: 14px;
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255, 0.5);
     margin-left: 20px;
@@ -192,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .logo img {
-    width: 180px;
+    width: 150px;
   }
 
   .nav-links {
@@ -223,7 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="flex-logo">
               <a href="/home">
                 <div class="logo">
-                  <img src="http://localhost/img/static/logo_s.jpg" alt="" />
+                  <img src="http://localhost/img/static/bb_logo_black.png" alt="" />
                   <paper-ripple></paper-ripple>
                 </div>
               </a>
@@ -235,11 +235,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              role="navigation">
 
                 <a class="nav-links" name="home" href="/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>События<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="gallery" href="/gallery"><iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="reservation" href="/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Бронь<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="reservation" href="/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Забить стол<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="about" href="/about"><iron-icon class="nav-icons" icon="message"></iron-icon>О Борисе<paper-ripple></paper-ripple></a>
               </iron-selector>
             </div>
@@ -278,9 +278,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-events>
           <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
-          <bb-news name="sales" page=[[page]]>
+          <bb-sales name="sales" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-news>
+          </bb-sales>
           <bb-article route={{subroute}} name="article" page=[[page]]></bb-article>
           <bb-gallery name="gallery" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>

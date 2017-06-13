@@ -1,9 +1,9 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/md-app.html",
+  "shell": "src/bb-app.html",
   "fragments": [
-    "src/md-reservation.html",
-    "src/md-about.html"
+    "src/bb-reservation.html",
+    "src/bb-about.html"
   ],
   "sourceGlobs": [
     "src/**/*",

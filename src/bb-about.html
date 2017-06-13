@@ -20,10 +20,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="md-about-contacts.html">
-<link rel="import" href="md-icons.html">
+<link rel="import" href="bb-about-contacts.html">
+<link rel="import" href="bb-icons.html">
 
-<dom-module id="md-about">
+<dom-module id="bb-about">
 
   <template>
 
@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(https://maddogclub.com/img/static/homepage/about.jpg);
+          background-image: url(http://localhost/img/static/homepage/abou.jpg);
           background-position: left center;
         };
       }
@@ -61,17 +61,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       [main-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 35px;
-        --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
       }
 
       [main-title] .title-label {
-        margin-left: 40px;
-        margin-right: 40px;
-        font-size: 34px;
-        letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
-        font-weight: bold;
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
       }
 
 
@@ -88,12 +90,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       [condensed-title] .title-label {
-        @apply(--paper-font-title);
+        font-size: 22px;
         margin-left: 24px;
         margin-right: 24px;
         letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
-        font-weight: bold;
+        font-family: 'Oswald', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-title;
       }
 
       [condensed-title] iron-icon {
@@ -179,10 +182,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
         <app-toolbar>
           <slot select="[drawer-toggle]"></slot>
-          <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
+          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
         <app-toolbar class="tall">
-          <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
+          <div main-title><iron-icon icon="star"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
       </app-header>
 
@@ -190,7 +193,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="ripple"></div>
       <div class="content-container" id="content">
         <div class="content">
-              <md-about-contacts name="contacts"></md-about-contacts>
+              <bb-about-contacts name="contacts"></bb-about-contacts>
         </div>
         <!--
         <div class="nav">
@@ -218,7 +221,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-about',
+      is: 'bb-about',
 
       properties: {
         animationConfig: {

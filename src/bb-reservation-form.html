@@ -25,10 +25,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 
-<link rel="import" href="md-icons.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
+<link rel="import" href="bb-icons.html">
 
 
-<dom-module id="md-reservation-form">
+<dom-module id="bb-reservation-form">
 
   <template>
 
@@ -139,11 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <div class="form-container">
-      <div class="form-block">
-        <div class="form-event-title">
-          Бронирование столика на [[event.date.day]] [[event.date.month]], [[event.name]]
-        </div>
-      </div>
+      
       <div class="form-block">
         <div class="form-title">
           Контактные данные
@@ -173,9 +171,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="form-title">
           Дополнительно
         </div>
-        <div class="form-row">
+<div class="form-row">
+<div class="form-item form-item-half">
+              <vaadin-date-picker i18n="[[i18n]]"></vaadin-date-picker>
+          </div>
           <div class="form-item form-item-half">
-            <paper-dropdown-menu  label="Время" value="{{form.time}}">
+            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
+              <paper-listbox id="peoples" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+</div>
+        
+
+        <div class="form-row">
+          
+          <div class="form-item form-item-half">
+            <paper-dropdown-menu  label="Время от" value="{{form.time}}">
               <paper-listbox id="time" class="dropdown-content">
                 <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
@@ -204,36 +224,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </paper-dropdown-menu>
           </div>
           <div class="form-item form-item-half">
-            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
-              <paper-listbox id="peoples" class="dropdown-content">
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+            <paper-dropdown-menu  label="Время до" value="{{form.time}}">
+              <paper-listbox id="time" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
+          
 
         </div>
-        <div class="form-row">
-          <div class="form-item">
-            <paper-checkbox on-change="_handleCheckbox">Вип столик</paper-checkbox>
-          </div>
-        </div>
 
-        <template is="dom-if" if="[[form.is_vip]]">
-          <div class="form-row">
-            <div class="form-item">
-              <span>Внимание! Для бронирования вип столика требуется вложение депозита. Подробности Вы сможете узнать у администратора клуба по телефону 8 (351) 240 - 20 - 00</span>
-            </div>
-          </div>
-        </template>
-
-
+        
+        
         <div class="form-item">
           <paper-textarea label="Комментарий" value="{{form.comment}}" maxlength="100"
           char-counter></paper-textarea>
@@ -258,7 +282,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
 
     Polymer({
-      is: 'md-reservation-form',
+      is: 'bb-reservation-form',
 
       properties: {
         form: {
@@ -420,9 +444,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       },
 
-      _handleCheckbox: function() {
-        this.set('form.is_vip', !this.form.is_vip);
-      },
 
     });
   </script>

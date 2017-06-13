@@ -16,11 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="md-icons.html">
+<link rel="import" href="bb-icons.html">
 
-<link rel="import" href="md-reservation-form.html">
+<link rel="import" href="bb-reservation-form.html">
 
-<dom-module id="md-reservation">
+<dom-module id="bb-reservation">
 
   <template>
 
@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(https://maddogclub.com/img/static/homepage/reserved.jpg);
+          background-image: url(http://localhost/img/static/homepage/reserved.jpg);
           background-position: center center;
         };
       }
@@ -59,18 +59,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       [main-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 35px;
-        --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
       }
 
       [main-title] .title-label {
-        @apply(--paper-font-display1);
-        margin-left: 40px;
-        margin-right: 40px;
-        font-size: 38px;
-        letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
-        font-weight: bold;
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
       }
 
 
@@ -87,12 +88,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       [condensed-title] .title-label {
-        @apply(--paper-font-title);
         margin-left: 24px;
         margin-right: 24px;
         letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
-        font-weight: bold;
+        font-family: 'Oswald', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-title;
       }
 
       [condensed-title] iron-icon {
@@ -132,6 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-toolbar {
         color: white;
 
+      }
+
+      #content {
+        margin: 16px;
       }
 
 
@@ -195,21 +200,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <app-header-layout>
+    
       <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
         <app-toolbar>
           <slot select="[drawer-toggle]"></slot>
-          <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">БРОНИРОВАНИЕ</div><iron-icon icon="foot-right"></iron-icon></div>
+          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">БРОНИРОВАНИЕ</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
         <app-toolbar class="tall">
-          <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">БРОНИРОВАНИЕ</div><iron-icon icon="foot-right"></iron-icon></div>
+          <div main-title><iron-icon icon="star"></iron-icon><div class="title-label">БРОНИРОВАНИЕ</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
       </app-header>
 
       <div id="ripple"></div>
       <div id="content">
+        <paper-material>
+<bb-reservation-form></bb-reservation-form>
+        </paper-material>
+        
       <div>
-    </app-header-layout>
+    
 
 
   </template>
@@ -218,7 +227,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-reservation',
+      is: 'bb-reservation',
 
       properties: {
         animationConfig: {
@@ -239,11 +248,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       listeners: {
-        'md-render-neon-page': '_renderNeonPage',
+        'bb-render-neon-page': '_renderNeonPage',
       },
 
       _renderNeonPage: function(e) {
-          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+        layout = document.createElement('app-header-layout');
+          childNodes = Polymer.dom(this.root).childNodes;
+          for (var i = 0; i < childNodes.length; i++) {
+            Polymer.dom(layout).appendChild(childNodes[i]);
+          }
+          Polymer.dom(this.root).appendChild(layout);
+          this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
       },
     });
 

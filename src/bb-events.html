@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
@@ -29,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-sales.html">
+
 
 
 <dom-module id="bb-events">
@@ -75,17 +76,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             [main-title] iron-icon {
               --iron-icon-fill-color: #FFFFFF;
-              --iron-icon-height: 35px;
-              --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
             }
 
             [main-title] .title-label {
-              @apply(--paper-font-display1);
-              margin-left: 40px;
-              margin-right: 40px;
-              font-size: 38px;
-              letter-spacing: 4px;
-              font-family: 'Raleway', sans-serif;
+              margin-left: 24px;
+              margin-right: 24px;
+              font-family: 'Oswald', sans-serif !important;
+              @apply --paper-font-display1;
+              letter-spacing: 6px;
+              font-size: 36px;
             }
 
             [condensed-title] {
@@ -100,12 +103,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             [condensed-title] .title-label {
-              @apply(--paper-font-title);
+              @apply --paper-font-title;
               font-size: 22px;
               margin-left: 24px;
               margin-right: 24px;
               letter-spacing: 4px;
-              font-family: 'Raleway', sans-serif;
+              font-family: 'Oswald', sans-serif !important;
               line-height: 34px;
             }
 
@@ -124,180 +127,109 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: white;
             }
 
-            .content {
-                @apply(--layout-horizontal);
-            }
-
-            .sales-list {
-                width: 30%;
-                margin: auto;
-                margin-top: 16px;
-            }
-
-            .events-list {
-                width: 70%;
-                margin: 16px auto;
-                transition: opacity 0.3s;
-                opacity: 0;
-            }
-
-            .events-list[has-content] {
+            .content[has-content] {
               opacity: 1;
             }
 
-            paper-material {
-                position: relative;
+            .content {
                 width: 85%;
-                margin: 16px auto;
+                margin-top: 16px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 16px;
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
             }
 
-            .event {
+            paper-material:hover {
+                @apply --shadow-elevation-8dp;
+            }
+
+            .card {
+                @apply --layout-vertical;
+                display: inline-block;
+                -webkit-flex: 1 1;
+                flex: 1 1;
+                -webkit-flex-basis: 23%;
+                flex-basis: 23%;
+                max-width: 23%;
+                margin-top: 16px;
+                margin-right: 16px;
+                box-sizing: border-box;
+                border-radius: 2px;
+                background-color: var(--app-upper-layer-color);
+            }
+
+            .card-header {
                 position: relative;
-                @apply(--layout-horizontal);
-                cursor: pointer;
-                padding: 16px;
-                border-bottom: 1px solid #191919;
-                background-color: #252525;
-                min-height: 60px;
+                height: 250px;
             }
 
-            .artist-container {
-                @apply(--layout-horizontal);
+            .card-image {
+                position: relative;
+                width: 100%;
+                height: 250px;
+            }
+
+            .card-title {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+                color: white;
+                padding: 16px;
+                @apply --paper-font-headline;
+                font-weight: 400;
+                transition: opacity 0.1s;
+            }
+
+            .card-content {
+                color: #fff;
+                padding: 16px 8px;
+            }
+
+            .card-row {
+                @apply --layout-horizontal;
+                margin: 8px;
+            }
+
+            .card-date {
+                margin-left: -1px;
+                @apply --layout-flex;
+                @apply --paper-font-subhead;
+            }
+
+            .card-time {
+                margin-left: 16px;
+                @apply --paper-font-subhead;
             }
 
             .artist-title {
-                @apply(--paper-font-subhead);
-                text-decoration: none;
+                @apply --paper-font-subhead;
                 color: var(--app-primary-color);
-                margin-right: 8px;
-            }
-
-            .artist-box {
-                @apply(--layout-vertical);
-                margin-right: 16px;
-            }
-
-            .event-date {
-                @apply(--layout-horizontal);
-                @apply(--paper-font-title);
-                width: 30%;
-                min-width: 100px;
-                max-width: 160px;
-                color: var(--app-primary-color);
-                text-align: center;
-                margin-top: auto;
-                margin-bottom: auto;
-            }
-
-            .event-date-vertical {
-                @apply(--layout-vertical);
-                text-align: left;
-                margin-left: 8px;
-                margin-top: auto;
-                margin-bottom: auto;
-            }
-
-            .event-date-soon {
-                @apply(--paper-font-headline);
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .event-date-container {
-              margin-left: auto;
-              margin-right: auto;
-            }
-
-            .event-date-weekday {
-                @apply(--paper-font-subhead);
-            }
-
-            .event-date-day {
-                @apply(--paper-font-display2);
-                margin-top: auto;
-                margin-bottom: auto;
-                width: 55px;
-                text-align: right;
-                font-size: 40px;
-            }
-
-            .event-date-month {
-                @apply(--paper-font-subhead);
-                line-height: 12px;
-            }
-
-            .event-title {
-                padding: 16px;
-                @apply(--paper-font-display2);
-                color: #FFFFFF;
-            }
-
-            .pad {
-              @apply(--layout-flex);
-              @apply(--layout-vertical);
-              padding: 0 16px;
-              margin-top: auto;
-              margin-bottom: auto;
-            }
-
-            .artists-pad {
-              @apply(--layout-flex);
-              @apply(--layout-vertical);
-            }
-
-            .artist-label {
-                @apply(--paper-font-subhead);
-                color: #FFFFFF;
-                opacity: 0.7;
-                margin-right: 8px;
-                white-space: nowrap;
-            }
-
-            .artist-name {
-                @apply(--paper-font-subhead);
-                color: #FFFFFF;
-                opacity: 0.7;
-                margin-right: 8px;
+                margin-right: 4px;
                 display: inline-block;
             }
 
-            .artist-style {
-                @apply(--paper-font-body1);
+            .artist-name {
+                @apply --paper-font-subhead;
                 color: #FFFFFF;
                 opacity: 0.7;
+                margin-right: 4px;
+                display: inline-block;
             }
 
             .artist-name:not(:last-of-type):after {
               content: ",";
-              margin-left: -3px;
             }
 
             .artist-name:nth-last-of-type(2):before {
               content: none;
             }
 
-            .primary {
-                @apply(--paper-font-headline);
-                color: #FFFFFF;
-                font-size: 26px;
-            }
+      
 
-            .event:hover .primary {
-                text-decoration: underline;
-            }
-
-            .secondary {
-                @apply(--paper-font-subhead);
-                color: #FFFFFF;
-                opacity: 0.7;
-                display: block;
-                /* Fallback for non-webkit */
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
 
             a {
                 text-decoration: none;
@@ -307,9 +239,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: var(--app-primary-color);
             }
 
-            .special-event {
+            iron-icon {
                 color: var(--app-primary-color);
+                --iron-icon-height: 20px;
+                --iron-icon-width: 20px;
             }
+
 
             #ripple {
                 position: fixed;
@@ -325,9 +260,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               app-toolbar.tall {
                 height: 200px;
               }
+
+              .card {
+                -webkit-flex-basis: 44%;
+                flex-basis: 44%;
+                max-width: 44%;
+              }
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 1050px) {
               [main-title] {
                 -webkit-transform-origin: center top !important;
                 transform-origin: center top !important;
@@ -354,58 +295,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-right: 16px;
               }
 
-              .sales-list {
-                display: none;
-              }
-
-              .events-list {
-                width: 100%;
-              }
-
-              paper-material {
-                position: relative;
-                width: 95%;
+              .card {
+                -webkit-flex-basis: 46.9%;
+                flex-basis: 46.9%;
+                max-width: 46.9%;
               }
 
             }
 
         @media (max-width: 550px) {
 
-            .pad {
-                padding-right: 0;
-            }
-
-            .event-date-day {
-                font-size: 34px;
-            }
-
-            .primary {
-                font-size: 20px;
-            }
-
-            .event {
-                padding: 8px 4px 8px 8px;
-            }
-
-            .event-date-day {
-                width: 40px;
-            }
-
-            .event-date {
-                width: 88px;
-                min-width: 88px;
-            }
-
-            .event-date-soon {
-                font-size: 22px;
-            }
-
-            .artist-label, .artist-name{
-                font-size: 14px;
-            }
-
             .artist-name:not(:last-of-type):after {
                 margin-left: -2px;
+            }
+
+            .card {
+                -webkit-flex-basis: 100%;
+                flex-basis: 100%;
+                max-width: 100%;
             }
         }
         </style>
@@ -413,10 +320,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
           <app-toolbar>
             <slot select="[drawer-toggle]"></slot>
-            <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right"></iron-icon></div>
+            <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">СОБЫТИЯ</div><iron-icon icon="star"></iron-icon></div>
           </app-toolbar>
           <app-toolbar class="tall">
-            <div main-title><iron-icon icon="foot-left" id="fleft"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right" id="fright"></iron-icon></div>
+            <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">СОБЫТИЯ</div><iron-icon icon="star" id="fright"></iron-icon></div>
           </app-toolbar>
         </app-header>
 
@@ -426,42 +333,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div id="ripple"></div>
 
-        <div id="content" class="content">
-            <div id="events" class="events-list" has-content$="[[_isDefined(events)]]">
-                <paper-material>
-                    <template is="dom-repeat" items="[[events]]">
-                        <a href="/event/[[item.pk]]">
-                            <div class="event" on-tap="_heroAnimationHandler">
-                                <div class="event-date">
-                                    <div class="event-date-soon" hidden$="[[!_shouldRenderDate(item.date)]]">[[item.date.soon]]</div>
-                                    <template is="dom-if" if$="[[!_shouldRenderDate(item.date)]]">
-                                        <div class="event-date-day">[[item.date.day]]</div>
-                                        <div class="event-date-vertical">
-                                            <div class="event-date-month">[[item.date.month]]</div>
-                                            <div class="event-date-weekday">[[item.date.weekday]]</div>
-                                        </div>
-                                    </template>
-                                </div>
-                                <div class="pad">
-                                    <div class$="[[_createEventClass(item)]]" class="primary">[[item.name]]</div>
-                                    <div class="artist-container">
-                                      <div class="artist-label">В программе:</div>
-                                      <div class="">
-                                        <template is="dom-repeat" items="{{item.artists}}" as="artist">
-                                            <div class="artist-name">
-                                              [[artist.name]]
-                                            </div>
-                                        </template>
-                                      </div>
-                                    </div>
-                                </div>
-                                <paper-ripple></paper-ripple>
+        <div class="content" has-content$="[[_isDefined(events)]]" id="events">
+            <template is="dom-repeat" items="[[events]]" as="event" initial-count="8" on-dom-change="_doAnimation">
+                <paper-material class="card" elevation="2" animated="true" on-tap="_heroAnimationHandler">
+                    <a href="/event/[[event.pk]]">
+                    <div class="card-header">
+                        <iron-image class="card-image" sizing="cover" preload fade src="[[_getImage(event)]]"></iron-image>
+                        <div class="card-title">[[event.name]]</div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="card-row">
+                            <div class="card-date">
+                                <iron-icon icon="event"></iron-icon> [[event.date.day]] / [[event.date.month]] [[event.date.weekday]]
                             </div>
-                        </a>
-                    </template>
+                            <div class="card-time">
+                                <iron-icon icon="access-time"></iron-icon> [[event.start]]
+                            </div>
+                        </div>
+                        <div class="card-row">
+                            <div class="artist-title">В деле:</div> 
+                            <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                                <div class="artist-name">[[artist.name]]</div>
+                                
+                            </template>
+                        </div>
+                    </div>
+                    <paper-ripple></paper-ripple>
+                    </a>
                 </paper-material>
-            </div>
-            <bb-sales id="sales" class="sales-list"></bb-sales>
+            </template>
         </div>
 
     </template>
@@ -489,16 +390,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 id: 'events-hero',
                                 toPage: this,
                             }, {
+                               name: 'cascaded-animation',
+                               animation: 'slide-from-bottom-animation',
+                            },{
                                 name: 'fade-in-animation',
                                 node: this.$.events,
                                 timing: {delay: 250},
-                            }, {
-                                name: 'slide-from-bottom-animation',
-                                node: this.$.events,
-                            }, {
-                                name: 'fade-in-animation',
-                                node: this.$.sales,
-                                timing: {delay: 300},
                             }, {
                                 name: 'fade-in-animation',
                                 node: this.$.fleft,
@@ -507,10 +404,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 name: 'fade-in-animation',
                                 node: this.$.fright,
                                 timing: {delay: 450},
-                            },{
-                                name: 'slide-from-bottom-animation',
-                                node: this.$.sales,
-                                timing: {delay: 100},
                             }],
                             'exit': [{
                                 name: 'fade-out-animation',
@@ -553,17 +446,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
             },
 
-            _shouldRenderDate: function(date) {
-                return !!date.soon;
-            },
-
-            _createEventClass: function(event) {
-                var is_special = event.is_special ? ' special-event' : '';
-                return 'primary' + is_special;
-            },
-
             _isDefined: function(events) {
               return events != null;
+            },
+
+            _getImage: function(event) {
+                var img, index;
+                if(Object.getOwnPropertyNames(event.poster).length === 0) {
+                    index = this._randomInteger(0, event.artists.length - 1);
+                    img = event.artists[index].img.thumbnail;
+                } else {
+                    img = event.poster.thumbnail;
+                }
+                return img;
+            },
+
+            _randomInteger: function(min, max) {
+                var rand = min - 0.5 + Math.random() * (max - min + 1)
+                rand = Math.round(rand);
+                return rand;
+            },
+
+            _doAnimation: function(e) {
+                var items, itemsArray;
+                items = Polymer.dom(this.root).querySelectorAll('.card');
+                itemsArray = Array.prototype.slice.call(items);
+                this.animationConfig.entry[2].nodes = itemsArray;
             },
 
             behaviors: [
@@ -573,34 +481,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             handleResponse: function(request) {
                 var response = request.detail.response;
-                var index, len, date, today, options;
+                var index, len, date, date_long, options, options_long;
                 
                 options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
                     weekday: 'long',
+                    day: 'numeric',
+                    month: 'numeric',
                 };
+
+                options_long = {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                };
+
+
                 
                 for (index = 0, len = response.length; index < len; ++index) {
                     date = new Date(response[index].date);
-                    today = new Date();
-                    today = today.toLocaleString("ru", options).split(' ');
-                    date = date.toLocaleString("ru", options).split(' ');
+                    date_long = new Date(response[index].date);
+                    date = date.toLocaleString("ru", options).split(/ |,|\./g);
+                    date_long = date_long.toLocaleString("ru", options_long).split(/ |,|\./g);
                     response[index].date = {
-                        'weekday': date[0].slice(0, -1),
-                        'day': date[1],
-                        'month': date[2],
-                        'year': date[3],
+                        'weekday': date[0],
+                        'day': date[2],
+                        'month': date[3],
+                        'month_long': date_long[3],
                         'original': response[index].date,
                     };
 
                     response[index].start = response[index].start.slice(0, -3);
-                    if (date[1] === today[1] && date[2] === today[2]) {
-                        response[index].date['soon'] = 'Сегодня';
-                    } else if (date[1] == (parseInt(today[1]) + 1) && date[2] === today[2]) {
-                        response[index].date['soon'] = 'Завтра';
-                    }
                 };
                 this.events = response;
             },

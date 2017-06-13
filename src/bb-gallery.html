@@ -66,17 +66,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     [main-title] iron-icon {
       --iron-icon-fill-color: #FFFFFF;
-      --iron-icon-height: 35px;
-      --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 
     [main-title] .title-label {
-      @apply(--paper-font-display1);
-      margin-left: 40px;
-      margin-right: 40px;
-      font-size: 38px;
-      letter-spacing: 4px;
-      font-family: 'Raleway', sans-serif;
+      margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
     }
 
 
@@ -93,13 +95,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     [condensed-title] .title-label {
-      @apply(--paper-font-title);
       font-size: 22px;
-      margin-left: 24px;
-      margin-right: 24px;
-      letter-spacing: 4px;
-      font-family: 'Raleway', sans-serif;
-      line-height: 34px;
+        margin-left: 24px;
+        margin-right: 24px;
+        letter-spacing: 4px;
+        font-family: 'Oswald', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-title;
     }
 
     [condensed-title] iron-icon {
@@ -265,10 +267,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
     <app-toolbar>
       <slot select="[drawer-toggle]"></slot>
-      <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">ГАЛЕРЕЯ</div><iron-icon icon="foot-right"></iron-icon></div>
+      <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">ГАЛЕРЕЯ</div><iron-icon icon="star"></iron-icon></div>
     </app-toolbar>
     <app-toolbar class="tall">
-      <div main-title><iron-icon icon="foot-left" id="fleft"></iron-icon><div class="title-label">ГАЛЕРЕЯ</div><iron-icon icon="foot-right" id="fright"></iron-icon></div>
+      <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">ГАЛЕРЕЯ</div><iron-icon icon="star" id="fright"></iron-icon></div>
     </app-toolbar>
   </app-header>
 
