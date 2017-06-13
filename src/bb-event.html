@@ -180,6 +180,21 @@
            opacity: 0.7;
          }
 
+         .artist-name {
+                
+                color: #FFFFFF;
+                
+                margin-right: 4px;
+                display: inline-block;
+            }
+
+            .artist-name:not(:last-of-type):after {
+              content: ",";
+            }
+
+            .artist-name:nth-last-of-type(2):before {
+              content: none;
+            }
 
 
 
@@ -268,7 +283,16 @@
                      <div class="event-date-month">[[event.date.month_long]]</div>
                      <div class="event-date-weekday">[[event.date.weekday]]</div>
                  </div>
-                 <div class="event-content event-name">[[event.name]]</div>
+                 <template is="dom-if" if="[[!_showTitle(event.name)]]">
+                    <div class="event-content event-name">[[event.name]]</div>
+                 </template>
+                 <template is="dom-if" if="[[_showTitle(event.name)]]">
+                    <div class="event-content event-name artist-title" >
+                        <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                            <div class="artist-name">[[artist.name]]</div>
+                        </template>
+                    </div>
+                 </template>
                </div>
 
                <div class="event-row">
@@ -456,6 +480,10 @@
 
        _eventChanged: function(event) {
          this._updateImg(event);
+       },
+
+       _showTitle: function(title) {
+            return title == null;
        },
 
        _updateImg: function(event) {

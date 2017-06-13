@@ -63,6 +63,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               padding-top: 212px;
             }
 
+           [hidden] {
+              display: none;
+           }
+
             [main-title] {
               font-weight: normal;
               -webkit-transform-origin: center top !important;
@@ -221,16 +225,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .artist-title {
-                @apply --paper-font-subhead;
+                
                 color: var(--app-primary-color);
                 margin-right: 4px;
                 display: inline-block;
             }
 
             .artist-name {
-                @apply --paper-font-subhead;
+                
                 color: #FFFFFF;
-                opacity: 0.7;
+                
                 margin-right: 4px;
                 display: inline-block;
             }
@@ -361,7 +365,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                         
                         <iron-image class="card-image" sizing="cover" preload fade src="[[_getImage(event)]]"></iron-image>
-                        <div class="card-title">[[event.name]]</div>
+                        <div class="card-title">
+                            <div class="event-title">[[event.name]]</div>
+                            <template is="dom-if" if="[[_showTitle(event.name)]]">
+                                <div class="artist-title" >
+                                    <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                                        <div class="artist-name">[[artist.name]]</div>
+                                    </template>
+                                </div>
+                            </template>
+                            
+                            
+                        </div>
                     </div>
                     <paper-ripple></paper-ripple>
                     </a>
@@ -452,6 +467,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _isDefined: function(events) {
               return events != null;
+            },
+
+            _showTitle: function(title) {
+                return title == null;
             },
 
             _getImage: function(event) {
