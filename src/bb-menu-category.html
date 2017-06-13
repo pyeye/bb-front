@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <style>
       :host {
+          margin-bottom: 16px;
         display: block;
         --iron-icon-fill-color: #FFFFFF;
         --iron-icon-height: 18px;
@@ -35,6 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 24px;
         background-color: #252525;
         color: #FFFFFF;
+        margin-bottom: 32px;
       }
 
       [hidden] {
@@ -48,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           @apply --paper-font-headline;
           @apply --layout-horizontal;
           letter-spacing: 2px;
+          font-size: 26px;
       }
 
       iron-icon {
@@ -55,9 +58,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .menu-position {
-          padding: 8px 0;
+          padding: 16px;
           @apply --layout-horizontal;
-          border-bottom: 1px solid #202020;
+          border-bottom: 1px solid #191919;
       }
 
       .menu-position:last-of-type { 
@@ -93,8 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .menu-price-value {
-        @apply --paper-font-title;
-        font-weight: normal;
+        @apply --paper-font-headline;
       }
 
       .menu-price-measure {
