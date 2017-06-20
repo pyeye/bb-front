@@ -198,25 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin: 8px;
             }
 
-            .card-top-box {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                background: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
-                @apply --layout-horizontal;
-                z-index: 1;
-                color: #fff;
-            }
-
-            .card-top-date {
-                @apply --layout-vertical;
-                @apply --layout-flex;
-                @apply --paper-font-subhead;
-                margin-top: 8px;
-                margin-left: 16px;
-                font-size: 18px;
-            }
+           
 
 
             .card-time {
@@ -357,25 +339,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-material class="card" elevation="2" animated="true" on-tap="_heroAnimationHandler">
                     <a href="/event/[[event.pk]]">
                     <div class="card-header">
-                        <div class="card-top-box">
-                        <div class="card-top-date">
-                            <div>[[event.date.day]] | [[event.date.month]]</div> 
-                            <div>[[event.date.weekday]]</div>
-                        </div>
-                        </div>
-                        
                         <iron-image class="card-image" sizing="cover" preload fade src="[[_getImage(event)]]"></iron-image>
-                        <div class="card-title">
-                            <div class="event-title">[[event.name]]</div>
-                            <template is="dom-if" if="[[_showTitle(event.name)]]">
-                                <div class="artist-title" >
-                                    <template is="dom-repeat" items="[[event.artists]]" as="artist">
-                                        <div class="artist-name">[[artist.name]]</div>
-                                    </template>
-                                </div>
+                        <div class="card-title">[[event.name]]</div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="card-row">
+                            <div class="card-date">
+                                <iron-icon icon="event"></iron-icon> [[event.date.day]] / [[event.date.month]] [[event.date.weekday]]
+                            </div>
+                            <div class="card-time">
+                                <iron-icon icon="access-time"></iron-icon> [[event.start]]
+                            </div>
+                        </div>
+                        <div class="card-row">
+                            <div class="artist-title">В деле:</div> 
+                            <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                                <div class="artist-name">[[artist.name]]</div>
+                                
                             </template>
-                            
-                            
                         </div>
                     </div>
                     <paper-ripple></paper-ripple>
