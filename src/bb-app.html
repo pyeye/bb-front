@@ -28,14 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 
-<link rel="import" href="bb-home.html">
-<link rel="import" href="bb-events.html">
-<link rel="import" href="bb-event.html">
-<link rel="import" href="bb-menu.html">
-<link rel="import" href="bb-gallery.html">
-<link rel="import" href="bb-album.html">
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-sales.html">
+<link rel="import" href="bb-album.html">
 
 
 <dom-module id="bb-app">
@@ -220,13 +214,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" no-focus-trap>
         <div class="drawer-container">
           <div class="flex-drawer">
-            <div class="flex-logo">
-              <a href="/home">
+            <div class="flex-logo">   
                 <div class="logo">
                   <img src="http://localhost/img/static/bb_logo_black.png" alt="" />
-                  <paper-ripple></paper-ripple>
                 </div>
-              </a>
             </div>
             <div class="flex-nav">
               <iron-selector selected="[[pageSection]]"
@@ -234,7 +225,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              class="drawer-list"
                              role="navigation">
 
-                <a class="nav-links" name="home" href="/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>События<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
@@ -267,10 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
 
-        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="home">
-          <bb-home name="home">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-home>
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="events">
           <bb-menu name="menu">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-menu>
@@ -332,7 +319,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _routePageChanged: function(page) {
-        this.page = page || 'home';
+        this.page = page || 'events';
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
@@ -344,12 +331,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        if (page === 'reservation') {
-          this.importHref(this.resolveUrl('bb-reservation.html'), null, null, true);
-        }
-        if (page === 'about') {
-          this.importHref(this.resolveUrl('bb-about.html'), null, null, true);
-        }
+        this.importHref(this.resolveUrl('bb-' + page + '.html'), null, null, true);
         this._changeSection(page);
       },
 

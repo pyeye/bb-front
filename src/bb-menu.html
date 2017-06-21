@@ -193,31 +193,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
-      <app-toolbar>
-        <slot select="[drawer-toggle]"></slot>
-        <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star"></iron-icon></div>
-      </app-toolbar>
-      <app-toolbar class="tall">
-        <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star" id="fright"></iron-icon></div>
-      </app-toolbar>
-    </app-header>
+    <app-header-layout>
+      <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star"></iron-icon></div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star" id="fright"></iron-icon></div>
+        </app-toolbar>
+      </app-header>
 
-    <div id="ripple"></div>
+      <div id="ripple"></div>
 
-    <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
-        <paper-tab group="kitchen">Кухня</paper-tab>
-        <paper-tab group="bar">Бар</paper-tab>
-        <paper-tab group="hookah">Hookah</paper-tab>
-        <paper-tab group="special">Спец предложение</paper-tab>
-    </paper-tabs>
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
+          <paper-tab group="kitchen">Кухня</paper-tab>
+          <paper-tab group="bar">Бар</paper-tab>
+          <paper-tab group="hookah">Hookah</paper-tab>
+          <paper-tab group="special">Спец предложение</paper-tab>
+      </paper-tabs>
 
-    <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group">
-        <bb-menu-list group="kitchen" tab=[[tab]] ></bb-menu-list>
-        <bb-menu-list group="bar" tab=[[tab]] ></bb-menu-list>
-        <bb-menu-list group="hookah" tab=[[tab]] ></bb-menu-list>
-        <bb-menu-list group="special" tab=[[tab]] ></bb-menu-list>
-    </neon-animated-pages>
+      <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group">
+          <bb-menu-list group="kitchen" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="bar" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="hookah" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="special" tab=[[tab]] ></bb-menu-list>
+      </neon-animated-pages>
+    </app-header-layout>
+
+    
 
   </template>
 
@@ -230,6 +234,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         tab: {
           type: String,
+          value: 'kitchen',
         },
 
         middleEntryAnimation: {
@@ -292,35 +297,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      listeners: {
-        'bb-render-neon-page': '_renderNeonPage',
-      },
-
       behaviors: [
         Polymer.NeonSharedElementAnimatableBehavior,
         Polymer.IronResizableBehavior
       ],
 
-      _renderNeonPage: function(e) {
-          layout = document.createElement('app-header-layout');
-          childNodes = Polymer.dom(this.root).childNodes;
-          for (var i = 0; i < childNodes.length; i++) {
-            Polymer.dom(layout).appendChild(childNodes[i]);
-          }
-          Polymer.dom(this.root).appendChild(layout);
-          this.tab = 'kitchen';
-          this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
+      _mainTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-right-animation';
+        this.middleExitAnimation = 'slide-right-animation';
       },
 
-        _mainTapped: function(e) {
-          this.middleEntryAnimation = 'slide-from-right-animation';
-          this.middleExitAnimation = 'slide-right-animation';
-        },
-
-        _otherTapped: function(e) {
-          this.middleEntryAnimation = 'slide-from-left-animation';
-          this.middleExitAnimation = 'slide-left-animation';
-        },
+      _otherTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-left-animation';
+        this.middleExitAnimation = 'slide-left-animation';
+      },
     });
 
   </script>

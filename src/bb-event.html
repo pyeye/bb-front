@@ -259,7 +259,8 @@
 
       <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-       <app-header id="header" effects="fade-background" reveals>
+      <app-header-layout>
+<app-header id="header" effects="fade-background" reveals>
          <app-toolbar>
            <a href="/events" tabindex="-1">
              <paper-icon-button icon="arrow-back"></paper-icon-button>
@@ -326,6 +327,10 @@
            </div>
          </paper-card>
          </div>
+      </app-header-layout>
+
+
+       
      </template>
 
      <script>
@@ -398,15 +403,7 @@
          Polymer.IronResizableBehavior
        ],
 
-       _renderNeonPage: function() {
-         layout = document.createElement('app-header-layout');
-         layout.id = "layout";
-         childNodes = Polymer.dom(this.root).childNodes;
-         for (var i = 0; i < childNodes.length; i++) {
-           Polymer.dom(layout).appendChild(childNodes[i]);
-         }
-         Polymer.dom(this.root).appendChild(layout);
-       },
+       
 
        _eventPageChanged: function(event) {
          var date, storageEvent;
@@ -442,7 +439,6 @@
 
        _pageChanged: function(page) {
          if (page === this.name && !this.pageInit) {
-            this._renderNeonPage()
             this.pageInit = true;
          }
        },

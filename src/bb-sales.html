@@ -21,6 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
@@ -312,7 +314,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+    <app-header-layout>
+<app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
       <app-toolbar>
         <slot select="[drawer-toggle]"></slot>
         <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">АКЦИИ</div><iron-icon icon="star"></iron-icon></div>
@@ -359,6 +362,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     
     </paper-material>
+    </app-header-layout>
+
+    
     
 
 </template>
@@ -432,26 +438,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      listeners: {
-          'bb-render-neon-page': '_renderNeonPage',
-      },
-
       behaviors: [
           Polymer.NeonSharedElementAnimatableBehavior,
           Polymer.IronResizableBehavior
       ],
 
-      _renderNeonPage: function(e) {
+      ready: function() {
           var currentMonth = new Date().getMonth();
           this.$.ajax.url = ['http://localhost/api/v1/sales', currentMonth+1].join('/') + '/';
           this.$.ajax.generateRequest();
-          layout = document.createElement('app-header-layout');
-          childNodes = Polymer.dom(this.root).childNodes;
-          for (var i = 0; i < childNodes.length; i++) {
-              Polymer.dom(layout).appendChild(childNodes[i]);
-          }
-          Polymer.dom(this.root).appendChild(layout);
-          this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
       },
 
       _isDefined: function(month) {
