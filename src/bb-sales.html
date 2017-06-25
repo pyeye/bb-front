@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
@@ -37,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-sales-detail.html">
+<link rel="import" href="bb-ripple.html">
 
 <dom-module id="bb-sales">
 
@@ -45,7 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        height: 100vh;
         --sale-content-layer-color: #202020;
       }
 
@@ -129,9 +130,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color: white;
       }
 
-      paper-ripple {
-        color: var(--app-primary-color);
+      bb-ripple {
+        color: var(--sale-content-layer-color);
+        
       }
+
+      
 
       .content {
         @apply --layout-vertical;
@@ -143,6 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #fff;
         background-color: var(--sale-content-layer-color);
         transition: background-color 1s ease;
+        
       }
 
       .sale-month {
@@ -186,17 +191,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .sale-info-box {
+        transition: opacity 5000ms cubic-bezier(0,0,0.2,1);
         position: relative;
         height: 100%;
         padding: 16px;
         @apply --layout-horizontal;
+        
       }
 
       .sale-info-text {
         @apply --layout-verical;
-        width: 50%;
+        width: 65%;
         margin-top: 16px;
-        margin-left: 16px;
       }
 
       .sale-info-day {
@@ -211,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .sale-info-day-bottom {
-        @apply --paper-font-display2;
+        @apply --paper-font-headline;
         border-bottom: 4px solid #fff;
         position: relative;
         margin: 16px;
@@ -226,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       .sale-info-image {
-        width: 50%;
+        width: 35%;
         height: 400px;
         display: -ms-flexbox;
         display: -webkit-flex;
@@ -252,6 +258,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 100vw;
             background-color: var(--app-lower-layer-color);
             z-index: -5;
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: rgba(255,255,255, 0.9);
+        }
+      }
+
+      paper-tab {
+        @apply --paper-font-subheading;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      paper-tab.iron-selected {
+        color: rgba(255,255,255, 1);
       }
 
 
@@ -331,36 +355,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         [[month.name]].
       </div>
       <div class="sale-nav">
-        <iron-selector selected="{{day}}" attr-for-selected="name" role="navigation">
-            <template is="dom-repeat" items="[[month.sales]]" as="sale">
-              <div class="sale-nav-day" name="[[sale.day.name]]" on-tap="_rippleHandler">[[sale.day.name]]</div>
-            </template>
-        </iron-selector>
+        <paper-tabs selected="{{day}}" attr-for-selected="name" no-bar noink >
+          <template is="dom-repeat" items="[[month.sales]]" as="sale">
+            <paper-tab name="[[sale.day.name]]" on-tap="_rippleHandler">[[sale.day.name]]</paper-tab>
+          </template>
+        </paper-tabs>
       </div>
       <div class="sale-main">
-        <iron-pages selected="[[day]]" attr-for-selected="name"> 
+        <neon-animated-pages selected="[[day]]" attr-for-selected="name"> 
             <template is="dom-repeat" items="[[month.sales]]" as="sale">
-              <div class="sale-info-box" name="[[sale.day.name]]">
-                  <div class="sale-info-text">
-                    <div id="day" class="sale-info-day">
-                        <iron-icon icon="star"></iron-icon>
-                        <div class="sale-info-day-bottom">[[sale.day.name]]</div> 
-                        <iron-icon icon="star"></iron-icon>
-                    </div>
-                    <div id="description" class="sale-info-description">
-                        <marked-element markdown="[[sale.info]]">
-                          <div slot="markdown-html custom"></div>
-                        </marked-element>
-                    </div>
-                  </div>
-                  <div id="image" class="sale-info-image">
-                    <img class="iron-image" src="[[sale.image.original]]"></img>
-                  </div>
-              </div>
+              
+                  <bb-sales-detail name="[[sale.day.name]]" sale="[[sale]]"></bb-sales-detail>
+             
             </template>
-        </iron-pages>
+        </neon-animated-pages>
       </div>
-    
+    <bb-ripple id="sripple" style="pointer-events: none;" initial-opacity="1" opacity-decay-velocity="1" max-radius="850"></paper-ripple>
     </paper-material>
     </app-header-layout>
 
@@ -453,16 +463,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return month != null;
       },
 
+      
+
       _rippleHandler: function(e) {
-        console.log(e.model.__data__.sale.day.code);
         this.customStyle['--sale-content-layer-color'] = this.rippleConfig[e.model.__data__.sale.day.name];
         this.updateStyles();
+        this.$.sripple.uiDownAction(event);
+        this.async(function(){
+          this.$.sripple.uiUpAction(event)
+        }, 200);
       },
 
       handleResponse: function(request) {
           var response = request.detail.response;
           var date, short_date, options, index, len;
-
           this.month = response;
           this.day = this.month.sales[0].day.name;
           this.customStyle['--sale-content-layer-color'] = this.rippleConfig[this.day];

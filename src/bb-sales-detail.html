@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
@@ -38,91 +38,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style>
-      :host {
-        position: absolute;
-        top: -104px !important;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        height: 530px;
-        --sale-ripple-color: #191919;
+  
+    :host {
+        display: block;
+        position: relative !important;
       }
 
-      app-header {
-          background-color: var(--app-primary-color);
-          color: #fff;
-          --app-header-background-front-layer: {
-              background-image: url(http://localhost/img/static/homepage/news.jpg);
-              background-position: center center;
-          };
-      }
-
-      app-toolbar.tall {
-        height: 300px;
-        padding-left: 20px;
-      }
-
-      sample-content {
-        padding-top: 212px;
-      }
-
-      [main-title] {
-        font-weight: normal;
-        -webkit-transform-origin: center top !important;
-        transform-origin: center top !important;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
-        font-size: 38px;
-      }
-
-      [main-title] iron-icon {
-        --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 35px;
-        --iron-icon-width: 24px;
-      }
-
-      [main-title] .title-label {
-        margin-left: 24px;
-        margin-right: 24px;
-        font-family: 'Oswald', sans-serif !important;
-        @apply --paper-font-display1;
-        letter-spacing: 6px;
-        font-size: 36px;
-      }
-
-      [condensed-title] {
-        font-weight: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
-        font-size: 20px;
-      }
-
-      [condensed-title] .title-label {
-        @apply --paper-font-title;
-        font-size: 22px;
-        margin-left: 24px;
-        margin-right: 24px;
-        letter-spacing: 4px;
-         font-family: 'Oswald', sans-serif !important;
-        line-height: 34px;
-      }
-
-      [condensed-title] iron-icon {
-        --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 26px;
-        --iron-icon-width: 18px;
-      }
-
-      [condensed-title] i {
-          font-weight: 100;
-          font-style: normal;
-      }
 
       app-toolbar {
           color: white;
@@ -140,7 +61,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: auto;
         margin-right: auto;
         color: #fff;
-        background-color: var(--app-upper-layer-color);
+        background-color: var(--sale-content-layer-color);
+        transition: background-color 1s ease;
       }
 
       .sale-month {
@@ -155,11 +77,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-family: 'Oswald', sans-serif !important;
         @apply --paper-font-headline;
         letter-spacing: 4px;
+        z-index: 3;
       }
 
       .sale-nav {
         @apply --layout-horizontal;
         margin: 0 auto;
+        z-index: 3;
       }
 
       .sale-main {
@@ -183,19 +107,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .sale-info-box {
         position: relative;
-        
+        height: 100%;
         padding: 16px;
         @apply --layout-horizontal;
-        z-index: 2;
-        margin-top: 104px;
-        margin-bottom: 16px;
       }
 
       .sale-info-text {
         @apply --layout-verical;
-        width: 50%;
+        width: 65%;
         margin-top: 16px;
-        margin-left: 16px;
       }
 
       .sale-info-day {
@@ -210,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .sale-info-day-bottom {
-        @apply --paper-font-display2;
+        @apply --paper-font-headline;
         border-bottom: 4px solid #fff;
         position: relative;
         margin: 16px;
@@ -225,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       .sale-info-image {
-        width: 50%;
+        width: 35%;
         height: 400px;
         display: -ms-flexbox;
         display: -webkit-flex;
@@ -243,15 +163,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 400px;
       }
 
-      #ripple {
-        position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--sale-ripple-color);
-            z-index: 1;
+      
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: rgba(255,255,255, 0.9);
+        }
       }
+
+      paper-tab {
+        @apply --paper-font-subheading;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      paper-tab.iron-selected {
+        color: rgba(255,255,255, 1);
+      }
+
 
 
       @media (max-width: 1450px) {
@@ -314,23 +245,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     
-    <div id="ripple"></div>
 
-    <div class="sale-info-box">
+    <div class="sale-info-box" name="[[sale.day.name]]">
         <div class="sale-info-text">
-           <div id="day" class="sale-info-day">
+          <div id="day" class="sale-info-day">
               <iron-icon icon="star"></iron-icon>
-              <div class="sale-info-day-bottom">[[sale.day.name]]</div> 
+              <div class="sale-info-day-bottom">[[sale.name]]</div> 
               <iron-icon icon="star"></iron-icon>
-           </div>
-           <div id="description" class="sale-info-description">
+          </div>
+          <div id="description" class="sale-info-description">
               <marked-element markdown="[[sale.info]]">
                 <div slot="markdown-html custom"></div>
               </marked-element>
-           </div>
+          </div>
         </div>
         <div id="image" class="sale-info-image">
-           <img class="iron-image" src="[[sale.image.original]]"></img>
+          <img class="iron-image" src="[[sale.image.original]]"></img>
         </div>
     </div>
     
@@ -355,32 +285,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
-
-        animationConfig: {
+animationConfig: {
           value: function() {
             return {
               'entry': [
-                {
-                  name: 'slide-from-left-animation',
-                  node: this.$.day,
-                }, {
+                 {
                   name: 'fade-in-animation',
                   node: this.$.day,
-                  timing: {delay: 250},
-                }, {
-                  name: 'slide-from-left-animation',
-                  node: this.$.description,
-                }, {
+                  timing: {delay: 150},
+                },  {
                   name: 'fade-in-animation',
                   node: this.$.description,
-                  timing: {delay: 250},
-                },{
-                  name: 'slide-from-right-animation',
-                  node: this.$.image,
+                  timing: {delay: 200},
                 }, {
                   name: 'fade-in-animation',
                   node: this.$.image,
-                  timing: {delay: 350},
+                  timing: {delay: 250},
                 }],
               'exit': {
                   name: 'fade-out-animation',
@@ -389,27 +309,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
-
-        sharedElements: {
-          value: function() {
-            return {
-              'sale-ripple': this.$.ripple,
-            }
-          }
-        },
+        
         
       },
 
       
       behaviors: [
-          Polymer.NeonSharedElementAnimatableBehavior,
+          Polymer.NeonAnimatableBehavior,
           Polymer.IronResizableBehavior
       ],
-
-      ready: function() {
-        this.customStyle['--sale-ripple-color'] = this.rippleConfig[this.sale.day.name];
-        this.updateStyles();
-      }
 
       
 

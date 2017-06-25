@@ -52,6 +52,10 @@
          --iron-icon-fill-color: #FFFFFF;
        }
 
+       [hidden] {
+         display: none !important;
+       }
+
        app-box {
            position: absolute;;
            top: 0;
@@ -145,19 +149,23 @@
          }
 
          .event-date-day {
-           @apply(--paper-font-display3);
+           @apply --paper-font-display3;
+           font-size: 48px;
+           line-height: 48px;
          }
 
          .event-date-month {
-           @apply(--paper-font-subhead);
-           line-height: 12px;
+           @apply --paper-font-subhead;
+           line-height: 18px;
+           font-size: 20px;
          }
 
          .event-date-weekday {
-           @apply(--paper-font-subhead);
+           @apply --paper-font-subhead;
            white-space: nowrap;
            overflow: hidden;
            text-overflow: ellipsis;
+           font-size: 20px;
          }
 
          .event-name {
@@ -233,6 +241,39 @@
            p {
              font-size: 14px;
            }
+
+           .event-label {
+             text-align: left;
+           }
+
+           #event-label-content {
+             display: none;
+           }
+
+           .event-date {
+             text-align: center;
+           }
+
+           .event-artists {
+             @apply --layout-vertical;
+           }
+
+           .event-content-column {
+             @apply --layout-horizontal;
+             padding-right: 0;
+           }
+
+           .event-content-primary {
+             padding-right: 4px;
+           }
+
+           .event-content-secondary {
+             margin-top: 3px;
+           }
+
+           .event-row {
+             margin: 8px 0;
+           }
          }
 
          #ripple {
@@ -281,28 +322,23 @@
                <div class="event-row">
                  <div class="event-label event-date">
                      <div class="event-date-day">[[event.date.day]]</div>
-                     <div class="event-date-month">[[event.date.month_long]]</div>
+                     <div class="event-date-month">[[event.date.month]]</div>
                      <div class="event-date-weekday">[[event.date.weekday]]</div>
                  </div>
-                 <template is="dom-if" if="[[!_showTitle(event.name)]]">
-                    <div class="event-content event-name">[[event.name]]</div>
-                 </template>
-                 <template is="dom-if" if="[[_showTitle(event.name)]]">
-                    <div class="event-content event-name artist-title" >
-                        <template is="dom-repeat" items="[[event.artists]]" as="artist">
-                            <div class="artist-name">[[artist.name]]</div>
-                        </template>
-                    </div>
-                 </template>
+                 <div class="event-content event-name">[[event.name]]</div>
                </div>
 
                <div class="event-row">
-                 <div class="event-label"></div>
+                 <div id="event-label-content" class="event-label"></div>
                  <div class="event-content">
                    <marked-element markdown="[[event.info]]">
                      <div class="markdown-html custom"></div>
                    </marked-element>
                  </div>
+               </div>
+               <div class="event-row" hidden$="[[_showSales(event.sale)]]">
+                 <div class="event-label">Акции:</div>
+                 <div class="event-content">[[event.sale]]</div>
                </div>
                <div class="event-row">
                  <div class="event-label">В деле:</div>
@@ -465,6 +501,12 @@
            'year': date[3],
            'original': response.date,
          };
+         if(response.sales.length >= 1) {
+           response.sale = response.sales[0][0];
+         } else {
+           response.sale = null;
+         }
+         
          this.event = response;
          this.async(this._scroll, 200);
          this.notifyResize();
@@ -478,8 +520,8 @@
          this._updateImg(event);
        },
 
-       _showTitle: function(title) {
-            return title == null;
+       _showSales: function(sales) {
+          return sales === null;
        },
 
        _updateImg: function(event) {
