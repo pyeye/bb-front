@@ -9,18 +9,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="bb-about-contacts.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="bb-about-news.html">
+<link rel="import" href="bb-about-concept.html">
+<link rel="import" href="bb-about-job.html">
+<link rel="import" href="bb-about-interior.html">
 <link rel="import" href="bb-icons.html">
 
 <dom-module id="bb-about">
@@ -35,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(http://localhost/img/static/homepage/abou.jpg);
+          background-image: url(http://localhost/img/static/homepage/about.jpg);
           background-position: left center;
         };
       }
@@ -52,10 +58,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         -webkit-transform-origin: center top !important;
         transform-origin: center top !important;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 34px;
       }
 
@@ -82,10 +87,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 20px;
       }
 
@@ -166,15 +170,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-primary-color);
       }
 
-      #ripple {
-        position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100vw;
-            background-color: var(--app-lower-layer-color);
-            z-index: -5;
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: rgba(255,255,255, 0.9);
+          background-color: var(--app-primary-color);
+        }
       }
+
+      paper-tab {
+        font-family: 'Raleway', sans-serif;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      paper-tab.iron-selected {
+        color: rgba(255,255,255, 1);
+      }
+
+      
     </style>
 
 
@@ -182,34 +196,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
         <app-toolbar>
           <slot select="[drawer-toggle]"></slot>
-          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="star"></iron-icon></div>
+          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">О БОРИСЕ</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
         <app-toolbar class="tall">
-          <div main-title><iron-icon icon="star"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="star"></iron-icon></div>
+          <div main-title><iron-icon icon="star"></iron-icon><div class="title-label">О БОРИСЕ</div><iron-icon icon="star"></iron-icon></div>
         </app-toolbar>
       </app-header>
 
 
-      <div id="ripple"></div>
-      <div class="content-container" id="content">
-        <div class="content">
-              <bb-about-contacts name="contacts"></bb-about-contacts>
-        </div>
-        <!--
-        <div class="nav">
-          <iron-selector selected="{{aboutSection}}"
-                         attr-for-selected="name"
-                         class="drawer-list"
-                         role="navigation">
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container>
+          <paper-tab group="news">Жизнь</paper-tab>
+          <paper-tab group="concept">Концепция</paper-tab>
+          <paper-tab group="interior">Интерьер</paper-tab>
+          <paper-tab group="job">Вакансии</paper-tab>
+      </paper-tabs>
 
-            <span name="story">Наша история</span>
-            <span name="contacts">Наши контакты</span>
-          </iron-selector>
-        </div>
-        -->
-
-
-      </div>
+      
+        <neon-animated-pages  selected="[[tab]]" attr-for-selected="group">
+          <bb-about-news group="news"></bb-about-news>
+          <bb-about-concept group="concept"></bb-about-concept>
+          <bb-about-interior group="interior"></bb-about-interior>
+          <bb-about-job group="job"></bb-about-job>
+        </neon-animated-pages>
+      
     </app-header-layout>
 
 
@@ -224,23 +233,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'bb-about',
 
       properties: {
+        tab: {
+          type: String,
+          value: 'news',
+        },
         animationConfig: {
           value: function() {
             return {
-              'entry': [{
-                  name: 'ripple-animation',
-                  id: 'about-ripple',
-                  toPage: this,
-                  timing: {duration: 700},
-                },{
-                name: 'hero-animation',
-                id: 'about-hero',
-                toPage: this,
-                timing: {duration: 400},
-              }, {
+              'entry': [ {
                 name: 'fade-in-animation',
                 node: this.$.content,
-                timing: {delay: 150},
               }],
               'exit': {
                 name: 'fade-out-animation',

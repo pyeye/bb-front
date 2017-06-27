@@ -23,10 +23,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
@@ -72,10 +73,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         -webkit-transform-origin: center top !important;
         transform-origin: center top !important;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 38px;
       }
 
@@ -98,10 +98,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 20px;
       }
 
@@ -140,14 +139,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .content {
         @apply --layout-vertical;
         width: 90%;
+        height: 450px;
         margin-top: 16px;
         margin-bottom: 16px;
         margin-left: auto;
         margin-right: auto;
         color: #fff;
+        
+        
+        background-image: var(--sale-background-image);
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+
+      paper-material {
+        border-radius: 10px;
+      }
+
+      .cover-layer {
+        border-radius: 10px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
         background-color: var(--sale-content-layer-color);
         transition: background-color 1s ease;
-        
+        opacity: 0.7;
       }
 
       .sale-month {
@@ -173,6 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .sale-main {
         @apply --layout-flex;
+        
       }
 
       .sale-nav-day {
@@ -180,11 +199,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 8px;
         text-transform: uppercase; 
         font-weight: 600;
+        
       }
 
-      .sale-nav-day.iron-selected {
-        color: var(--app-primary-color);
-      }
 
       .sale-nav-day:hover {
         cursor: pointer;
@@ -233,7 +250,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .sale-info-image {
         width: 35%;
-        height: 400px;
         display: -ms-flexbox;
         display: -webkit-flex;
         display: flex;
@@ -244,7 +260,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .iron-image {
         display: block;
         position: relative;
-        height: 400px;
+        
         margin-left: auto;
         margin-right: auto;
         width: 400px;
@@ -263,12 +279,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-tabs {
         --paper-tabs-selection-bar-color: #fff;
         --paper-tabs: {
-          color: rgba(255,255,255, 0.9);
+          color: rgba(255,255,255, 0.8);
         }
       }
 
       paper-tab {
-        @apply --paper-font-subheading;
+        @apply --paper-font-subhead;
         font-family: 'Oswald', sans-serif;
         text-transform: uppercase;
         font-weight: 600;
@@ -276,6 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-tab.iron-selected {
         color: rgba(255,255,255, 1);
+
       }
 
 
@@ -351,11 +368,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="ripple"></div>
 
     <paper-material class="content" id="content">
+      <div class="cover-layer"></div>
       <div class="sale-month">
         [[month.name]].
       </div>
       <div class="sale-nav">
-        <paper-tabs selected="{{day}}" attr-for-selected="name" no-bar noink >
+        <paper-tabs selected="{{day}}" attr-for-selected="name" noink >
           <template is="dom-repeat" items="[[month.sales]]" as="sale">
             <paper-tab name="[[sale.day.name]]" on-tap="_rippleHandler">[[sale.day.name]]</paper-tab>
           </template>
@@ -364,9 +382,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="sale-main">
         <neon-animated-pages selected="[[day]]" attr-for-selected="name"> 
             <template is="dom-repeat" items="[[month.sales]]" as="sale">
-              
-                  <bb-sales-detail name="[[sale.day.name]]" sale="[[sale]]"></bb-sales-detail>
-             
+                  <bb-sales-detail name="[[sale.day.name]]" sale="[[sale]]" day="[[day]]"></bb-sales-detail>
             </template>
         </neon-animated-pages>
       </div>
@@ -395,9 +411,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: function() {
             return {
-              'Вторник': '#2f3d4a',
-              'Среда': '#403d2c',
-              'Четверг': '#494c39',
+              'Именниникам': '#004D40',
+              'Понедельник': '#006064',
+              'Вторник': '#263238',
+              'Среда': '#104414',
+              'Четверг': '#3E2723',
+              'Пятница': '#37474F',
+              'Суббота': '#403d2c',
+              'Воскресенье': '#494c39',
             }
           }
         },
@@ -406,15 +427,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return {
               'entry': [
-                {
-                  name: 'ripple-animation',
-                  id: 'sales-ripple',
-                  toPage: this,
-                }, {
-                  name: 'hero-animation',
-                  id: 'sales-hero',
-                  toPage: this,
-                }, {
+                 {
                   name: 'slide-from-bottom-animation',
                   node: this.$.content,
                 }, {
@@ -438,20 +451,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        sharedElements: {
-          value: function() {
-            return {
-              'sales-hero': this.$.header,
-              'sales-ripple': this.$.ripple,
-            }
-          }
-        },
+        
       },
 
       behaviors: [
-          Polymer.NeonSharedElementAnimatableBehavior,
+          Polymer.NeonAnimatableBehavior,
           Polymer.IronResizableBehavior
       ],
+
+      listeners: {
+        'sale-selected': '_saleSelected',
+      },
+
+      _saleSelected: function(e) {
+        this.background_img = e.detail.img;
+        this.async(this._cangeBackgroundImage, 200);
+        
+      },
+
+      _cangeBackgroundImage: function(img) {
+        this.customStyle['--sale-background-image'] = 'url('+this.background_img+')';
+        this.updateStyles();
+      },
 
       ready: function() {
           var currentMonth = new Date().getMonth();
@@ -479,6 +500,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var date, short_date, options, index, len;
           this.month = response;
           this.day = this.month.sales[0].day.name;
+          this.customStyle['--sale-background-image'] = 'url('+this.month.sales[0].image.original+')';
           this.customStyle['--sale-content-layer-color'] = this.rippleConfig[this.day];
           this.updateStyles();
         },

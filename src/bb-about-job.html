@@ -1,0 +1,185 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+
+<dom-module id="bb-about-job">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      paper-material {
+        margin: 24px;
+        background-color: #252525;
+        color: #FFFFFF;
+      }
+
+      .content {
+        transition: opacity 0.3s;
+        opacity: 0;
+        width: 85%;
+        margin: 16px auto;
+      }
+
+      .content[has-content]{
+        opacity: 1;
+      }
+
+      .material {
+          min-height: 350px;
+          @apply --layout-horizontal;
+      }
+
+      .image {
+          width: 40%;
+      }
+
+      .text {
+          width: 60%;
+          padding: 16px;
+      }
+
+      .text-title {
+          @apply --paper-font-headline;
+          font-size: 28px;
+      }
+
+      .info {
+        margin: 8px 0 16px 0;
+        @apply --layout-horizontal;
+        @apply --paper-font-body1;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .category {
+        letter-spacing: 0.7px;
+      }
+
+      .date {
+        letter-spacing: 1px;
+      }
+
+      .category-border {
+        display: inline-block;
+        border-top: 1px solid var(--app-primary-color);
+        border-bottom: 1px solid var(--app-primary-color);
+      }
+
+      .description {
+          @apply --paper-font-body1;
+          font-size: 16px;  
+      }
+
+      iron-image {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+
+    </style>
+
+    <iron-ajax id="ajax"
+                auto
+                url="http://localhost/api/v1/news/"
+                handle-as="json"
+                on-response="handleResponse"></iron-ajax>
+
+
+    <div class="content" has-content$="[[_isDefined(news)]]">
+        
+            <paper-material class="material">
+                
+                <div class="text">
+                    <div class="text-title">Название вакансии</div>
+                    <div class="info">
+                        <div class="date">
+                            26.06.2017
+                        </div>
+                    </div>
+                    <div class="description">
+                      ОБЯЗАННОСТИ:
+                      <p>- Оперативное решение интересующих посетителей вопросов в рамках своей компетенции;</p>
+                      <p>- Поддержание чистоты на рабочем месте.</p>
+                      <br>
+                      ТРЕБОВАНИЯ:
+                      <p>- Презентабельный внешний вид;</p>
+                      <p>- Высокая обучаемость, ответственность, позитивный настрой;</p>
+                      <p>- Опыт работы является преимуществом.</p>
+                      <p></p>
+                    </div>
+                </div>
+                <div class="image">
+                    <iron-image class="card-image" sizing="cover" preload fade src="http://localhost/img/static/team/team.jpg"></iron-image>
+                </div>
+                
+            </paper-material>
+       
+
+
+    </div>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'bb-about-job',
+
+
+      _isDefined: function(news) {
+        return news != null;
+      },
+
+      handleResponse: function(request) {
+          var response = request.detail.response;
+          var date, short_date, options, index, len;
+
+          options = {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+          };
+
+          for (index = 0, len = response.length; index < len; ++index) {
+              date = new Date(response[index].updated_at);
+              date = date.toLocaleString("ru", options).split(' ');
+              short_date = response[index].updated_at.split('-');
+              response[index].date = {
+                  'day': date[0],
+                  'month': date[1],
+                  'year': date[2],
+                  'short': short_date[2] + '/' + short_date[1] + '/' + short_date[0].slice(2,4),
+              };
+          };
+
+          this.news = response;
+        },
+    });
+
+  </script>
+
+</dom-module>

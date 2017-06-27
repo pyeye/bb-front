@@ -68,10 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         -webkit-transform-origin: center top !important;
         transform-origin: center top !important;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 38px;
       }
 
@@ -97,10 +96,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 20px;
       }
 
@@ -213,7 +211,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-tab group="special">Спец предложение</paper-tab>
       </paper-tabs>
 
-      <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group">
+      <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
           <bb-menu-list group="kitchen" tab=[[tab]] ></bb-menu-list>
           <bb-menu-list group="bar" tab=[[tab]] ></bb-menu-list>
           <bb-menu-list group="hookah" tab=[[tab]] ></bb-menu-list>

@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
@@ -26,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-top-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
 
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
@@ -41,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
     :host {
         display: block;
-        position: relative !important;
+        
       }
 
 
@@ -107,7 +108,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .sale-info-box {
         position: relative;
-        height: 100%;
         padding: 16px;
         @apply --layout-horizontal;
       }
@@ -146,7 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .sale-info-image {
         width: 35%;
-        height: 400px;
+        
         display: -ms-flexbox;
         display: -webkit-flex;
         display: flex;
@@ -157,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .iron-image {
         display: block;
         position: relative;
-        height: 400px;
+        
         margin-left: auto;
         margin-right: auto;
         width: 400px;
@@ -173,14 +173,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-tab {
-        @apply --paper-font-subheading;
+        @apply --paper-font-subhead;
         font-family: 'Oswald', sans-serif;
         text-transform: uppercase;
         font-weight: 600;
+        
       }
 
       paper-tab.iron-selected {
         color: rgba(255,255,255, 1);
+        
       }
 
 
@@ -246,22 +248,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     
 
-    <div class="sale-info-box" name="[[sale.day.name]]">
+    <div class="sale-info-box" name="[[sale.day.name]]" id="box">
         <div class="sale-info-text">
-          <div id="day" class="sale-info-day">
+          <div  class="sale-info-day">
               <iron-icon icon="star"></iron-icon>
               <div class="sale-info-day-bottom">[[sale.name]]</div> 
               <iron-icon icon="star"></iron-icon>
           </div>
-          <div id="description" class="sale-info-description">
+          <div  class="sale-info-description">
               <marked-element markdown="[[sale.info]]">
                 <div slot="markdown-html custom"></div>
               </marked-element>
           </div>
         </div>
-        <div id="image" class="sale-info-image">
-          <img class="iron-image" src="[[sale.image.original]]"></img>
-        </div>
+        
     </div>
     
 
@@ -275,6 +275,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
         },
 
+        day: {
+          type: String,
+          observer: '_dayChanged',
+        },
+
         rippleConfig: {
           type: Object,
           value: function() {
@@ -285,23 +290,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
-animationConfig: {
+        animationConfig: {
           value: function() {
             return {
               'entry': [
                  {
                   name: 'fade-in-animation',
-                  node: this.$.day,
-                  timing: {delay: 150},
-                },  {
-                  name: 'fade-in-animation',
-                  node: this.$.description,
+                  node: this,
                   timing: {delay: 200},
-                }, {
-                  name: 'fade-in-animation',
-                  node: this.$.image,
-                  timing: {delay: 250},
-                }],
+                },
+                ],
               'exit': {
                   name: 'fade-out-animation',
                   node: this,
@@ -318,6 +316,18 @@ animationConfig: {
           Polymer.NeonAnimatableBehavior,
           Polymer.IronResizableBehavior
       ],
+
+      _dayChanged: function(day) {
+        if(day === this.name) {
+          this.fire('sale-selected', {
+            'img': this.sale.image.original,
+          });
+        }
+      },
+
+      ready: function() {
+        
+      },
 
       
 

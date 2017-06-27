@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bb-reservation-form.html">
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-album.html">
+
 
 
 <dom-module id="bb-app">
@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     display: -webkit-flex;
     display: flex;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .social-icon {
@@ -174,8 +174,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .reservation-button {
     color: #fff;
-    margin: 8px;
+    margin: 8px 16px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    border: 2px solid rgba(255,255,255, 0.5);
+    line-height: 0.8;
+    border-radius: 0;
+    --paper-button-ink-color: var(--app-primary-color);
+    transition: border ease .5s;
   }
+
+  .reservation-button:hover {
+    
+    border: 2px solid  var(--app-primary-color);
+  }
+
+  
 
   .contacts iron-icon {
     --iron-icon-fill-color: #FFFFFF;

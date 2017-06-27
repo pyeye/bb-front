@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
@@ -57,10 +60,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-weight: normal;
     -webkit-transform-origin: center top !important;
     transform-origin: center top !important;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
+    @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
     font-size: 38px;
   }
 
@@ -89,10 +91,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-weight: normal;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
+    @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
     font-size: 20px;
     margin-left: -36px;
   }
@@ -293,6 +294,11 @@ Polymer({
       reflectToAttribute: true
     },
 
+    initial: {
+      type: Boolean,
+      value: false,
+    },
+
     headerTitle: {
       type: String,
     },
@@ -306,22 +312,11 @@ Polymer({
     animationConfig: {
       value: function() {
         return {
-          'entry': [{
-            name: 'hero-animation',
-            id: 'album-hero',
-            toPage: this,
-          }, {
-            name: 'ripple-animation',
-            id: 'album-ripple',
-            toPage: this,
-            timing: {
-              duration: 800
-            }
-          }, {
+          'entry': [ {
             name: 'fade-in-animation',
-            node: this.$.lightgallery,
+            node: this,
             timing: {
-              delay: 300
+              delay: 100
             }
           }],
           'exit': {
@@ -363,10 +358,14 @@ Polymer({
     }
     Polymer.dom(this.root).appendChild(layout);
     this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
+    this.initial = true;
   },
 
   _albumPageChanged: function(album) {
     if(album !== undefined && this.route.prefix === '/album') {
+      if(!this.initial) {
+        this._renderNeonPage();
+      }
       this.$.ajax.url = ['http://localhost/api/v1/albums', album].join('/') + '/';
       this.$.ajax.generateRequest();
     }
