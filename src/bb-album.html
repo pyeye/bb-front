@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
@@ -57,27 +60,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-weight: normal;
     -webkit-transform-origin: center top !important;
     transform-origin: center top !important;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
+    @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
     font-size: 38px;
   }
 
   [main-title] iron-icon {
     --iron-icon-fill-color: #FFFFFF;
-    --iron-icon-height: 35px;
-    --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
   }
 
   [main-title] .title-label {
-    @apply(--paper-font-display1);
-    margin-left: 40px;
-    margin-right: 40px;
-    font-size: 38px;
+    margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 4px;
+        font-size: 36px;
     white-space: pre-line;
-    letter-spacing: 2px;
-    font-family: 'Raleway', sans-serif;
+    
   }
 
 
@@ -86,23 +91,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-weight: normal;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
+    @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
     font-size: 20px;
     margin-left: -36px;
   }
 
   [condensed-title] .title-label {
-    @apply(--paper-font-title);
+    @apply --paper-font-title;
     font-size: 22px;
     margin-left: 24px;
     margin-right: 24px;
     white-space: pre-line;
     text-align: center;
     letter-spacing: 2px;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Oswald', sans-serif !important;
   }
 
   [condensed-title] iron-icon {
@@ -256,10 +260,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <a href="/gallery" tabindex="-1">
         <paper-icon-button icon="arrow-back"></paper-icon-button>
       </a>
-      <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">[[headerTitle]]</div><iron-icon icon="foot-right"></iron-icon></div>
+      <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">[[headerTitle]]</div><iron-icon icon="star"></iron-icon></div>
     </app-toolbar>
     <app-toolbar class="tall">
-      <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">[[headerTitle]]</div><iron-icon icon="foot-right"></iron-icon></div>
+      <div main-title><iron-icon icon="star"></iron-icon><div class="title-label">[[headerTitle]]</div><iron-icon icon="star"></iron-icon></div>
     </app-toolbar>
   </app-header>
 
@@ -290,6 +294,11 @@ Polymer({
       reflectToAttribute: true
     },
 
+    initial: {
+      type: Boolean,
+      value: false,
+    },
+
     headerTitle: {
       type: String,
     },
@@ -303,22 +312,11 @@ Polymer({
     animationConfig: {
       value: function() {
         return {
-          'entry': [{
-            name: 'hero-animation',
-            id: 'album-hero',
-            toPage: this,
-          }, {
-            name: 'ripple-animation',
-            id: 'album-ripple',
-            toPage: this,
-            timing: {
-              duration: 800
-            }
-          }, {
+          'entry': [ {
             name: 'fade-in-animation',
-            node: this.$.lightgallery,
+            node: this,
             timing: {
-              delay: 300
+              delay: 100
             }
           }],
           'exit': {
@@ -360,10 +358,14 @@ Polymer({
     }
     Polymer.dom(this.root).appendChild(layout);
     this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
+    this.initial = true;
   },
 
   _albumPageChanged: function(album) {
     if(album !== undefined && this.route.prefix === '/album') {
+      if(!this.initial) {
+        this._renderNeonPage();
+      }
       this.$.ajax.url = ['http://localhost/api/v1/albums', album].join('/') + '/';
       this.$.ajax.generateRequest();
     }

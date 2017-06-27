@@ -1,0 +1,174 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="bb-icons.html">
+
+<dom-module id="bb-menu-category">
+
+  <template>
+
+    <style>
+      :host {
+          margin-bottom: 16px;
+        display: block;
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 18px;
+        --iron-icon-width: 18px;
+      }
+
+
+      paper-material {
+        @apply --layout-vertical;
+        padding: 16px;
+        margin: 24px;
+        background-color: #252525;
+        color: #FFFFFF;
+        margin-bottom: 32px;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      .category-title {
+          margin: 8px auto 16px auto;
+          text-transform: uppercase;
+          font-family: 'Oswald', sans-serif !important;
+          @apply --paper-font-headline;
+          @apply --layout-horizontal;
+          letter-spacing: 2px;
+          font-size: 26px;
+      }
+
+      iron-icon {
+          margin: auto 6px;
+      }
+
+      .menu-position {
+          padding: 16px;
+          @apply --layout-horizontal;
+          border-bottom: 1px solid #191919;
+      }
+
+      .menu-position:last-of-type { 
+          border-bottom: 0 none;
+      }
+
+      .menu-title {
+          @apply --paper-font-headline;
+          font-size: 20px;
+          font-weight: normal;
+      }
+
+      .menu-info {
+          @apply --layout-flex;
+          @apply --layout-vertical;
+          
+      }
+
+      .menu-description {
+          @apply --layout-horizontal;
+          @apply --paper-font-body1;
+          opacity: 0.7;
+      }
+
+      .menu-price {
+          @apply --layout-horizontal;
+          
+      }
+
+      .menu-price-box {
+          @apply --layout-vertical;
+          margin-left: 16px;
+      }
+
+      .menu-price-value {
+        @apply --paper-font-headline;
+      }
+
+      .menu-price-measure {
+          @apply --layout-horizontal;
+          @apply --paper-font-body1;
+      }
+
+
+   
+    </style>
+
+    <iron-ajax id="ajax"
+               handle-as="json"
+               last-response="{{menu}}"></iron-ajax>
+
+    <paper-material hidden$="[[_isDefined(menu)]]">
+        <div class="category-title">
+            <iron-icon icon="star"></iron-icon>[[category.name]]<iron-icon icon="star"></iron-icon>
+        </div>
+        <template is="dom-repeat" items="[[menu]]">
+            <div class="menu-position">
+                <div class="menu-info">
+                    <div class="menu-title">[[item.name]]</div>
+                    <div class="menu-description">
+                        <div>[[item.description]]</div>
+                    </div>
+                </div>
+                <div class="menu-price">
+                    <template is="dom-repeat" items="[[item.prices]]" as="price">
+                        <div class="menu-price-box">
+                            <div class="menu-price-value">[[price.value]] &#x20bd;</div>
+                            <div class="menu-price-measure">
+                                <div>[[price.count]]</div>
+                                <div>[[price.measure]]</div>
+                            </div>
+                            
+                            
+                        </div>
+                            
+                    </template>
+                </div>
+            </div>
+        </template>
+    </paper-material>
+    
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'bb-menu-category',
+
+      properies: {
+          category: Object,
+          menu: Array,
+      },
+
+      ready: function() {
+          this._generateRequest(this.category);
+      },
+
+      _generateRequest: function(category) {
+        this.$.ajax.url = 'http://localhost/api/v1/menu/?category=' + category.code;
+        this.$.ajax.generateRequest();
+      },
+
+       _isDefined: function(menu) {
+        return menu.length == 0;
+      },
+
+    });
+
+  </script>
+
+</dom-module>

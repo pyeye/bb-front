@@ -8,8 +8,38 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+
+
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+
+<link rel="import" href="bb-icons.html">
+<link rel="import" href="bb-sales-detail.html">
+<link rel="import" href="bb-ripple.html">
 
 <dom-module id="bb-sales">
 
@@ -18,104 +48,463 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+        --sale-content-layer-color: #202020;
+      }
+
+      app-header {
+          background-color: var(--app-primary-color);
+          color: #fff;
+          --app-header-background-front-layer: {
+              background-image: url(http://localhost/img/static/homepage/news.jpg);
+              background-position: center center;
+          };
+      }
+
+      app-toolbar.tall {
+        height: 300px;
+        padding-left: 20px;
+      }
+
+      sample-content {
+        padding-top: 212px;
+      }
+
+      [main-title] {
+        font-weight: normal;
+        -webkit-transform-origin: center top !important;
+        transform-origin: center top !important;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
+        font-size: 38px;
+      }
+
+      [main-title] iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 35px;
+        --iron-icon-width: 24px;
+      }
+
+      [main-title] .title-label {
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
+      }
+
+      [condensed-title] {
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
+        font-size: 20px;
+      }
+
+      [condensed-title] .title-label {
+        @apply --paper-font-title;
+        font-size: 22px;
+        margin-left: 24px;
+        margin-right: 24px;
+        letter-spacing: 4px;
+         font-family: 'Oswald', sans-serif !important;
+        line-height: 34px;
+      }
+
+      [condensed-title] iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 18px;
+      }
+
+      [condensed-title] i {
+          font-weight: 100;
+          font-style: normal;
+      }
+
+      app-toolbar {
+          color: white;
+      }
+
+      bb-ripple {
+        color: var(--sale-content-layer-color);
+        
+      }
+
+      
+
+      .content {
+        @apply --layout-vertical;
+        width: 90%;
+        height: 450px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #fff;
+        
+        
+        background-image: var(--sale-background-image);
+        background-position: center center;
+        background-repeat: no-repeat;
       }
 
       paper-material {
-        position: relative;
-        width: 90%;
-        max-width: 400px;
-        margin-right: auto;
-        margin-top: 16px;
-        height: 170px;
+        border-radius: 10px;
       }
 
-      .sales-box {
+      .cover-layer {
+        border-radius: 10px;
         position: absolute;
-        right: 0;
         bottom: 0;
         left: 0;
+        right: 0;
         top: 0;
-        background: rgba(55, 71, 79, 0.6);
-        color: white;
-        padding: 24px;
+        background-color: var(--sale-content-layer-color);
+        transition: background-color 1s ease;
+        opacity: 0.7;
       }
 
-      .sale-image {
+      .sale-month {
         position: relative;
-        min-height: 170px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        text-align: center;
+        padding: 16px;
+        text-transform: uppercase; 
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-headline;
+        letter-spacing: 4px;
+        z-index: 3;
+      }
+
+      .sale-nav {
+        @apply --layout-horizontal;
+        margin: 0 auto;
+        z-index: 3;
+      }
+
+      .sale-main {
+        @apply --layout-flex;
+        
+      }
+
+      .sale-nav-day {
+        display: inline-block;
+        margin: 8px;
+        text-transform: uppercase; 
+        font-weight: 600;
+        
+      }
+
+
+      .sale-nav-day:hover {
+        cursor: pointer;
+      }
+
+      .sale-info-box {
+        transition: opacity 5000ms cubic-bezier(0,0,0.2,1);
+        position: relative;
         height: 100%;
-        width: 100%;
-        max-width: 400px;
-        background-color: #252525;
+        padding: 16px;
+        @apply --layout-horizontal;
+        
       }
 
-      .sale-date {
-        @apply(--paper-font-subhead);
-        font-weight: normal;
+      .sale-info-text {
+        @apply --layout-verical;
+        width: 65%;
+        margin-top: 16px;
       }
 
-      .sale-info {
-        @apply(--paper-font-headline);
+      .sale-info-day {
+        @apply --layout-horizontal;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        text-transform: uppercase;
+        font-size: 26px;
+
       }
 
-      .sale-title {
-        position: absolute;
-        bottom: 0;
-        margin-bottom: 24px;
+      .sale-info-day-bottom {
+        @apply --paper-font-headline;
+        border-bottom: 4px solid #fff;
+        position: relative;
+        margin: 16px;
+        font-family: 'Oswald', sans-serif;
+        letter-spacing: 4px;
       }
 
+      .sale-info-description {
+        @apply --paper-font-subhead;
+        margin-top: 16px;
+      }
+
+
+      .sale-info-image {
+        width: 35%;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .iron-image {
+        display: block;
+        position: relative;
+        
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+      }
+
+      #ripple {
+        position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: var(--app-lower-layer-color);
+            z-index: -5;
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: rgba(255,255,255, 0.8);
+        }
+      }
+
+      paper-tab {
+        @apply --paper-font-subhead;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      paper-tab.iron-selected {
+        color: rgba(255,255,255, 1);
+
+      }
+
+
+      @media (max-width: 1450px) {
+        app-toolbar.tall {
+          height: 200px;
+        }
+
+        .item {
+          -webkit-flex-basis: 33%;
+          flex-basis: 33%;
+          max-width: 33%;
+        }
+
+
+      }
+
+      @media (max-width: 1050px) {
+        .item {
+          -webkit-flex-basis: 50%;
+            flex-basis: 50%;
+            max-width: 50%;
+        }
+        [main-title] {
+          -webkit-transform-origin: center top !important;
+          transform-origin: center top !important;
+          font-size: 30px;
+        }
+
+        [main-title] .title-label {
+          font-size: 30px;
+          margin-left: 16px;
+          margin-right: 16px;
+          letter-spacing: 2px;
+        }
+
+        [condensed-title] {
+          margin-left: -36px;
+          font-size: 20px;
+        }
+
+        [condensed-title] .title-label {
+          font-size: 20px;
+          margin-left: 16px;
+          margin-right: 16px;
+          letter-spacing: 2px;
+        }
+      }
+
+      @media (max-width: 550px) {
+        .item {
+          -webkit-flex-basis: 100%;
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+      }
     </style>
 
-        <paper-material>
-            <iron-image class="sale-image" 
-                        sizing="cover" 
-                        preload 
-                        fade 
-                        placeholder="[[base64img.casting]]" 
-                        src="http://localhost/img/static/events/casting.jpg"></iron-image>
-            <div class="sales-box">
-                <div class="sale-title">
-                    <div class="sale-info">Открытая сцена</div>
-                    <div class="sale-date">Каждую среду в 18:00</div>
-                </div>
-            </div>
-        </paper-material>
+    <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
 
-        <paper-material>
-            <iron-image class="sale-image" 
-                        sizing="cover" 
-                        preload 
-                        fade 
-                        placeholder="[[base64img.jazz]]" 
-                        src="http://localhost/img/static/events/jazz.jpg"></iron-image>
-            <div class="sales-box">
-                <div class="sale-title">
-                    <div class="sale-info">Джазовый вечер</div>
-                    <div class="sale-date">Каждый четверг в 21:00</div>
-                </div>
-            </div>
-        </paper-material>
-        
-  </template>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
+    <app-header-layout>
+<app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+      <app-toolbar>
+        <slot select="[drawer-toggle]"></slot>
+        <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">АКЦИИ</div><iron-icon icon="star"></iron-icon></div>
+      </app-toolbar>
+      <app-toolbar class="tall">
+        <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">АКЦИИ</div><iron-icon icon="star" id="fright"></iron-icon></div>
+      </app-toolbar>
+    </app-header>
+    <div id="ripple"></div>
+
+    <paper-material class="content" id="content">
+      <div class="cover-layer"></div>
+      <div class="sale-month">
+        [[month.name]].
+      </div>
+      <div class="sale-nav">
+        <paper-tabs selected="{{day}}" attr-for-selected="name" noink >
+          <template is="dom-repeat" items="[[month.sales]]" as="sale">
+            <paper-tab name="[[sale.day.name]]" on-tap="_rippleHandler">[[sale.day.name]]</paper-tab>
+          </template>
+        </paper-tabs>
+      </div>
+      <div class="sale-main">
+        <neon-animated-pages selected="[[day]]" attr-for-selected="name"> 
+            <template is="dom-repeat" items="[[month.sales]]" as="sale">
+                  <bb-sales-detail name="[[sale.day.name]]" sale="[[sale]]" day="[[day]]"></bb-sales-detail>
+            </template>
+        </neon-animated-pages>
+      </div>
+    <bb-ripple id="sripple" style="pointer-events: none;" initial-opacity="1" opacity-decay-velocity="1" max-radius="850"></paper-ripple>
+    </paper-material>
+    </app-header-layout>
+
+    
+    
+
+</template>
   <script>
-
     Polymer({
       is: 'bb-sales',
 
       properties: {
-          base64img: {
-                  type: Object,
-                  value: function () {
-                    return {
-                      'jazz': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QCARXhpZgAASUkqAAgAAAAEABoBBQABAAAAPgAAABsBBQABAAAARgAAACgBAwABAAAAAgAAAGmHBAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAAAAwAAkAcABAAAADAyMTAAoAcABAAAADAxMDABoAMAAQAAAP//AAAAAAAA/+EC/2h0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8APD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiB4bWxuczp4bXBNTT0naHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyc+CiAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoyOEVDQkZDNERBM0UxMUU2QTRBQ0I0NjI5MEE4Mzk5MDwveG1wTU06SW5zdGFuY2VJRD4KICA8eG1wTU06RG9jdW1lbnRJRCByZGY6cmVzb3VyY2U9J3htcC5kaWQ6MjhFQ0JGQzVEQTNFMTFFNkE0QUNCNDYyOTBBODM5OTAnIC8+CiAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoyOEVDQkZDNERBM0UxMUU2QTRBQ0I0NjI5MEE4Mzk5MDwveG1wTU06SW5zdGFuY2VJRD4KICA8eG1wTU06RGVyaXZlZEZyb20gcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogIDwveG1wTU06RGVyaXZlZEZyb20+CiA8L3JkZjpEZXNjcmlwdGlvbj4KCiA8cmRmOkRlc2NyaXB0aW9uIHhtbG5zOnhtcD0naHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyc+CiAgPHhtcDpDcmVhdG9yVG9vbD5EeE8gT3B0aWNzIFBybyA5LjUuMjwveG1wOkNyZWF0b3JUb29sPgogPC9yZGY6RGVzY3JpcHRpb24+Cgo8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSdyJz8+Cv/bAEMAAwICAwICAwMDAwQDAwQFCAUFBAQFCgcHBggMCgwMCwoLCw0OEhANDhEOCwsQFhARExQVFRUMDxcYFhQYEhQVFP/bAEMBAwQEBQQFCQUFCRQNCw0UFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFP/CABEIAAQABgMBEQACEQEDEQH/xAAUAAEAAAAAAAAAAAAAAAAAAAAH/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAP/2gAMAwEAAhADEAAAAQqr/8QAFxAAAwEAAAAAAAAAAAAAAAAAAAEDBf/aAAgBAQABBQKevVH/xAAYEQACAwAAAAAAAAAAAAAAAAAAAgEDBP/aAAgBAwEBPwHBUsKx/8QAGREAAgMBAAAAAAAAAAAAAAAAAhEAAwRR/9oACAECAQE/AdthMVyf/8QAGhAAAgIDAAAAAAAAAAAAAAAAAQMAEQISIv/aAAgBAQAGPwI7YrbdHsT/xAAXEAEBAQEAAAAAAAAAAAAAAAABIQAR/9oACAEBAAE/IXyaKTxtib//2gAMAwEAAgADAAAAEN//xAAbEQABBAMAAAAAAAAAAAAAAABBAAERIWGB8P/aAAgBAwEBPxAo2cz23X//xAAXEQADAQAAAAAAAAAAAAAAAAAAARFh/9oACAECAQE/EKJpg//EABcQAQEBAQAAAAAAAAAAAAAAAAEhEQD/2gAIAQEAAT8Qy9kFpkKrNNyEO//Z',
-                      'casting': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAADAAYDAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABP/EABQBAQAAAAAAAAAAAAAAAAAAAAL/2gAMAwEAAhADEAAAASk//8QAFhAAAwAAAAAAAAAAAAAAAAAABAci/9oACAEBAAEFAmBY3//EABgRAAIDAAAAAAAAAAAAAAAAAAACBCEi/9oACAEDAQE/AZ2Xo//EABcRAAMBAAAAAAAAAAAAAAAAAAACIQT/2gAIAQIBAT8Bz1af/8QAHBAAAQMFAAAAAAAAAAAAAAAAAQACAxESISJB/9oACAEBAAY/AoA7YCZ1Ls9K/8QAGRAAAQUAAAAAAAAAAAAAAAAAAAERMUFR/9oACAEBAAE/IVVuKB9T/9oADAMBAAIAAwAAABBf/8QAGBEBAQADAAAAAAAAAAAAAAAAAREAIbH/2gAIAQMBAT8QM3Vhwz//xAAYEQACAwAAAAAAAAAAAAAAAAAAASFRsf/aAAgBAgEBPxCWrPWf/8QAGBABAQEBAQAAAAAAAAAAAAAAAREhAEH/2gAIAQEAAT8QaQfijYhUMAPAhDO//9k=',
-                      }
-                  }
-                },
-      }
-    });
+        month: {
+          type: Object,
+        },
 
+        day: {
+          type: String,
+        },
+
+        rippleConfig: {
+          type: Object,
+          value: function() {
+            return {
+              'Именниникам': '#004D40',
+              'Понедельник': '#006064',
+              'Вторник': '#263238',
+              'Среда': '#104414',
+              'Четверг': '#3E2723',
+              'Пятница': '#37474F',
+              'Суббота': '#403d2c',
+              'Воскресенье': '#494c39',
+            }
+          }
+        },
+
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [
+                 {
+                  name: 'slide-from-bottom-animation',
+                  node: this.$.content,
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {delay: 250},
+                }, {
+                    name: 'fade-in-animation',
+                    node: this.$.fleft,
+                    timing: {delay: 400},
+                },{
+                    name: 'fade-in-animation',
+                    node: this.$.fright,
+                    timing: {delay: 450},
+                }],
+              'exit': {
+                  name: 'fade-out-animation',
+                  node: this,
+              },
+            }
+          }
+        },
+
+        
+      },
+
+      behaviors: [
+          Polymer.NeonAnimatableBehavior,
+          Polymer.IronResizableBehavior
+      ],
+
+      listeners: {
+        'sale-selected': '_saleSelected',
+      },
+
+      _saleSelected: function(e) {
+        this.background_img = e.detail.img;
+        this.async(this._cangeBackgroundImage, 200);
+        
+      },
+
+      _cangeBackgroundImage: function(img) {
+        this.customStyle['--sale-background-image'] = 'url('+this.background_img+')';
+        this.updateStyles();
+      },
+
+      ready: function() {
+          var currentMonth = new Date().getMonth();
+          this.$.ajax.url = ['http://localhost/api/v1/sales', currentMonth+1].join('/') + '/';
+          this.$.ajax.generateRequest();
+      },
+
+      _isDefined: function(month) {
+        return month != null;
+      },
+
+      
+
+      _rippleHandler: function(e) {
+        this.customStyle['--sale-content-layer-color'] = this.rippleConfig[e.model.__data__.sale.day.name];
+        this.updateStyles();
+        this.$.sripple.uiDownAction(event);
+        this.async(function(){
+          this.$.sripple.uiUpAction(event)
+        }, 200);
+      },
+
+      handleResponse: function(request) {
+          var response = request.detail.response;
+          var date, short_date, options, index, len;
+          this.month = response;
+          this.day = this.month.sales[0].day.name;
+          this.customStyle['--sale-background-image'] = 'url('+this.month.sales[0].image.original+')';
+          this.customStyle['--sale-content-layer-color'] = this.rippleConfig[this.day];
+          this.updateStyles();
+        },
+    });
   </script>
 
 </dom-module>

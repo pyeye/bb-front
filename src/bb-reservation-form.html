@@ -24,17 +24,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 
-<link rel="import" href="md-icons.html">
+<link rel="import" href="bb-icons.html">
 
 
-<dom-module id="md-reservation-form">
+<dom-module id="bb-reservation-form">
 
   <template>
 
     <style>
-      :host {
+       :host {
         display: block;
+        color: #FFFFFF;
+        background-color: #202020;
+        margin: 16px;
+
         --paper-spinner-color: #fff;
         --iron-icon-fill-color: #FFFFFF;
         --paper-toast-background-color: var(--app-accent-color);
@@ -46,9 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-checkbox-unchecked-ink-color: #fff;
         --paper-checkbox-checked-color: var(--app-primary-color);
         --paper-checkbox-checked-ink-color: var(--app-primary-color);
-        --gold-phone-input-country-code: {
-          color: #FFFFFF;
-        }
+        --gold-phone-input-country-code: {}
       }
 
       [hidden] {
@@ -72,111 +78,155 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-align: left;
       }
 
-    paper-button {
-      background: var(--app-accent-color);
-      color: #fff;
-    }
+      paper-button {
+        background: var(--app-accent-color);
+        color: #fff;
+      }
 
-    .form-container {
-      width: 100;
-      margin: 16px;
-    }
+      .form-container {
+        margin: 16px;
+      }
 
-    .action-bar {
-      @apply(--layout-horizontal);
-    }
+      .action-bar {
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
+        margin-bottom: 24px;
+        margin-right: 10px;
+      }
 
-    .form-title {
-      @apply(--paper-font-title);
-      color: var(--app-primary-color);
-      margin-top: 8px;
-    }
+      .form-header {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        @apply --paper-font-headline;
+        margin-bottom: 16px;
+        margin-top: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
 
-    .form-event-title {
-      @apply(--paper-font-headline);
-      color: #fff;
-      margin-top: 16px;
-      margin-bottom: 16px;
-    }
+      .form-header-event-name {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        @apply --paper-font-headline;
+        margin-bottom: 16px;
+        font-family: 'Oswald', sans-serif !important;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
 
-    .form-item {
-      margin-top: 8px;
-      margin-right: 24px;
-      min-width: 120px;
-      width: 95.5%;
-    }
+      .form-header iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+      }
 
-    .form-item-half {
-      width: 50%;
-    }
+      .form-title {
+        margin: 0 8px;
+      }
 
-    paper-dropdown-menu {
-      width: 100%;
-    }
+      .form-event-title {
+        @apply(--paper-font-headline);
+        color: #fff;
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
 
-    .form-item span {
-      color: #fff;
-    }
+      .form-item {
+        
+        margin-right: 16px;
+        margin-left: 16px;
+        min-width: 120px;
+        width: 95.5%;
+      }
 
-    .form-row {
-      @apply(--layout-horizontal);
-    }
+      .form-item-half {
+        width: 50%;
+      }
 
-    .form-block {
-      margin-bottom: 24px;
-    }
+      paper-dropdown-menu {
+        width: 100%;
+      }
 
+      .form-item span {
+        color: #fff;
+      }
+
+      .form-row {
+        @apply --layout-horizontal;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .form-block {
+        margin-bottom: 16px;
+      }
+
+      paper-dialog-scrollable {
+          box-sizing: border-box;
+          width: 518px;
+          height: 320px;
+      }
     </style>
 
-    <iron-ajax id="ajax"
-               url="https://maddogclub.com/api/v1/reservation/"
-               method="POST"
-               content-type="application/json"
-               handle-as="json"
-               loading={{loading}}
-               on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="ajax" url="https://maddogclub.com/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+      loading={{loading}} on-response="handleResponse"></iron-ajax>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <div class="form-container">
-      <div class="form-block">
-        <div class="form-event-title">
-          Бронирование столика на [[event.date.day]] [[event.date.month]], [[event.name]]
-        </div>
+    
+
+      <div class="form-header">
+        <iron-icon icon="star"></iron-icon>
+        <div class="form-title">Забить стол</div>
+        <iron-icon icon="star"></iron-icon>
       </div>
-      <div class="form-block">
-        <div class="form-title">
-          Контактные данные
-        </div>
+      <template is="dom-if" if="[[_showEvent(event)]]">
+        <div class="form-header-event-name">
+          на [[event.name]]
+         </div>
+      </template>
+      
+
+      <paper-dialog-scrollable>
+
+       <div class="form-block">
         <div class="form-row">
           <div class="form-item form-item-half">
-            <paper-input maxlength="20"
-                         char-counter
-                         error-message="Это обязательное поле!"
-                         value="{{form.name}}"
-                         label="Имя"
-                         required></paper-input>
+            <paper-input maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя" required></paper-input>
           </div>
           <div class="form-item form-item-half">
-            <paper-input maxlength="17"
-                         char-counter
-                         error-message="Это обязательное поле!"
-                         value="{{form.phone_number}}"
-                         label="Номер телефона"
-                         required></paper-input>
+            <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
+              required></paper-input>
           </div>
         </div>
 
-      </div>
-
-      <div class="form-block">
-        <div class="form-title">
-          Дополнительно
-        </div>
         <div class="form-row">
           <div class="form-item form-item-half">
-            <paper-dropdown-menu  label="Время" value="{{form.time}}">
-              <paper-listbox id="time" class="dropdown-content">
+            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
+              <paper-listbox id="peoples" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="form-item form-item-half">
+            <vaadin-date-picker value="{{form.date}}" label="Дата" i18n="[[i18n]]"></vaadin-date-picker>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-item form-item-half">
+            <paper-dropdown-menu label="Время c" value="{{form.time_start}}">
+              <paper-listbox id="time_start" class="dropdown-content">
                 <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
@@ -204,84 +254,100 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </paper-dropdown-menu>
           </div>
           <div class="form-item form-item-half">
-            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
-              <paper-listbox id="peoples" class="dropdown-content">
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+            <paper-dropdown-menu label="Время до" value="{{form.time_end}}">
+              <paper-listbox id="time_end" class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
-
         </div>
+
         <div class="form-row">
           <div class="form-item">
-            <paper-checkbox on-change="_handleCheckbox">Вип столик</paper-checkbox>
+            <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="100" char-counter></paper-textarea>
           </div>
-        </div>
-
-        <template is="dom-if" if="[[form.is_vip]]">
-          <div class="form-row">
-            <div class="form-item">
-              <span>Внимание! Для бронирования вип столика требуется вложение депозита. Подробности Вы сможете узнать у администратора клуба по телефону 8 (351) 240 - 20 - 00</span>
-            </div>
-          </div>
-        </template>
-
-
-        <div class="form-item">
-          <paper-textarea label="Комментарий" value="{{form.comment}}" maxlength="100"
-          char-counter></paper-textarea>
         </div>
       </div>
 
+      </paper-dialog-scrollable>
+
+     
+      
       <div class="action-bar">
-        <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
+        <paper-button raised dialog-dismiss>
+          <iron-icon class="reservation-icons" icon="close"></iron-icon>
+          Закрыть
+        </paper-button>
+        <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]" dialog-confirm>
           <div class="loading-box">
             <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
             <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
           </div>
           Отправить
         </paper-button>
-        <slot select="[form-toggle]"></slot>
       </div>
+     
 
-    <paper-toast id="toast" horizontal-align="right" always-on-top text="Заявка отправлена. В ближайшее время с Вами свяжутся для подтверждения брони." duration="5000"></paper-toast>
-  </div>
+      <paper-toast 
+        id="toast" 
+        horizontal-align="right" 
+        always-on-top 
+        text="Заявка отправлена. В ближайшее время с Вами свяжутся для подтверждения брони."
+        duration="5000"></paper-toast>
+
   </template>
 
   <script>
-
     Polymer({
-      is: 'md-reservation-form',
+      is: 'bb-reservation-form',
 
       properties: {
         form: {
           type: Object,
-          value: function() {
+          value: function () {
             return {
-                name: '',
-                phone_number: '',
-                date: '',
-                time: '',
-                is_vip: false,
-                count_people: '',
+              name: '',
+              phone_number: '',
+              date: '',
+              time_start: '',
+              time_end: '',
+              is_vip: false,
+              count_people: '',
             }
           },
         },
 
         validators: {
           type: Object,
-          value: function() {
+          value: function () {
             return {
               name: false,
               phone_number: false,
-              time: false,
+              date: false,
+              time_start: false,
+              time_end: false,
               count_people: false,
               summary: false,
             }
@@ -306,10 +372,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: false,
         },
 
+        time_range: {
+          type: Array,
+          readonly: true,
+          value: function () {
+            return [
+              '16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30',
+              '21:00','21:30','22:00','22:30','23:00','23:30','00:00','00:30','01:00','01:30',
+              '02:00','02:30','03:00','03:30','04:00','04:30','05:00','05:30','06:00'
+            ]
+          }
+        },
+
         i18n: {
           type: Object,
           readonly: true,
-          value: function() {
+          value: function () {
             return {
               monthNames: [
                 'Январь', 'Февраль', 'Март', 'Апрель', 'Май',
@@ -319,10 +397,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               weekdaysShort: [
                 'Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'
               ],
+              weekdays: [
+                'Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'
+              ],
               firstDayOfWeek: 1,
               today: 'Сегодня',
               cancel: 'Отмена',
-              formatDate: function(d) {
+              formatDate: function (d) {
                 var options = {
                   month: 'long',
                   day: 'numeric',
@@ -330,12 +411,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var local = d.toLocaleString("ru", options).split(' ');
                 var date = d.getDate();
                 var year = this.smallScreen ? d.getFullYear() : '';
-                if(date < 10) {
+                if (date < 10) {
                   date = '0' + date;
                 }
                 return [date, local[1], year].join(' ');
               },
-              formatTitle: function(monthName, fullYear) {
+              formatTitle: function (monthName, fullYear) {
                 return monthName + ' ' + fullYear;
               },
             }
@@ -345,84 +426,122 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       observers: [
         '_formNameChanged(form.name)',
+        '_formDateChanged(form.date)',
         '_formPhoneChanged(form.phone_number)',
-        '_formTimeChanged(form.time)',
+        '_formTimeStartChanged(form.time_start)',
+        '_formTimeEndChanged(form.time_end)',
         '_formPeopleChanged(form.count_people)',
-        '_formValid(validators.name, validators.phone_number, validators.count_people, validators.time)',
+        '_formValid(validators.name, validators.date, validators.phone_number, validators.count_people, validators.time_start, validators.time_end)',
       ],
 
-      _formTimeInitial: function(newValue, oldValue) {
+      behaviors: [
+        Polymer.PaperDialogBehavior,
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
+      _formTimeInitial: function (newValue, oldValue) {
         this.set('form.time', newValue);
       },
 
-      _formNameChanged: function(newValue, oldValue) {
+      _formNameChanged: function (newValue, oldValue) {
         this.set('validators.name', newValue.length !== 0);
       },
 
-      _formPhoneChanged: function(newValue, oldValue) {
+      _formDateChanged: function(newValue, oldValue) {
+        this.set('validators.date', (newValue.length !== 0));
+      },
+
+      _formPhoneChanged: function (newValue, oldValue) {
         this.set('validators.phone_number', (newValue.length !== 0));
       },
 
-      _formTimeChanged: function(newValue, oldValue) {
-        this.set('validators.time', newValue.length !== 0);
+      _formTimeStartChanged: function (newValue, oldValue) {
+        this.set('validators.time_start', newValue.length !== 0);
       },
 
-      _formPeopleChanged: function(newValue, oldValue) {
+      _formTimeEndChanged: function (newValue, oldValue) {
+        this.set('validators.time_end', newValue.length !== 0);
+      },
+
+      _formPeopleChanged: function (newValue, oldValue) {
         this.set('validators.count_people', newValue.length !== 0);
       },
 
-      _formValid: function(name, phone_number, count_people, time) {
-        this.set('validators.summary', (name && phone_number && count_people && time));
+      _formValid: function (name, date, phone_number, count_people, time_start, time_end) {
+        this.set('validators.summary', (name && date && phone_number && count_people && time_start && time_end));
       },
 
-      _initialDate: function() {
+      _initialDate: function () {
         var d = new Date();
         var date = d.getDate();
         var month = d.getMonth() + 1;
-        if(date < 10) {
+        if (date < 10) {
           date = '0' + date;
         }
-        if(month < 10) {
+        if (month < 10) {
           month = '0' + month;
         }
-        return [d.getFullYear(),  month, date].join('-') + 'г.';
+        return [d.getFullYear(), month, date].join('-') + 'г.';
       },
 
-      _activeChanged: function(active) {
+      _activeChanged: function (active) {
         if (!active) {
           this._resetForm();
         }
       },
 
-      submitForm: function() {
+      setEvent: function(event) {
+        this.event = event;
+        this.set('form.date', this.event.date.original);
+        this.set('form.time_start', this.event.start);
+        this.$.time_start.selected = this.time_range.indexOf(this.event.start)
+      },
+
+      clearForm: function() {
+        this._resetForm();
+        this._resetEvent();
+      },
+
+      submitForm: function () {
         this.form.date = this.event.date.original;
         this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },
 
-      handleResponse: function(request) {
+      handleResponse: function (request) {
         this.fire('reservation-form-send');
         this.$.toast.open();
       },
 
-      _resetForm: function() {
+      _showEvent: function(event) {
+        for (var key in event) {
+          if (hasOwnProperty.call(event, key)) return true;
+        }
+
+        return false;
+      },
+
+      _resetForm: function () {
 
         this.form = {
-            name: '',
-            phone_number: '',
-            date: '',
-            time: '',
-            is_vip: false,
-            count_people: '',
+          name: '',
+          phone_number: '',
+          date: '',
+          time_start: '',
+          time_end: '',
+          is_vip: false,
+          count_people: '',
         };
         this.$.peoples.selected = null;
-        this.$.time.selected = null;
+        this.$.time_start.selected = null;
+        this.$.time_end.selected = null;
 
       },
 
-      _handleCheckbox: function() {
-        this.set('form.is_vip', !this.form.is_vip);
+      _resetEvent: function() {
+        this.event = {}
       },
+
 
     });
   </script>

@@ -22,21 +22,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 
-<link rel="import" href="bb-home.html">
-<link rel="import" href="bb-events.html">
-<link rel="import" href="bb-event.html">
-<link rel="import" href="bb-menu.html">
-<link rel="import" href="bb-gallery.html">
-<link rel="import" href="bb-album.html">
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bb-reservation-form.html">
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-news.html">
-<link rel="import" href="bb-article.html">
+
+
 
 <dom-module id="bb-app">
 
@@ -49,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-fullbleed);
     --app-primary-color: #F44336;
     --app-secondary-color: #212121;
-    --app-lower-layer-color: #202020;
-    --app-upper-layer-color: #252525;
+    --app-lower-layer-color: #191919;
+    --app-upper-layer-color: #232323;
     --app-accent-color: #37474F;
     --paper-button-ink-color: var(--app-accent-color);
     --paper-icon-button-ink-color: var(--app-accent-color);
@@ -65,7 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
                 0  6px 30px 5px rgba(0, 0, 0, 0.12),
                 0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    --app-drawer-width: 260px;
+    --app-drawer-width: 256px;
     --app-drawer-content-container: {
       background-color: var(--app-upper-layer-color);
     }
@@ -89,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     display: -webkit-flex;
     display: flex;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .social-icon {
@@ -116,6 +114,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app-header paper-icon-button {
     --paper-icon-button-ink-color: #fff;
+  }
+
+  paper-dialog {
+    background-color: #202020;
   }
 
   .drawer-list {
@@ -170,6 +172,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     letter-spacing: 1.5px;
   }
 
+  .reservation-button {
+    color: #fff;
+    margin: 8px 16px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    border: 2px solid rgba(255,255,255, 0.5);
+    line-height: 0.8;
+    border-radius: 0;
+    --paper-button-ink-color: var(--app-primary-color);
+    transition: border ease .5s;
+  }
+
+  .reservation-button:hover {
+    
+    border: 2px solid  var(--app-primary-color);
+  }
+
+  
+
   .contacts iron-icon {
     --iron-icon-fill-color: #FFFFFF;
     --iron-icon-height: 21px;
@@ -178,8 +199,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .logo {
     position: relative;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 18px;
+    padding-bottom: 14px;
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255, 0.5);
     margin-left: 20px;
@@ -192,7 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .logo img {
-    width: 180px;
+    width: 150px;
   }
 
   .nav-links {
@@ -220,13 +241,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" no-focus-trap>
         <div class="drawer-container">
           <div class="flex-drawer">
-            <div class="flex-logo">
-              <a href="/home">
+            <div class="flex-logo">   
                 <div class="logo">
-                  <img src="http://localhost/img/static/logo_s.jpg" alt="" />
-                  <paper-ripple></paper-ripple>
+                  <img src="http://localhost/img/static/bb_logo_black.png" alt="" />
                 </div>
-              </a>
             </div>
             <div class="flex-nav">
               <iron-selector selected="[[pageSection]]"
@@ -234,20 +252,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              class="drawer-list"
                              role="navigation">
 
-                <a class="nav-links" name="home" href="/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>События<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
                 <a class="nav-links" name="gallery" href="/gallery"><iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="reservation" href="/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Бронь<paper-ripple></paper-ripple></a>
+                
                 <a class="nav-links" name="about" href="/about"><iron-icon class="nav-icons" icon="message"></iron-icon>О Борисе<paper-ripple></paper-ripple></a>
               </iron-selector>
+              
             </div>
-
+            <paper-button class="reservation-button" on-tap="_openDialog">Забить стол</paper-button>
             <div class="flex-contact">
               <div class="contact-info">
                 <span class="contacts contact-logo"> Boris Bar</span><br>
-                <span class="contacts"> Drinks and Food</span><br>
+                <span class="contacts"> Drinks & Food</span><br>
                 <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp 16:00 - 06:00</span><br>
                 <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp 8 (351) 220 - 20 - 20</span>
               </div>
@@ -267,10 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
 
-        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="home">
-          <bb-home name="home">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-home>
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="events">
           <bb-menu name="menu">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-menu>
@@ -278,23 +293,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-events>
           <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
-          <bb-news name="sales" page=[[page]]>
+          <bb-sales name="sales" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-news>
+          </bb-sales>
           <bb-article route={{subroute}} name="article" page=[[page]]></bb-article>
           <bb-gallery name="gallery" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-gallery>
           <bb-album route={{subroute}} name="album" page=[[page]]></bb-album>
-          <bb-reservation name="reservation">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-reservation>
           <bb-about name="about">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </bb-about>
         </neon-animated-pages>
 
     </app-drawer-layout>
+
+    <bb-reservation-form id="dialog" with-backdrop="{{!smallScreen}}"  entry-animation="fade-in-animation" exit-animation="fade-out-animation"></bb-reservation-form>
+
 
   </template>
 
@@ -318,6 +333,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       listeners: {
         'redirect-to-album': '_redirectToAlbum',
+        'open-reservation-dialog': '_openDialog'
       },
 
       _neonPageChanged: function(e) {
@@ -332,7 +348,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _routePageChanged: function(page) {
-        this.page = page || 'home';
+        this.page = page || 'events';
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
@@ -344,12 +360,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        if (page === 'reservation') {
-          this.importHref(this.resolveUrl('bb-reservation.html'), null, null, true);
-        }
-        if (page === 'about') {
-          this.importHref(this.resolveUrl('bb-about.html'), null, null, true);
-        }
+        this.importHref(this.resolveUrl('bb-' + page + '.html'), null, null, true);
         this._changeSection(page);
       },
 
@@ -358,6 +369,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         category = category === 'event' ? 'events' : category;
         category = category === 'article' ? 'sales' : category;
         this.pageSection = category;
+      },
+
+      _openDialog: function(e) {
+        this.$.dialog.clearForm();
+        if(e.detail.event !== undefined) {
+          this.$.dialog.setEvent(e.detail.event);
+        }
+        this.$.dialog.open();
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
       },
 
     });

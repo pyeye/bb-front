@@ -52,6 +52,10 @@
          --iron-icon-fill-color: #FFFFFF;
        }
 
+       [hidden] {
+         display: none !important;
+       }
+
        app-box {
            position: absolute;;
            top: 0;
@@ -145,19 +149,23 @@
          }
 
          .event-date-day {
-           @apply(--paper-font-display3);
+           @apply --paper-font-display3;
+           font-size: 48px;
+           line-height: 48px;
          }
 
          .event-date-month {
-           @apply(--paper-font-subhead);
-           line-height: 12px;
+           @apply --paper-font-subhead;
+           line-height: 18px;
+           font-size: 20px;
          }
 
          .event-date-weekday {
-           @apply(--paper-font-subhead);
+           @apply --paper-font-subhead;
            white-space: nowrap;
            overflow: hidden;
            text-overflow: ellipsis;
+           font-size: 20px;
          }
 
          .event-name {
@@ -180,6 +188,21 @@
            opacity: 0.7;
          }
 
+         .artist-name {
+                
+                color: #FFFFFF;
+                
+                margin-right: 4px;
+                display: inline-block;
+            }
+
+            .artist-name:not(:last-of-type):after {
+              content: ",";
+            }
+
+            .artist-name:nth-last-of-type(2):before {
+              content: none;
+            }
 
 
 
@@ -218,6 +241,39 @@
            p {
              font-size: 14px;
            }
+
+           .event-label {
+             text-align: left;
+           }
+
+           #event-label-content {
+             display: none;
+           }
+
+           .event-date {
+             text-align: center;
+           }
+
+           .event-artists {
+             @apply --layout-vertical;
+           }
+
+           .event-content-column {
+             @apply --layout-horizontal;
+             padding-right: 0;
+           }
+
+           .event-content-primary {
+             padding-right: 4px;
+           }
+
+           .event-content-secondary {
+             margin-top: 3px;
+           }
+
+           .event-row {
+             margin: 8px 0;
+           }
          }
 
          #ripple {
@@ -244,7 +300,8 @@
 
       <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-       <app-header id="header" effects="fade-background" reveals>
+      <app-header-layout>
+<app-header id="header" effects="fade-background" reveals>
          <app-toolbar>
            <a href="/events" tabindex="-1">
              <paper-icon-button icon="arrow-back"></paper-icon-button>
@@ -272,15 +329,19 @@
                </div>
 
                <div class="event-row">
-                 <div class="event-label"></div>
+                 <div id="event-label-content" class="event-label"></div>
                  <div class="event-content">
                    <marked-element markdown="[[event.info]]">
                      <div class="markdown-html custom"></div>
                    </marked-element>
                  </div>
                </div>
+               <div class="event-row" hidden$="[[_showSales(event.sale)]]">
+                 <div class="event-label">Акции:</div>
+                 <div class="event-content">[[event.sale]]</div>
+               </div>
                <div class="event-row">
-                 <div class="event-label">Артисты:</div>
+                 <div class="event-label">В деле:</div>
                  <div class="event-content event-artists">
                    <template is="dom-repeat" items="[[event.artists]]" as="artist">
                      <div class="event-content-column">
@@ -302,6 +363,10 @@
            </div>
          </paper-card>
          </div>
+      </app-header-layout>
+
+
+       
      </template>
 
      <script>
@@ -374,15 +439,7 @@
          Polymer.IronResizableBehavior
        ],
 
-       _renderNeonPage: function() {
-         layout = document.createElement('app-header-layout');
-         layout.id = "layout";
-         childNodes = Polymer.dom(this.root).childNodes;
-         for (var i = 0; i < childNodes.length; i++) {
-           Polymer.dom(layout).appendChild(childNodes[i]);
-         }
-         Polymer.dom(this.root).appendChild(layout);
-       },
+       
 
        _eventPageChanged: function(event) {
          var date, storageEvent;
@@ -418,7 +475,6 @@
 
        _pageChanged: function(page) {
          if (page === this.name && !this.pageInit) {
-            this._renderNeonPage()
             this.pageInit = true;
          }
        },
@@ -445,6 +501,12 @@
            'year': date[3],
            'original': response.date,
          };
+         if(response.sales.length >= 1) {
+           response.sale = response.sales[0][0];
+         } else {
+           response.sale = null;
+         }
+         
          this.event = response;
          this.async(this._scroll, 200);
          this.notifyResize();
@@ -456,6 +518,10 @@
 
        _eventChanged: function(event) {
          this._updateImg(event);
+       },
+
+       _showSales: function(sales) {
+          return sales === null;
        },
 
        _updateImg: function(event) {

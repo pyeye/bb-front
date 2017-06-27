@@ -28,10 +28,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 
-<link rel="import" href="md-icons.html">
-<link rel="import" href="md-menu-list.html">
+<link rel="import" href="bb-icons.html">
+<link rel="import" href="bb-menu-list.html">
 
-<dom-module id="md-menu">
+<dom-module id="bb-menu">
 
   <template>
 
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FFFFFF;
         --app-header-background-front-layer: {
-          background-image: url(https://maddogclub.com/img/static/homepage/menu.jpg);
+          background-image: url(http://localhost/img/static/homepage/menu.jpg);
           background-position: left center;
         };
       }
@@ -68,26 +68,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         -webkit-transform-origin: center top !important;
         transform-origin: center top !important;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 38px;
       }
 
       [main-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 35px;
-        --iron-icon-width: 24px;
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-top: auto;
+        margin-bottom: auto;
       }
 
       [main-title] .title-label {
-        margin-left: 40px;
-        margin-right: 40px;
-        font-size: 38px;
-        letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
-        @apply(--paper-font-display1);
+        margin-left: 24px;
+        margin-right: 24px;
+        font-family: 'Oswald', sans-serif !important;
+        @apply --paper-font-display1;
+        letter-spacing: 6px;
+        font-size: 36px;
       }
 
 
@@ -95,10 +96,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: center;
+        @apply --layout-horizontal;
+              @apply --layout-center;
+              @apply --layout-center-justified;
         font-size: 20px;
       }
 
@@ -107,9 +107,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 24px;
         margin-right: 24px;
         letter-spacing: 4px;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Oswald', sans-serif !important;
         line-height: 34px;
-        @apply(--paper-font-title);
+        @apply --paper-font-title;
       }
 
       [condensed-title] iron-icon {
@@ -191,29 +191,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
-      <app-toolbar>
-        <slot select="[drawer-toggle]"></slot>
-        <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="foot-right"></iron-icon></div>
-      </app-toolbar>
-      <app-toolbar class="tall">
-        <div main-title><iron-icon icon="foot-left" id="fleft"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="foot-right" id="fright"></iron-icon></div>
-      </app-toolbar>
-    </app-header>
+    <app-header-layout>
+      <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div condensed-title><iron-icon icon="star"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star"></iron-icon></div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title><iron-icon icon="star" id="fleft"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="star" id="fright"></iron-icon></div>
+        </app-toolbar>
+      </app-header>
 
-    <div id="ripple"></div>
+      <div id="ripple"></div>
 
-    <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
-        <paper-tab group="main" on-tap="_mainTapped">Основное</paper-tab>
-        <paper-tab group="bar">Карта бара</paper-tab>
-        <paper-tab group="other" on-tap="_otherTapped">Фруктовый пар</paper-tab>
-    </paper-tabs>
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
+          <paper-tab group="kitchen">Кухня</paper-tab>
+          <paper-tab group="bar">Бар</paper-tab>
+          <paper-tab group="hookah">Hookah</paper-tab>
+          <paper-tab group="special">Спец предложение</paper-tab>
+      </paper-tabs>
 
-    <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group">
-        <md-menu-list group="main" tab=[[tab]] entry-animation="slide-from-left-animation" exit-animation="slide-left-animation"></md-menu-list>
-        <md-menu-list group="bar" tab=[[tab]] entry-animation="[[middleEntryAnimation]]" exit-animation="[[middleExitAnimation]]"></md-menu-list>
-        <md-menu-list group="other" tab=[[tab]] entry-animation="slide-from-right-animation" exit-animation="slide-right-animation"></md-menu-list>
-    </neon-animated-pages>
+      <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+          <bb-menu-list group="kitchen" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="bar" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="hookah" tab=[[tab]] ></bb-menu-list>
+          <bb-menu-list group="special" tab=[[tab]] ></bb-menu-list>
+      </neon-animated-pages>
+    </app-header-layout>
+
+    
 
   </template>
 
@@ -221,11 +227,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-menu',
+      is: 'bb-menu',
 
       properties: {
         tab: {
           type: String,
+          value: 'kitchen',
         },
 
         middleEntryAnimation: {
@@ -288,35 +295,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      listeners: {
-        'md-render-neon-page': '_renderNeonPage',
-      },
-
       behaviors: [
         Polymer.NeonSharedElementAnimatableBehavior,
         Polymer.IronResizableBehavior
       ],
 
-      _renderNeonPage: function(e) {
-          layout = document.createElement('app-header-layout');
-          childNodes = Polymer.dom(this.root).childNodes;
-          for (var i = 0; i < childNodes.length; i++) {
-            Polymer.dom(layout).appendChild(childNodes[i]);
-          }
-          Polymer.dom(this.root).appendChild(layout);
-          this.tab = 'main';
-          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+      _mainTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-right-animation';
+        this.middleExitAnimation = 'slide-right-animation';
       },
 
-        _mainTapped: function(e) {
-          this.middleEntryAnimation = 'slide-from-right-animation';
-          this.middleExitAnimation = 'slide-right-animation';
-        },
-
-        _otherTapped: function(e) {
-          this.middleEntryAnimation = 'slide-from-left-animation';
-          this.middleExitAnimation = 'slide-left-animation';
-        },
+      _otherTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-left-animation';
+        this.middleExitAnimation = 'slide-left-animation';
+      },
     });
 
   </script>
