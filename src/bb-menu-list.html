@@ -12,6 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+
 
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
@@ -28,12 +31,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     :host {
       display: block;
-      width: 90%;
+      
+      width: 85%;
       position: relative;
-      margin: 16px auto;
+      margin: 0 auto;
     }
 
     .content {
+      margin-top: 16px;
+      margin-bottom: 16px;
       transition: opacity 0.3s;
       opacity: 0;
     }
@@ -44,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .menu-category {
         padding-top: 16px;
-        @apply(--paper-font-headline);
+        @apply --paper-font-headline;
         font-size: 26px;
         color: var(--app-primary-color);
       }
@@ -54,8 +60,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     .card-flex {
-      @apply(--layout-horizontal);
-      @apply(--layout-wrap);
+      @apply --layout-horizontal;
+      @apply --layout-wrap;
 
     }
 
@@ -89,11 +95,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     @media (max-width: 1450px) {
-      .card {
-        -webkit-flex-basis: 31%;
-        flex-basis: 31%;
-        max-width: 31%;
-      }
+
+      :host {
+      
+      width: 90%;
+      
+    }
+      
     }
 
     @media (max-width: 1050px) {
@@ -105,6 +113,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     @media (max-width: 550px) {
+      :host{
+        margin: 0;
+        width: 100%;
+      }
+      .content {
+      margin-top: 0;
+      margin-bottom: 0;
+      
+    }
       .card {
         -webkit-flex-basis: 100%;
           flex-basis: 100%;
@@ -120,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     .item-name {
       max-width: 70%;
       display: inline-block;
-      @apply(--paper-font-title);
+      @apply --paper-font-title;
       color: #FFFFFF;
     }
 
@@ -149,7 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-button {
       margin-right: -5px;
       float: right;
-      @apply(--paper-font-button);
+      @apply --paper-font-button;
       color: #FFFFFF;
 
     }
@@ -198,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
 
-  }
+  
     </style>
 
     <iron-ajax id="ajax"
@@ -250,7 +267,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _generateRequest: function(group) {
-        this.$.ajax.url = 'http://localhost/api/v1/category/menu/?group=' + group;
+        this.$.ajax.url = 'http://95.85.60.177/api/v1/category/menu/?group=' + group;
         this.$.ajax.generateRequest();
       },
 

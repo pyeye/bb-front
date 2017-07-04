@@ -2,23 +2,36 @@
   "entrypoint": "index.html",
   "shell": "src/bb-app.html",
   "fragments": [
-    "src/bb-reservation.html",
-    "src/bb-about.html"
+    "src/lazy-resources.html",
+    "src/bb-reservation-form.html",
+    "src/bb-about.html",
+    "src/bb-album.html",
+    "src/bb-event.html",
+    "src/bb-events.html",
+    "src/bb-gallery.html",
+    "src/bb-menu.html",
+    "src/bb-sales.html"
   ],
-  "sourceGlobs": [
+  "sources": [
     "src/**/*",
     "images/**/*",
     "assets/**/*",
     "fonts/**/*",
     "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
     "manifest.json",
     "app.js",
     "bower_components/lightgallery.js/dist/**/*",
     "bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js",
+    "bower_components/lg-hash.js/dist/lg-hash.min.js",
     "bower_components/lightgallery.js/dist/css/lightgallery.min.css",
     "bower_components/particles.js/particles.min.js",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
-  ]
+  ],
+  "builds": [{
+    "js": {"minify": true},
+    "css": {"minify": true},
+    "html": {"minify": true}
+  }]
 }

@@ -10,15 +10,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-box/app-box.html">
+
 
 <dom-module id="bb-about-concept">
 
@@ -31,32 +30,109 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       paper-material {
-        padding: 16px;
+        position: relative;
         margin: 24px auto;
         background-color: #252525;
         color: #FFFFFF;
-        width: 60%;
+        width: 90%;
       }
+
+      .description {
+        @apply --layout-horizontal;
+      }
+
+      .description-text {
+        width: 50%;
+        padding: 16px;
+        
+      }
+
+      .description-text-full {
+        padding: 16px;
+        
+      }
+
+      app-box {
+        height: 400px;
+        position: relative;
+         --app-box-background-front-layer: {
+          background-image: url(http://95.85.60.177/img/static/about/about2.jpg);
+          background-position: center;
+          
+          height: 100%;
+        };
+      }
+
+      .description-image {
+        width: 50%;
+        background-image: url('http://95.85.60.177/img/static/about/about.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      @media (max-width: 768px) {
+        .description {
+        @apply --layout-vertical;
+      }
+
+      .description-text {
+        width: auto;
+      }
+
+      .description-image {
+        width: 100%;
+        height: 300px;
+      }
+
+      }
+
+      @media (max-width: 550px) {
+        paper-material {
+          width: 100%;
+          margin: 16px 0 0 0;
+        }
+
+      }
+
+      
 
 
     </style>
 
+    
     <paper-material>
-      <p>Пафосные посиделки - это не BORIS BAR.</p>
-      <p>Пьянки до поросячьего визга - и это не BORIS BAR.</p>
-      <p>О BORIS BAR, как и о самом Борисе в двух словах можно сказать следующее: хрен попадёшь!</p>
-      <p>Вы спросите почему? А потому что реально - хрен попадёшь! Ни кто не знает где он есть, как его найти. И если есть люди, которые об этом знают, то вряд ли скажут, не будь уверены, что вам можно доверять.</p>
-      <p>Кто-то говорит, что BORIS BAR находится в одном из подвалов в центре Челябинска, другие утверждают, что искать его следует на одной из крыш высотных домов. Но в чём мнения сходятся, так это в том, что BORIS BAR - это место, где нет места банальностям. Некоторые из тех, кто здесь побывал, говорят, что искали такое место давно. А если смогли они, то сможете и вы. Не пытайтесь выяснить адрес у таксистов - они не знают (мамой клянусь). Не ищите адрес в справочниках и картах города. Когда придёт время, Борис найдёт вас сам...</p>
-      <p>Если Вы еще не знаете куда пойти в Челябинске, бар будет отличным выбором! BORIS BAR – это одно из самых интересных мест Челябинска, и конечно, одно из самых загадочных. Ведь адрес бара никто не знает!</p>
-      <p>BORIS BAR – место, где можно отдохнуть и развлечься. Ждем Вас!</p>
+      <div class="description">
+        <div class="description-text">
+          <p>Пафосные посиделки - это не Boris Bar.</p>
+          <p>Пьянки до поросячьего визга - и это не Boris Bar.</p>
+          <p>О Boris Bar, как и о самом Борисе в двух словах можно сказать следующее: хрен попадёшь!</p>
+          <p>Вы спросите почему? А потому что реально - хрен попадёшь! Ни кто не знает где он есть, как его найти. И если есть люди, которые об этом знают, то вряд ли скажут, не будь уверены, что вам можно доверять.</p>
+          
+        </div>
+        <div class=description-image></div>
+       
+      </div>
+      <div class="description-text-full">
+          <p>Кто-то говорит, что Boris Bar находится в одном из подвалов в центре Челябинска, другие утверждают, что искать его следует на одной из крыш высотных домов. Но в чём мнения сходятся, так это в том, что BORIS BAR - это место, где нет места банальностям. Некоторые из тех, кто здесь побывал, говорят, что искали такое место давно. А если смогли они, то сможете и вы. Не пытайтесь выяснить адрес у таксистов - они не знают (мамой клянусь). Не ищите адрес в справочниках и картах города. Когда придёт время, Борис найдёт вас сам...</p>
+          
+          
+      </div>
+      <app-box  effects="parallax-background" effects-config='{"parallax-background": {"scalar": -0.1}}'>
+   
+      </app-box>
+
+      <div class="description-text-full">
+          <p>Если Вы еще не знаете куда пойти в Челябинске, бар будет отличным выбором! BORIS BAR – это одно из самых интересных мест Челябинска, и конечно, одно из самых загадочных. Ведь адрес бара никто не знает!</p>
+          <p>Boris Bar – место, где можно отдохнуть и развлечься. Ждем Вас!</p>
+          
+      </div>
+
+     
 
 
-
-
- 
-
-      
     </paper-material>
+
     
   </template>
 

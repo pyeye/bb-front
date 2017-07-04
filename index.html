@@ -16,11 +16,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta charset="utf-8">
   <meta name="theme-color" content="#F44336">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <link rel="shortcut icon" sizes="32x32" href="/images/favicon.png">
+  
   <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
-  <link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/css?family=Oswald:500&amp;subset=cyrillic" rel="stylesheet">
   <link rel="import" href="/src/bb-app.html" id="htmlImport" async>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="shortcut icon" sizes="32x32" href="/images/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Boris Bar">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Boris Bar">
 
   <script>
   var importsLoadedDeferred = new Promise(function(resolve, reject) {
@@ -31,30 +41,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 
   <style>
-
-  @font-face {
-    font-family: 'Raleway';
-    src: url('fonts/Raleway-Regular.ttf') format('truetype');
-    font-weight: normal;
-  }
-
-  @font-face {
-    font-family: 'Raleway';
-    src: url('fonts/Raleway-Medium.ttf') format('truetype');
-    font-weight: 500;
-  }
-
-  @font-face {
-    font-family: 'Raleway';
-    src: url('fonts/Raleway-Light.ttf') format('truetype');
-    font-weight: 300;
-  }
-
-  @font-face {
-    font-family: 'Raleway';
-    src: url('fonts/Raleway-SemiBold.ttf') format('truetype');
-    font-weight: bold;
-  }
 
   .no-scroll,
   body.loading {
@@ -96,13 +82,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   height: 3px;
   display: block;
   width: 100%;
-  background-color: #EF9A9A;
+  background-color: #E57373;
   border-radius: 2px;
   background-clip: padding-box;
   
   overflow: hidden; }
   .progress .indeterminate {
-    background-color: #F44336; }
+    background-color: #E53935; }
     .progress .indeterminate:before {
       content: '';
       position: absolute;
@@ -181,15 +167,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body class="loading">
   <div id="splash">
     <div id="splash-logo">
-      <img src="http://localhost/img/static/bb_logo_black.png" alt="" />
+      <img src="http://95.85.60.177/img/static/bb_logo_black.png" alt="" />
       <div class="progress">
         <div class="indeterminate"></div>
       </div>
     </div>
   </div>
 
-  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
-  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
+  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
+  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
+  <script src="bower_components/lg-hash.js/dist/lg-hash.min.js"></script>
 
   <bb-app></bb-app>
   <script src="app.js" async></script>

@@ -9,12 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -27,159 +22,269 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style>
-      :host {
+       :host {
         display: block;
+        width: 100%;
+        margin: 16px auto;
+        color: #FFFFFF;
+        --iron-icon-height: 16px;
+        --iron-icon-width: 16px;
       }
 
       paper-material {
         margin: 24px;
         background-color: #252525;
-        color: #FFFFFF;
+        
       }
 
       .content {
         transition: opacity 0.3s;
         opacity: 0;
-        width: 85%;
+        width: 100%;
         margin: 16px auto;
+        @apply --layout-vertical;
       }
 
-      .content[has-content]{
+      .content[has-content] {
         opacity: 1;
       }
 
       .material {
-          min-height: 350px;
-          @apply --layout-horizontal;
+        min-height: 350px;
+        
       }
 
-      .image {
-          width: 40%;
-      }
-
-      .text {
-          width: 60%;
-          padding: 16px;
-      }
-
-      .text-title {
-          @apply --paper-font-headline;
-          font-size: 28px;
-      }
-
-      .info {
-        margin: 8px 0 16px 0;
+      .card-title {
         @apply --layout-horizontal;
-        @apply --paper-font-body1;
-        font-size: 16px;
-        line-height: 1.5;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        width: 100%;
+        letter-spacing: 4px;
+        font-family: 'Oswald', sans-serif !important;
+        line-height: 34px;
+        @apply --paper-font-headline;
+        text-transform: uppercase;
+        margin-top: 24px;
+        
       }
 
-      .category {
-        letter-spacing: 0.7px;
+      .title-label  {
+        margin: 0 12px;
       }
 
-      .date {
-        letter-spacing: 1px;
+      .card-description {
+        margin: 48px auto;
+        width: 70%;
+        text-align: center
       }
 
-      .category-border {
-        display: inline-block;
-        border-top: 1px solid var(--app-primary-color);
-        border-bottom: 1px solid var(--app-primary-color);
+      .card-content {
+        @apply --layout-horizontal;
+        width: 85%;
+        margin: 36px auto;
+        min-height: 600px;
       }
 
-      .description {
-          @apply --paper-font-body1;
-          font-size: 16px;  
+      .accordeon {
+        width: 50%;
       }
 
-      iron-image {
-                position: relative;
-                width: 100%;
-                height: 100%;
-            }
+      .card-image {
+        width: 100%;
+        min-height: 50px;
+        margin: 24px 0;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12), 
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-content-image {
+        width: 50%;
+        background-image: url('http://95.85.60.177/img/static/team/vacancy2.jpg');
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .accordion {
+        
+        color: #fff;
+        cursor: pointer;
+        padding: 16px;
+        border-bottom: 1px solid #191919;
+        text-align: left;
+        
+        @apply --paper-font-subhead;
+        font-size: 20px;
+      
+       
+      }
+
+      .vacancy-desc{
+        @apply --paper-font-subhead;
+        padding: 16px;
+        border-bottom: 1px solid #191919;
+        background: #303030;
+      }
 
 
+      .show {
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.hide {
+    overflow: hidden;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+@media (max-width: 550px) {
+        .card-title {
+          margin-top:  16px;
+          font-size: 20px;
+        }
+
+        .card-description {
+          width: 85%;
+          margin: 24px;
+        }
+        .card-content-image {
+        display: none;
+      }
+      .accordeon {
+        width: 100%;
+      }
+      .card-content {
+        
+        min-height: 50px;
+      }
+
+      }
+
+      
     </style>
 
-    <iron-ajax id="ajax"
-                auto
-                url="http://localhost/api/v1/news/"
-                handle-as="json"
-                on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="ajax" auto url="http://95.85.60.177/api/v1/news/" handle-as="json" on-response="handleResponse"></iron-ajax>
 
 
     <div class="content" has-content$="[[_isDefined(news)]]">
-        
-            <paper-material class="material">
-                
-                <div class="text">
-                    <div class="text-title">Название вакансии</div>
-                    <div class="info">
-                        <div class="date">
-                            26.06.2017
-                        </div>
-                    </div>
-                    <div class="description">
-                      ОБЯЗАННОСТИ:
-                      <p>- Оперативное решение интересующих посетителей вопросов в рамках своей компетенции;</p>
-                      <p>- Поддержание чистоты на рабочем месте.</p>
-                      <br>
-                      ТРЕБОВАНИЯ:
-                      <p>- Презентабельный внешний вид;</p>
-                      <p>- Высокая обучаемость, ответственность, позитивный настрой;</p>
-                      <p>- Опыт работы является преимуществом.</p>
-                      <p></p>
-                    </div>
-                </div>
-                <div class="image">
-                    <iron-image class="card-image" sizing="cover" preload fade src="http://localhost/img/static/team/team.jpg"></iron-image>
-                </div>
-                
-            </paper-material>
-       
+
+      
+
+        <div class="card-title">
+          <iron-icon icon="star"></iron-icon><div class="title-label">Банда</div><iron-icon icon="star"></iron-icon>
+        </div>
+        <div class="card-description">
+          Текст о том, как хорошо работать в Boris баре. О том что это эксклюзивная работа, уникальные люди и насыщенная жизнь. Мы верим, что работа должна приносить удовольствие
+          и новые впечатления и так далее. Если готов - пиши на email  и добро пожаловать в банду.
+        </div>
+
+        <img class="card-image" src="http://95.85.60.177/img/static/team/team.jpg" alt="">
+
+        <div class="card-title">
+          <iron-icon icon="star"></iron-icon><div class="title-label">Вакансии</div><iron-icon icon="star"></iron-icon>
+        </div>
+        <paper-material  class="card-content">
+<div class="accordeon">
+            <div id="first" class="accordion" on-tap="_handleTap">Вакансия 1</div>
+            <div id="first-section">
+              <div class="vacancy-desc">
+                Обязанности: </br>
+                - обязанность 1; </br>
+                - обязанность 2; </br></br>
+                Требования: </br>
+                - требование 1; </br>
+                - требование 2; </br></br>
+                Условия: </br>
+                - условие 1; </br>
+                - условие 2; </br>
+              </div>
+            </div>
+
+            <div id="second" class="accordion" on-tap="_handleTap">Вакансия 2</div>
+            <div id="second-section">
+              <div class="vacancy-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.</div>
+            </div>
+
+            
+          </div>
+
+          <div class="card-content-image" ></div>
+
+        </paper-material>
+      
+
+     
+
 
 
     </div>
   </template>
 
-  <script>
 
+  <script>
     Polymer({
       is: 'bb-about-job',
 
 
-      _isDefined: function(news) {
+      _isDefined: function (news) {
         return news != null;
       },
 
-      handleResponse: function(request) {
-          var response = request.detail.response;
-          var date, short_date, options, index, len;
+      _handleTap: function(e) {
+        id = '#'+ Polymer.dom(e).localTarget.id + '-section';
+        support_text = this.$$(id);
+          
+          support_text.classList.value = support_text.classList.value == 'show' ? 'hide' : 'show';
+      },
 
-          options = {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+      handleResponse: function (request) {
+        var response = request.detail.response;
+        var date, short_date, options, index, len;
+
+        options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        };
+
+        for (index = 0, len = response.length; index < len; ++index) {
+          date = new Date(response[index].updated_at);
+          date = date.toLocaleString("ru", options).split(' ');
+          short_date = response[index].updated_at.split('-');
+          response[index].date = {
+            'day': date[0],
+            'month': date[1],
+            'year': date[2],
+            'short': short_date[2] + '/' + short_date[1] + '/' + short_date[0].slice(2, 4),
           };
+        };
 
-          for (index = 0, len = response.length; index < len; ++index) {
-              date = new Date(response[index].updated_at);
-              date = date.toLocaleString("ru", options).split(' ');
-              short_date = response[index].updated_at.split('-');
-              response[index].date = {
-                  'day': date[0],
-                  'month': date[1],
-                  'year': date[2],
-                  'short': short_date[2] + '/' + short_date[1] + '/' + short_date[0].slice(2,4),
-              };
-          };
-
-          this.news = response;
-        },
+        this.news = response;
+      },
     });
-
   </script>
 
 </dom-module>

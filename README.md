@@ -32,7 +32,7 @@ Install [polymer-cli](https://github.com/Polymer/polymer-cli):
 
 ### Start the development server
 
-This command serves the app at `http://localhost:8080` and provides basic URL
+This command serves the app at `http://95.85.60.177:8080` and provides basic URL
 routing for the app:
 
     polymer serve

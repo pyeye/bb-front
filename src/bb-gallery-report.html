@@ -14,20 +14,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
 
 <link rel="import" href="bb-icons.html">
 
@@ -35,66 +25,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 
-  <style is="custom-style" include="app-grid-style">
-
-    
-
-    .pad {
-      @apply(--layout-flex);
-      @apply(--layout-vertical);
-    }
-
-    @media (max-width: 1450px) {
-      app-toolbar.tall {
-        height: 200px;
+    <style is="custom-style" include="app-grid-style">
+      .pad {
+        @apply --layout-flex;
+        @apply --layout-vertical;
       }
-    }
 
-    
+      @media (max-width: 1450px) {
+        app-toolbar.tall {
+          height: 200px;
+        }
+      }
 
-    app-toolbar {
-      color: white;
 
-    }
 
-    :host {
-      display: block;
+      app-toolbar {
+        color: white;
+      }
+
+       :host {
+        display: block;
         --app-grid-columns: 3;
         --app-grid-gutter: 5px;
         --app-grid-expandible-item-columns: 2;
         --app-grid-item-height: 20vw;
-    }
+      }
 
-    .content {
-      transition: opacity 0.3s;
-      opacity: 0;
-    }
+      .content {
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
 
-    .content[has-content]{
-      opacity: 1;
-    }
+      .content[has-content] {
+        opacity: 1;
+      }
 
-    .item-title {
-      position: absolute;
+      .item-title {
+        position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
         color: white;
         padding: 16px;
-        @apply(--paper-font-subhead);
+        @apply --paper-font-subhead;
         transition: opacity 0.1s;
       }
 
       .item-flex {
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
+        @apply --layout-flex;
+        @apply --layout-horizontal;
       }
 
       .item-title-count {
         float: right;
         align-self: flex-end;
-        @apply(--paper-font-title);
+        @apply --paper-font-title;
         font-weight: normal;
       }
 
@@ -103,12 +89,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --iron-icon-width: 21px;
       }
 
-    ul {
+      ul {
         padding: 0;
         list-style: none;
-    }
+      }
 
-    .item {
+      .item {
         cursor: pointer;
         min-height: 300px;
         list-style: none;
@@ -118,93 +104,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-size: cover;
         background-position: center center;
         box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 8px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 3px -2px rgba(0, 0, 0, 0.4);
-    }
-
-    .event-name {
-      @apply(--paper-font-headline);
-    }
-
-    paper-ripple {
-      color: var(--app-primary-color);
-    }
-
-    @media (min-width: 800px) {
-    .item:nth-child(5n+1) {
-        @apply(--app-grid-expandible-item);
-      }
-    }
-
-    @media (max-width: 799px) {
-      :host {
-        --app-grid-columns: 1;
-        --app-grid-gutter: 5px;
-        --app-grid-expandible-item-columns: 1;
+        0 1px 8px 0 rgba(0, 0, 0, 0.12),
+        0 3px 3px -2px rgba(0, 0, 0, 0.4);
       }
 
+      .event-name {
+        @apply --paper-font-headline;
+      }
 
-    }
+      paper-ripple {
+        color: var(--app-primary-color);
+      }
 
-    ul a {
-      color: -webkit-link;
-      text-decoration: none;
-      cursor: auto;
-    }
+      @media (min-width: 800px) {
+        .item:nth-child(5n+1) {
+          @apply --app-grid-expandible-item;
+        }
+      }
 
-    #ripple {
-      position: fixed;
-          top: 0;
-          left: 0;
-          height: 100vh;
-          width: 100vw;
-          background-color: var(--app-lower-layer-color);
-          z-index: -5;
-    }
+      @media (max-width: 799px) {
+         :host {
+          --app-grid-columns: 1;
+          --app-grid-gutter: 5px;
+          --app-grid-expandible-item-columns: 1;
+        }
+      }
 
-  </style>
+      ul a {
+        color: -webkit-link;
+        text-decoration: none;
+        cursor: auto;
+      }
 
-  
+      #ripple {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: var(--app-lower-layer-color);
+        z-index: -5;
+      }
+    </style>
 
-    <iron-ajax id="ajax"
-              auto
-              url="http://localhost/api/v1/albums/"
-              handle-as="json"
-              on-response="handleResponse"></iron-ajax>
 
-    
+
+    <iron-ajax id="ajax" auto url="http://95.85.60.177/api/v1/albums/" handle-as="json" on-response="handleResponse"></iron-ajax>
+
+
     <div id="content" class="content" has-content$="[[_isDefined(gallery)]]">
       <ul class="app-grid">
         <template items="[[gallery]]" is="dom-repeat" on-dom-change="_doAnimation">
-            <li class="item" style="background-image: url([[item.main_image.thumbnail_big]]);" on-tap="_itemTapHandler">
-              <div class="item-title">
-                <div class="item-flex">
-                  <div class="pad">
-                    <div class="event-date">
-                      [[item.date.day]] [[item.date.month]]
-                    </div>
-                    <div class="event-name">
-                      [[item.name]]
-                    </div>
+          <li class="item" style="background-image: url([[item.main_image.thumbnail_big]]);" on-tap="_itemTapHandler">
+            <div class="item-title">
+              <div class="item-flex">
+                <div class="pad">
+                  <div class="event-date">
+                    [[item.date.day]] [[item.date.month]]
                   </div>
-                  <div class="item-title-count">
-                    <iron-icon class="icon-camera" icon="photo-camera"></iron-icon> &nbsp [[item.image_count]]
+                  <div class="event-name">
+                    [[item.name]]
                   </div>
                 </div>
+                <div class="item-title-count">
+                  <iron-icon class="icon-camera" icon="photo-camera"></iron-icon> &nbsp [[item.image_count]]
+                </div>
               </div>
-              <paper-ripple></paper-ripple>
-            </li>
+            </div>
+            <paper-ripple></paper-ripple>
+          </li>
         </template>
       </ul>
     </div>
-  
-  
 
 
-</template>
+
+
+  </template>
 
   <script>
-
     Polymer({
 
       is: 'bb-gallery-report',
@@ -217,26 +195,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         animationConfig: {
-          value: function() {
+          value: function () {
             return {
-              'entry': [
-                  {
-                  name: 'fade-in-animation',
-                  node: this.$.content,
-                }],
-              'exit': [
-                {
-                  name: 'fade-out-animation',
-                  node: this,
-                },]
+              'entry': [{
+                name: 'fade-in-animation',
+                node: this.$.content,
+              }],
+              'exit': [{
+                name: 'fade-out-animation',
+                node: this,
+              }, ]
             }
           }
         },
 
         sharedElements: {
-          value: function() {
+          value: function () {
             return {
-              
+
             }
           }
         },
@@ -244,54 +220,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       behaviors: [
         Polymer.NeonAnimatableBehavior,
-        Polymer.IronResizableBehavior],
+        Polymer.IronResizableBehavior
+      ],
 
-      _doAnimation: function(e) {
-        
+      _doAnimation: function (e) {
+
       },
 
-      _isDefined: function(gallery) {
+      _isDefined: function (gallery) {
         return gallery != null;
       },
 
-      handleResponse: function(request) {
-          var response = request.detail.response;
-          var index, len, date;
-          var options = {
-              month: 'long',
-              day: 'numeric',
+      handleResponse: function (request) {
+        var response = request.detail.response;
+        var index, len, date;
+        var options = {
+          month: 'long',
+          day: 'numeric',
+        };
+        for (index = 0, len = response.length; index < len; ++index) {
+          date = new Date(response[index].date);
+          date = date.toLocaleString("ru", options).split(' ');
+          response[index].date = {
+            'day': date[0],
+            'month': date[1],
+            'original': response[index].date,
           };
-          for (index = 0, len = response.length; index < len; ++index) {
-              date = new Date(response[index].date);
-              date = date.toLocaleString("ru", options).split(' ');
-              response[index].date = {
-                  'day': date[0],
-                  'month': date[1],
-                  'original': response[index].date,
-              };
 
-          };
-          this.gallery = response;
+        };
+        this.gallery = response;
       },
 
-      _itemTapHandler: function(e) {
-        this.fire('redirect-to-album', {'pk': e.model.item.pk});
+      _itemTapHandler: function (e) {
+        this.fire('redirect-to-album', {
+          'pk': e.model.item.pk
+        });
       },
 
-      attached: function() {
-        this._updateGridStyles = this._updateGridStyles || function() {
+      attached: function () {
+        this._updateGridStyles = this._updateGridStyles || function () {
           this.updateStyles();
         }.bind(this);
         window.addEventListener('resize', this._updateGridStyles);
       },
 
-      detached: function() {
+      detached: function () {
         window.removeEventListener('resize', this._updateGridStyles);
       },
 
 
     });
-
   </script>
 
 </dom-module>

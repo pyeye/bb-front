@@ -18,157 +18,202 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="bb-menu-category">
 
-  <template>
+    <template>
 
-    <style>
-      :host {
-          margin-bottom: 16px;
-        display: block;
-        --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 18px;
-        --iron-icon-width: 18px;
-      }
-
-
-      paper-material {
-        @apply --layout-vertical;
-        padding: 16px;
-        margin: 24px;
-        background-color: #252525;
-        color: #FFFFFF;
-        margin-bottom: 32px;
-      }
-
-      [hidden] {
-        display: none;
-      }
-
-      .category-title {
-          margin: 8px auto 16px auto;
-          text-transform: uppercase;
-          font-family: 'Oswald', sans-serif !important;
-          @apply --paper-font-headline;
-          @apply --layout-horizontal;
-          letter-spacing: 2px;
-          font-size: 26px;
-      }
-
-      iron-icon {
-          margin: auto 6px;
-      }
-
-      .menu-position {
-          padding: 16px;
-          @apply --layout-horizontal;
-          border-bottom: 1px solid #191919;
-      }
-
-      .menu-position:last-of-type { 
-          border-bottom: 0 none;
-      }
-
-      .menu-title {
-          @apply --paper-font-headline;
-          font-size: 20px;
-          font-weight: normal;
-      }
-
-      .menu-info {
-          @apply --layout-flex;
-          @apply --layout-vertical;
-          
-      }
-
-      .menu-description {
-          @apply --layout-horizontal;
-          @apply --paper-font-body1;
-          opacity: 0.7;
-      }
-
-      .menu-price {
-          @apply --layout-horizontal;
-          
-      }
-
-      .menu-price-box {
-          @apply --layout-vertical;
-          margin-left: 16px;
-      }
-
-      .menu-price-value {
-        @apply --paper-font-headline;
-      }
-
-      .menu-price-measure {
-          @apply --layout-horizontal;
-          @apply --paper-font-body1;
-      }
+        <style>
+             :host {
+                margin-bottom: 16px;
+                display: block;
+                --iron-icon-fill-color: #FFFFFF;
+                --iron-icon-height: 18px;
+                --iron-icon-width: 18px;
+            }
 
 
-   
-    </style>
+            paper-material {
+                @apply --layout-vertical;
+                padding: 16px;
+                width: 80%;
+                margin: 32px auto 32px auto;
+                background-color: #252525;
+                color: #FFFFFF;
+                
+            }
 
-    <iron-ajax id="ajax"
-               handle-as="json"
-               last-response="{{menu}}"></iron-ajax>
+            [hidden] {
+                display: none;
+            }
 
-    <paper-material hidden$="[[_isDefined(menu)]]">
-        <div class="category-title">
-            <iron-icon icon="star"></iron-icon>[[category.name]]<iron-icon icon="star"></iron-icon>
-        </div>
-        <template is="dom-repeat" items="[[menu]]">
-            <div class="menu-position">
-                <div class="menu-info">
-                    <div class="menu-title">[[item.name]]</div>
-                    <div class="menu-description">
-                        <div>[[item.description]]</div>
+            .category-title {
+                margin: 8px 0 16px 0;
+                text-transform: uppercase;
+                font-family: 'Oswald', sans-serif !important;
+                @apply --paper-font-headline;
+                @apply --layout-horizontal;
+                @apply --layout-center-justified;
+                letter-spacing: 2px;
+                font-size: 26px;
+            }
+
+            iron-icon {
+                margin: auto 6px;
+            }
+
+            .menu-position {
+                padding: 16px;
+                @apply --layout-horizontal;
+                border-bottom: 1px solid #191919;
+            }
+
+            .menu-position:last-of-type {
+                border-bottom: 0 none;
+            }
+
+            .menu-title {
+                @apply --paper-font-headline;
+                font-size: 20px;
+                font-weight: normal;
+                margin-bottom: 4px;
+            }
+
+            .menu-info {
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+
+            .menu-description {
+                @apply --layout-horizontal;
+                @apply --paper-font-body1;
+                opacity: 0.7;
+            }
+
+            .menu-price {
+                @apply --layout-horizontal;
+            }
+
+            .menu-price-box {
+                @apply --layout-vertical;
+
+                margin-left: 16px;
+            }
+
+            .menu-price-value {
+                @apply --paper-font-headline;
+                text-align: center;
+            }
+
+            .menu-price-measure {
+                @apply --layout-horizontal;
+                @apply --paper-font-body1;
+            }
+
+            @media (max-width: 1450px) {
+                paper-material {
+                    
+                    
+                    margin: 32px 24px 32px 24px;
+                    width: auto;
+                }
+            }
+
+            @media (max-width: 550px) {
+
+                 :host {
+
+                    --iron-icon-height: 14px;
+                    --iron-icon-width: 14px;
+                    margin-bottom: 0;
+                }
+
+                paper-material {
+                    padding: 8px;
+                    margin: 0;
+
+                    margin-bottom: 0;
+                }
+
+                .menu-position {
+                    padding: 8px;
+                }
+
+                .category-title {
+                    font-size: 20px;
+                    margin-top: 16px;
+                    margin-bottom: 16px;
+                }
+
+                .menu-title {
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+
+                .menu-price-value {
+                    font-size: 20px;
+                }
+                .menu-price {
+                    @apply --layout-vertical;
+                }
+            }
+        </style>
+
+        <iron-ajax id="ajax" handle-as="json" last-response="{{menu}}"></iron-ajax>
+
+        <paper-material hidden$="[[_isDefined(menu)]]">
+            <div class="category-title">
+                <iron-icon icon="star"></iron-icon><div>[[category.name]]</div>
+                <iron-icon icon="star"></iron-icon>
+            </div>
+            <template is="dom-repeat" items="[[menu]]">
+                <div class="menu-position">
+                    <div class="menu-info">
+                        <div class="menu-title">[[item.name]]</div>
+                        <div class="menu-description">
+                            <div>[[item.description]]</div>
+                        </div>
+                    </div>
+                    <div class="menu-price">
+                        <template is="dom-repeat" items="[[item.prices]]" as="price">
+                            <div class="menu-price-box">
+                                <div class="menu-price-value">[[price.value]] &#x20bd;</div>
+                                <div class="menu-price-measure">
+                                    <div>[[price.count]]</div>
+                                    <div>[[price.measure]]</div>
+                                </div>
+
+
+                            </div>
+
+                        </template>
                     </div>
                 </div>
-                <div class="menu-price">
-                    <template is="dom-repeat" items="[[item.prices]]" as="price">
-                        <div class="menu-price-box">
-                            <div class="menu-price-value">[[price.value]] &#x20bd;</div>
-                            <div class="menu-price-measure">
-                                <div>[[price.count]]</div>
-                                <div>[[price.measure]]</div>
-                            </div>
-                            
-                            
-                        </div>
-                            
-                    </template>
-                </div>
-            </div>
-        </template>
-    </paper-material>
-    
-  </template>
+            </template>
+        </paper-material>
 
-  <script>
+    </template>
 
-    Polymer({
-      is: 'bb-menu-category',
+    <script>
+        Polymer({
+            is: 'bb-menu-category',
 
-      properies: {
-          category: Object,
-          menu: Array,
-      },
+            properies: {
+                category: Object,
+                menu: Array,
+            },
 
-      ready: function() {
-          this._generateRequest(this.category);
-      },
+            ready: function () {
+                this._generateRequest(this.category);
+            },
 
-      _generateRequest: function(category) {
-        this.$.ajax.url = 'http://localhost/api/v1/menu/?category=' + category.code;
-        this.$.ajax.generateRequest();
-      },
+            _generateRequest: function (category) {
+                this.$.ajax.url = 'http://95.85.60.177/api/v1/menu/?category=' + category.code;
+                this.$.ajax.generateRequest();
+            },
 
-       _isDefined: function(menu) {
-        return menu.length == 0;
-      },
+            _isDefined: function (menu) {
+                return menu.length == 0;
+            },
 
-    });
-
-  </script>
+        });
+    </script>
 
 </dom-module>

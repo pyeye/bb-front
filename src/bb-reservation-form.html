@@ -15,12 +15,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input-error.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
@@ -79,8 +78,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-button {
-        background: var(--app-accent-color);
+        background: #026a1b;
         color: #fff;
+      }
+
+      paper-button.cancel {
+        background: var(--app-primary-color);
+      }
+
+      paper-button[disabled] {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
       }
 
       .form-container {
@@ -90,6 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .action-bar {
         @apply --layout-horizontal;
         @apply --layout-end-justified;
+        margin-top: 24px;
         margin-bottom: 24px;
         margin-right: 10px;
       }
@@ -119,8 +130,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .form-header iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 20px;
-        --iron-icon-width: 20px;
+        --iron-icon-height: 16px;
+        --iron-icon-width: 16px;
       }
 
       .form-title {
@@ -128,14 +139,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .form-event-title {
-        @apply(--paper-font-headline);
+        @apply --paper-font-headline;
         color: #fff;
         margin-top: 16px;
         margin-bottom: 16px;
       }
 
       .form-item {
-        
+
         margin-right: 16px;
         margin-left: 16px;
         min-width: 120px;
@@ -165,157 +176,203 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-dialog-scrollable {
-          box-sizing: border-box;
-          width: 518px;
-          height: 320px;
+        box-sizing: border-box;
+        width: 518px;
+        height: 320px;
+      }
+
+      @media (max-width: 1450px) {
+         :host {
+
+          top: 50px;
+        }
+      }
+
+      @media (max-width: 550px) {
+         :host {
+
+          margin: 0;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100vh;
+          overflow: auto;
+        }
+
+        .form-item {
+          width: 90%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .action-bar {
+          margin-right: 0;
+        }
+
+        paper-button {
+          width: 50%;
+        }
+
+
+        .form-row {
+          @apply --layout-vertical;
+        }
+
+        .form-header {
+          font-size: 20px;
+        }
+
+        .form-header {
+          margin-top: 8px;
+          margin-bottom: 8px;
+        }
+        .form-header-event-name {
+          font-size: 20px;
+          margin-bottom: 0;
+        }
       }
     </style>
 
-    <iron-ajax id="ajax" url="https://maddogclub.com/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+    <iron-ajax id="ajax" url="http://95.85.60.177/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
       loading={{loading}} on-response="handleResponse"></iron-ajax>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    
 
-      <div class="form-header">
-        <iron-icon icon="star"></iron-icon>
-        <div class="form-title">Забить стол</div>
-        <iron-icon icon="star"></iron-icon>
+
+    <div class="form-header">
+      <iron-icon icon="star"></iron-icon>
+      <div class="form-title">Забить стол</div>
+      <iron-icon icon="star"></iron-icon>
+    </div>
+    <template is="dom-if" if="[[_showEvent(event)]]">
+      <div class="form-header-event-name">
+        на [[event.name]]
       </div>
-      <template is="dom-if" if="[[_showEvent(event)]]">
-        <div class="form-header-event-name">
-          на [[event.name]]
-         </div>
-      </template>
-      
+    </template>
 
-      <paper-dialog-scrollable>
 
-       <div class="form-block">
-        <div class="form-row">
-          <div class="form-item form-item-half">
-            <paper-input maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя" required></paper-input>
-          </div>
-          <div class="form-item form-item-half">
-            <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
-              required></paper-input>
-          </div>
+
+
+    <div class="form-block">
+      <div class="form-row">
+        <div class="form-item form-item-half">
+          <paper-input id="i1" autofocus maxlength="20" char-counter error-message="Это обязательное поле!" value="{{form.name}}" label="Имя" required></paper-input>
         </div>
-
-        <div class="form-row">
-          <div class="form-item form-item-half">
-            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
-              <paper-listbox id="peoples" class="dropdown-content">
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-          <div class="form-item form-item-half">
-            <vaadin-date-picker value="{{form.date}}" label="Дата" i18n="[[i18n]]"></vaadin-date-picker>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-item form-item-half">
-            <paper-dropdown-menu label="Время c" value="{{form.time_start}}">
-              <paper-listbox id="time_start" class="dropdown-content">
-                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-          <div class="form-item form-item-half">
-            <paper-dropdown-menu label="Время до" value="{{form.time_end}}">
-              <paper-listbox id="time_end" class="dropdown-content">
-                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-item">
-            <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="100" char-counter></paper-textarea>
-          </div>
+        <div class="form-item form-item-half">
+          <paper-input maxlength="17" char-counter error-message="Это обязательное поле!" value="{{form.phone_number}}" label="Номер телефона"
+            required></paper-input>
         </div>
       </div>
 
-      </paper-dialog-scrollable>
-
-     
-      
-      <div class="action-bar">
-        <paper-button raised dialog-dismiss>
-          <iron-icon class="reservation-icons" icon="close"></iron-icon>
-          Закрыть
-        </paper-button>
-        <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]" dialog-confirm>
-          <div class="loading-box">
-            <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
-            <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
-          </div>
-          Отправить
-        </paper-button>
+      <div class="form-row">
+        <div class="form-item form-item-half">
+          <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
+            <paper-listbox id="peoples" class="dropdown-content">
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div class="form-item form-item-half">
+          <vaadin-date-picker value="{{form.date}}" label="Дата" i18n="[[i18n]]"></vaadin-date-picker>
+        </div>
       </div>
-     
 
-      <paper-toast 
-        id="toast" 
-        horizontal-align="right" 
-        always-on-top 
-        text="Заявка отправлена. В ближайшее время с Вами свяжутся для подтверждения брони."
-        duration="5000"></paper-toast>
+      <div class="form-row">
+        <div class="form-item form-item-half">
+          <paper-dropdown-menu label="Время c" value="{{form.time_start}}">
+            <paper-listbox id="time_start" class="dropdown-content">
+              <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div class="form-item form-item-half">
+          <paper-dropdown-menu label="Время до" value="{{form.time_end}}">
+            <paper-listbox id="time_end" class="dropdown-content">
+              <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-item">
+          <paper-textarea label="Комментарий (не обязательно)" value="{{form.comment}}" maxlength="200" char-counter></paper-textarea>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="action-bar">
+      <paper-button raised dialog-dismiss class="cancel">
+        <iron-icon class="reservation-icons" icon="close"></iron-icon>
+        Закрыть
+      </paper-button>
+      <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]" dialog-confirm>
+        <div class="loading-box">
+          <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
+          <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
+        </div>
+        Отправить
+      </paper-button>
+    </div>
+
+
+   
 
   </template>
 
@@ -377,9 +434,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           readonly: true,
           value: function () {
             return [
-              '16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30',
-              '21:00','21:30','22:00','22:30','23:00','23:30','00:00','00:30','01:00','01:30',
-              '02:00','02:30','03:00','03:30','04:00','04:30','05:00','05:30','06:00'
+              '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
+              '21:00', '21:30', '22:00', '22:30', '23:00', '23:30', '00:00', '00:30', '01:00', '01:30',
+              '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00'
             ]
           }
         },
@@ -447,7 +504,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.set('validators.name', newValue.length !== 0);
       },
 
-      _formDateChanged: function(newValue, oldValue) {
+      _formDateChanged: function (newValue, oldValue) {
         this.set('validators.date', (newValue.length !== 0));
       },
 
@@ -490,30 +547,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
 
-      setEvent: function(event) {
+      openForm: function(event) {
+        this._clearForm();
+        if (event !== undefined) {
+          this._setEvent(event);
+        }
+        this.open();
+        this.$.i1.focus();
+      },
+
+      _setEvent: function (event) {
         this.event = event;
         this.set('form.date', this.event.date.original);
         this.set('form.time_start', this.event.start);
         this.$.time_start.selected = this.time_range.indexOf(this.event.start)
       },
 
-      clearForm: function() {
+      _clearForm: function () {
         this._resetForm();
         this._resetEvent();
       },
 
       submitForm: function () {
-        this.form.date = this.event.date.original;
         this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },
 
       handleResponse: function (request) {
-        this.fire('reservation-form-send');
-        this.$.toast.open();
+        this.fire('reservation-form-send', {
+          'text': "Заявка отправлена.",
+        });
+        
       },
 
-      _showEvent: function(event) {
+      _showEvent: function (event) {
         for (var key in event) {
           if (hasOwnProperty.call(event, key)) return true;
         }
@@ -538,7 +605,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       },
 
-      _resetEvent: function() {
+      _resetEvent: function () {
         this.event = {}
       },
 

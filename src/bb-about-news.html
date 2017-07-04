@@ -9,18 +9,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bb-icons.html">
 
 <dom-module id="bb-about-news">
 
@@ -29,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+      }
+
+      [hidden] {
+          display: none;
       }
 
       paper-material {
@@ -71,8 +73,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 8px 0 16px 0;
         @apply --layout-horizontal;
         @apply --paper-font-body1;
+        align-items:center;
         font-size: 16px;
         line-height: 1.5;
+      }
+
+      .info-desc{
+          @apply --layout-horizontal;
+          @apply --layout-flex;
       }
 
       .category {
@@ -95,22 +103,102 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 16px;  
       }
 
+      paper-icon-button {
+          width: 35px;
+          height: 35px;
+      }
+
+      .show {
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.hide {
+    overflow: hidden;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
       iron-image {
                 position: relative;
                 width: 100%;
                 height: 100%;
             }
 
+        @media (max-width: 550px) {
+            iron-image {
+                
+                height: 250px;
+            }
+            .image{
+                width: 100%;
+            }
+            .text{
+                position: relative;
+                width: 100%;
+                padding: 0;
+            }
+            .text-title{
+                padding: 8px 16px;
+                font-size: 24px;
+            }
+            .description{
+                padding: 0 16px;
+            }
+            .info{
+                padding: 0 16px;
+                font-size: 14px;
+                margin: 0;
+
+            }
+        .material{
+            @apply --layout-vertical;
+            margin: 16px;
+        }
+
+        .description{
+            font-size: 14px;
+        }
+        
+        
+      }
+      @media (max-width: 760px) {
+           
+        .content{
+            width: 100%;
+            margin: 0;
+        }
+      }
+
 
     </style>
 
     <iron-ajax id="ajax"
                 auto
-                url="http://localhost/api/v1/news/"
+                url="http://95.85.60.177/api/v1/news/"
                 handle-as="json"
                 on-response="handleResponse"></iron-ajax>
 
-
+<iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
     <div class="content" has-content$="[[_isDefined(news)]]">
         <template is="dom-repeat" items="[[news]]">
             <paper-material class="material">
@@ -120,19 +208,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="text">
                     <div class="text-title">[[item.title]]</div>
                     <div class="info">
-                        <div class="category">
-                            <div class="category-border">
-                                [[item.category.name]]
+                        <div class="info-desc">
+                            <div class="category">
+                                <div class="category-border">
+                                    [[item.category.name]]
+                                </div>
+                            </div>
+                            <div class="date">
+                                [[item.date.short]]
                             </div>
                         </div>
-                        <div class="date">
-                            [[item.date.short]]
-                        </div>
+                        <paper-icon-button icon="expand-more" hidden on-tap="_supportTextHandler"></paper-icon-button>
+                        
                     </div>
                     <div class="description">
-                        <marked-element markdown="[[item.description]]">
-                            <div class="markdown-html custom"></div>
-                        </marked-element>
+                        <div id="[[_makeId(item)]]">
+                            <marked-element markdown="[[item.description]]">
+                                <div class="markdown-html custom"></div>
+                            </marked-element>
+                        </div>
                     </div>
                 </div>
                 
@@ -151,6 +245,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _isDefined: function(news) {
         return news != null;
+      },
+
+      _supportTextHandler: function(e) {
+          var pk, icon, support_text;
+          icon = Polymer.dom(e).localTarget.icon;
+          pk = '#id-' + e.model.__data__.item.pk
+          support_text = this.$$(pk);
+          Polymer.dom(e).localTarget.icon = icon == 'expand-more' ? 'expand-less' : 'expand-more';
+          support_text.classList.value = support_text.classList.value == 'show' ? 'hide' : 'show';
+      },
+
+      _makeInitialStyle: function() {
+          return this.smallScreen ? 'hide' : 'show';
+      },
+
+      _makeId: function(item) {
+        return 'id-' + item.pk;
       },
 
       handleResponse: function(request) {

@@ -49,7 +49,9 @@
     "marked-element": "PolymerElements/marked-element#^2.1.1",
     "particles.js": "^2.0.0",
     "paper-carousel": "Redbility/paper-carousel#^1.2.5",
-    "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^1.4.1"
+    "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^1.4.1",
+    "lg-hash.js": "^1.0.0",
+    "iron-swipeable-pages": "GeoloeG/iron-swipeable-pages#^1.2.9"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

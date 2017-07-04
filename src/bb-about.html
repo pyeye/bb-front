@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(http://localhost/img/static/homepage/about.jpg);
+          background-image: url(http://95.85.60.177/img/static/homepage/about.jpg);
           background-position: left center;
         };
       }
@@ -66,8 +66,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       [main-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 26px;
-        --iron-icon-width: 26px;
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
         margin-top: auto;
         margin-bottom: auto;
       }
@@ -95,8 +95,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       [condensed-title] .title-label {
         font-size: 22px;
-        margin-left: 24px;
-        margin-right: 24px;
+        margin-left: 10px;
+        margin-right: 10px;
         letter-spacing: 4px;
         font-family: 'Oswald', sans-serif !important;
         line-height: 34px;
@@ -105,8 +105,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       [condensed-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
-        --iron-icon-height: 26px;
-        --iron-icon-width: 18px;
+        --iron-icon-height: 14px;
+        --iron-icon-width: 14px;
       }
       [condensed-title] i {
         font-weight: 100;
@@ -137,8 +137,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         [condensed-title] .title-label {
           font-size: 20px;
-          margin-left: 16px;
-          margin-right: 16px;
         }
       }
 
@@ -150,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       .content-container {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
         justify-content: space-between;
       }
 
@@ -179,7 +177,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-tab {
-        font-family: 'Raleway', sans-serif;
         text-transform: uppercase;
         font-weight: 600;
       }
@@ -206,7 +203,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container>
           <paper-tab group="news">Жизнь</paper-tab>
-          <paper-tab group="concept">Концепция</paper-tab>
+          <paper-tab group="concept">Бар</paper-tab>
           <paper-tab group="interior">Интерьер</paper-tab>
           <paper-tab group="job">Вакансии</paper-tab>
       </paper-tabs>
@@ -255,7 +252,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-      behaviors: [Polymer.IronResizableBehavior],
+      behaviors: [
+        Polymer.NeonAnimatableBehavior,
+        Polymer.IronResizableBehavior],
 
 
     });

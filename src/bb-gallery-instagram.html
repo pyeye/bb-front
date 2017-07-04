@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <style>
     .content {
         margin: 24px auto;
-        width: 90%;
+        width: 80%;
         @apply --layout-horizontal;
         @apply --layout-wrap;
     }
@@ -104,6 +104,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #comment-icon {
         margin-left: 32px;
       }
+
+      @media (max-width: 1450px) {
+               .content {
+       
+        width: 90%;
+        
+    }
+            }
+
+            @media (max-width: 1050px) {
+                .content {
+       
+        width: 90%;
+        
+    }
+    .image-item {
+        
+        -webkit-flex-basis: 47%;
+        flex-basis: 47%;
+        max-width: 47%;
+        
+    }
+            }
+
+            @media (max-width: 550px) {
+.content {
+       
+        width: 95%;
+        
+    }
+    .image-item {
+        
+        -webkit-flex-basis: 100%;
+        flex-basis: 100%;
+        max-width: 100%;
+        
+    }
+                
+            }
     
 
   </style>
@@ -112,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax id="ajax"
                 auto
-                url="http://localhost/api/v1/instagram/"
+                url="http://95.85.60.177/api/v1/instagram/"
                 handle-as="json"
                 last-response="{{instagram}}"></iron-ajax>
 

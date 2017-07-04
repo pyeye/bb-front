@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
@@ -31,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="bb-reservation-form.html">
+
 <link rel="import" href="bb-icons.html">
 
 
@@ -40,226 +41,244 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 
-  <style>
+    <style>
+       :host {
+        overflow: hidden;
+        @apply --layout-fullbleed;
+        --app-primary-color: #F44336;
+        --app-secondary-color: #212121;
+        --app-lower-layer-color: #191919;
+        --app-upper-layer-color: #232323;
+        --app-accent-color: #37474F;
+        --paper-button-ink-color: var(--app-accent-color);
+        --paper-icon-button-ink-color: var(--app-accent-color);
+        --paper-spinner-color: var(--app-accent-color);
+        --paper-toast-background-color: var(--app-accent-color);
+      }
 
-  :host {
-    overflow: hidden;
-    @apply(--layout-fullbleed);
-    --app-primary-color: #F44336;
-    --app-secondary-color: #212121;
-    --app-lower-layer-color: #191919;
-    --app-upper-layer-color: #232323;
-    --app-accent-color: #37474F;
-    --paper-button-ink-color: var(--app-accent-color);
-    --paper-icon-button-ink-color: var(--app-accent-color);
-    --paper-spinner-color: var(--app-accent-color);
-  }
+      [hidden] {
+        display: none;
+      }
 
-  [hidden] {
-    display: none;
-  }
+      app-drawer {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+        0 6px 30px 5px rgba(0, 0, 0, 0.12),
+        0 8px 10px -5px rgba(0, 0, 0, 0.4);
+        --app-drawer-width: 256px;
+        --app-drawer-content-container: {
+          background-color: var(--app-upper-layer-color);
+        }
+      }
 
-  app-drawer {
-    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-                0  6px 30px 5px rgba(0, 0, 0, 0.12),
-                0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    --app-drawer-width: 256px;
-    --app-drawer-content-container: {
-      background-color: var(--app-upper-layer-color);
-    }
-  }
+      app-drawer a {
+        text-decoration: none;
+      }
 
-  app-drawer a {
-    text-decoration: none;
-  }
+      .flex-drawer {
+        @apply --layout-vertical;
+        height: 100%;
+      }
 
-  .flex-drawer {
-    @apply(--layout-vertical);
-    height: 100%;
-  }
+      .flex-nav {
+        @apply --layout-flex;
+      }
 
-  .flex-nav {
-    @apply(--layout-flex);
-  }
+      .social {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
 
-  .social {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
+      .social-icon {
+        --iron-icon-height: 26px;
+        --iron-icon-width: 26px;
+        margin-left: 18px;
+        margin-right: 18px;
+      }
 
-  .social-icon {
-    --iron-icon-height: 26px;
-    --iron-icon-width: 26px;
-    margin-left: 18px;
-    margin-right: 18px;
-  }
+      .social-icon-container {
+        display: inline-block;
+        transition: color 0.5s;
+        color: #FFFFFF;
+      }
 
-  .social-icon-container {
-    display: inline-block;
-    transition: color 0.5s;
-    color: #FFFFFF;
-  }
+      .social-icon-container a {
+        transition: color 0.5s;
+        color: #FFFFFF;
+      }
 
-  .social-icon-container a {
-    transition: color 0.5s;
-    color: #FFFFFF;
-  }
+      .social-icon-container:hover a {
+        color: var(--app-primary-color);
+      }
 
-  .social-icon-container:hover a {
-    color: var(--app-primary-color);
-  }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: #fff;
+      }
 
-  app-header paper-icon-button {
-    --paper-icon-button-ink-color: #fff;
-  }
+      paper-dialog {
+        background-color: #202020;
+      }
 
-  paper-dialog {
-    background-color: #202020;
-  }
+      .drawer-list {
+        margin: 0 8px;
+      }
 
-  .drawer-list {
-    margin: 0 8px;
-  }
+      .drawer-container {
+        height: 100%;
+        overflow: auto;
+      }
 
-  .drawer-container {
-    height: 100%;
-    overflow: auto;
-  }
+      .drawer-list a {
+        display: block;
+        padding: 0 10px;
+        margin-left: 4px;
+        line-height: 36px;
+        text-decoration: none;
+        color: #fff;
+        @apply --paper-font-subhead;
+        line-height: 36px;
+      }
 
-  .drawer-list a {
-    display: block;
-    padding: 0 10px;
-    margin-left: 4px;
-    line-height: 36px;
-    text-decoration: none;
-    color: #fff;
-    @apply(--paper-font-subhead);
-    line-height: 36px;
-  }
+      .drawer-list a.iron-selected {
+        margin-left: 0px;
+        border-left: 4px solid var(--app-primary-color);
+        color: var(--app-primary-color);
+        --iron-icon-fill-color: #FFFFFF;
+      }
 
-  .drawer-list a.iron-selected {
-    margin-left: 0px;
-    border-left: 4px solid var(--app-primary-color);
-    color: var(--app-primary-color);
-    --iron-icon-fill-color: #FFFFFF;
-  }
+      .drawer-list a:hover {
+        color: var(--app-primary-color);
+      }
 
-  .drawer-list a:hover {
-    color: var(--app-primary-color);
-  }
+      .drawer-list a.subroute {
+        padding-left: 32px;
+      }
 
-  .drawer-list a.subroute {
-    padding-left: 32px;
-  }
+      .contacts {
+        color: #fff;
+        margin-left: 6px;
+        font-size: 14px;
+      }
 
-  .contacts {
-    color: #fff;
-    margin-left: 6px;
-    font-size: 14px;
-  }
+      .contact-logo {
+        font-size: 18px;
+      }
 
-  .contact-logo {
-    font-size: 18px;
-  }
+      .contact-info {
+        margin: 0 16px;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.5);
+        letter-spacing: 1.5px;
+      }
 
-  .contact-info {
-    margin: 0 16px;
-    padding: 8px 0;
-    border-top: 1px solid rgba(255,255,255, 0.5);
-    letter-spacing: 1.5px;
-  }
+      .reservation-button {
+        color: #fff;
+        margin: 8px 16px;
+        font-family: 'Oswald', sans-serif;
+        letter-spacing: 2px;
+        border: 2px solid var(--app-primary-color);
+        line-height: 0.8;
+        border-radius: 0;
+        --paper-button-ink-color: var(--app-primary-color);
+        transition: color ease .5s;
+      }
 
-  .reservation-button {
-    color: #fff;
-    margin: 8px 16px;
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 2px;
-    border: 2px solid rgba(255,255,255, 0.5);
-    line-height: 0.8;
-    border-radius: 0;
-    --paper-button-ink-color: var(--app-primary-color);
-    transition: border ease .5s;
-  }
+      .reservation-button:hover {
+        color: var(--app-primary-color);
+      }
 
-  .reservation-button:hover {
-    
-    border: 2px solid  var(--app-primary-color);
-  }
+      .contacts iron-icon {
+        --iron-icon-fill-color: #FFFFFF;
+        --iron-icon-height: 21px;
+        --iron-icon-width: 21px;
+      }
 
-  
+      .logo {
+        position: relative;
+        padding-top: 18px;
+        padding-bottom: 18px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        margin-left: 20px;
+        margin-right: 20px;
+        color: var(--app-primary-color);
+      }
 
-  .contacts iron-icon {
-    --iron-icon-fill-color: #FFFFFF;
-    --iron-icon-height: 21px;
-    --iron-icon-width: 21px;
-  }
+      .nav-icons {
+        margin: 0 8px;
+      }
 
-  .logo {
-    position: relative;
-    padding-top: 18px;
-    padding-bottom: 14px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255,255,255, 0.5);
-    margin-left: 20px;
-    margin-right: 20px;
-    color: var(--app-primary-color);
-  }
+      .logo img {
+        width: 180px;
+      }
 
-  .nav-icons {
-    margin: 0 8px;
-  }
+      .nav-links {
+        position: relative;
+      }
 
-  .logo img {
-    width: 150px;
-  }
+      paper-ripple {
+        color: var(--app-primary-color);
+      }
 
-  .nav-links {
-    position: relative;
-  }
+      
 
-  paper-ripple {
-    color: var(--app-primary-color);
-  }
+      @media (max-width: 1450px) {
+        .logo img {
+          width: 150px;
+        }
+      }
 
-  </style>
+      @media (max-width: 550px) {
+        paper-button.reservation-button {
+        padding: 11px 9px;
+      }
+      }
+    </style>
 
     <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <app-drawer-layout responsive-width="1050px">
 
       <!-- Drawer content -->
-      <app-drawer id="drawer" no-focus-trap>
+      <app-drawer id="drawer" no-focus-trap swipe-open>
         <div class="drawer-container">
           <div class="flex-drawer">
-            <div class="flex-logo">   
-                <div class="logo">
-                  <img src="http://localhost/img/static/bb_logo_black.png" alt="" />
-                </div>
+            <div class="flex-logo">
+              <div class="logo">
+                <img src="http://95.85.60.177/img/static/bb_logo_black.png" alt="" />
+              </div>
             </div>
             <div class="flex-nav">
-              <iron-selector selected="[[pageSection]]"
-                             attr-for-selected="name"
-                             class="drawer-list"
-                             role="navigation">
+              <iron-selector selected="[[pageSection]]" attr-for-selected="name" class="drawer-list" role="navigation">
 
-                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>События<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="gallery" href="/gallery"><iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
-                
-                <a class="nav-links" name="about" href="/about"><iron-icon class="nav-icons" icon="message"></iron-icon>О Борисе<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="/events">
+                  <iron-icon class="nav-icons" icon="event"></iron-icon>События
+                  <paper-ripple></paper-ripple>
+                </a>
+                <a class="nav-links" name="sales" href="/sales">
+                  <iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции
+                  <paper-ripple></paper-ripple>
+                </a>
+                <a class="nav-links" name="menu" href="/menu">
+                  <iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню
+                  <paper-ripple></paper-ripple>
+                </a>
+                <a class="nav-links" name="gallery" href="/gallery">
+                  <iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея
+                  <paper-ripple></paper-ripple>
+                </a>
+
+                <a class="nav-links" name="about" href="/about">
+                  <iron-icon class="nav-icons" icon="message"></iron-icon>О Борисе
+                  <paper-ripple></paper-ripple>
+                </a>
               </iron-selector>
-              
+
             </div>
             <paper-button class="reservation-button" on-tap="_openDialog">Забить стол</paper-button>
             <div class="flex-contact">
@@ -272,10 +291,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             <div class="social">
               <div class="social-icon-container">
-                <a target="_blank" href="https://vk.com/boris_bar"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
+                <a target="_blank" href="https://vk.com/boris_bar">
+                  <iron-icon class="social-icon" icon="vk"></iron-icon>
+                </a>
               </div>
               <div class="social-icon-container">
-                <a target="_blank" href="https://www.instagram.com/boris_bar/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
+                <a target="_blank" href="https://www.instagram.com/boris_bar/">
+                  <iron-icon class="social-icon" icon="instagram"></iron-icon>
+                </a>
               </div>
             </div>
           </div>
@@ -285,36 +308,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
 
-        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="events">
-          <bb-menu name="menu">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-menu>
-          <bb-events name="events" page=[[page]]>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-events>
-          <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
-          <bb-sales name="sales" page=[[page]]>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-sales>
-          <bb-article route={{subroute}} name="article" page=[[page]]></bb-article>
-          <bb-gallery name="gallery" page=[[page]]>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-gallery>
-          <bb-album route={{subroute}} name="album" page=[[page]]></bb-album>
-          <bb-about name="about">
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </bb-about>
-        </neon-animated-pages>
+      <neon-animated-pages selected="[[page]]" attr-for-selected="name" fallback-selection="events">
+        <bb-menu name="menu">
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </bb-menu>
+        <bb-events name="events" page=[[page]]>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </bb-events>
+        <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
+        <bb-sales name="sales" page=[[page]]>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </bb-sales>
+        <bb-gallery name="gallery" page=[[page]]>
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </bb-gallery>
+        <bb-album route={{subroute}} name="album" page=[[page]]></bb-album>
+        <bb-about name="about">
+          <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </bb-about>
+      </neon-animated-pages>
 
     </app-drawer-layout>
 
-    <bb-reservation-form id="dialog" with-backdrop="{{!smallScreen}}"  entry-animation="fade-in-animation" exit-animation="fade-out-animation"></bb-reservation-form>
+    <bb-reservation-form id="dialog" with-backdrop="{{!smallScreen}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation"></bb-reservation-form>
 
+     <paper-toast id="toast" horizontal-align="right" always-on-top duration="5000"></paper-toast>
 
   </template>
 
   <script>
-
     Polymer({
 
       is: 'bb-app',
@@ -333,54 +355,66 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       listeners: {
         'redirect-to-album': '_redirectToAlbum',
-        'open-reservation-dialog': '_openDialog'
+        'open-reservation-dialog': '_openDialog',
+        'reservation-form-send': '_showToast'
       },
 
-      _neonPageChanged: function(e) {
-        this.fire('bb-render-neon-page', {},{
-          node: e.detail.item,
-          bubbles: false,
-        });
+      _routePageChanged: function (page) {
+        this.page = page || 'events';
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
       },
 
       _redirectToAlbum: function(e) {
         this.set('route.path', "/album/" + e.detail.pk)
       },
 
-      _routePageChanged: function(page) {
-        this.page = page || 'events';
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
-        this.async(this._scroll, 200);
+      ready: function() {
+        this.importHref(this.resolveUrl('lazy-resources.html'), null, null, true);
       },
 
-      _scroll: function() {
-        scroll(0,0);
-      },
-
-      _pageChanged: function(page) {
+      _pageChanged: function (page, oldPage) {
+        this._scroll(page, oldPage);
         this.importHref(this.resolveUrl('bb-' + page + '.html'), null, null, true);
         this._changeSection(page);
       },
 
-      _changeSection: function(category) {
-        category = category === 'album' ? 'gallery' : category;
-        category = category === 'event' ? 'events' : category;
-        category = category === 'article' ? 'sales' : category;
-        this.pageSection = category;
+      _scroll: function(page, oldPage) {
+        if((page === 'event' && oldPage === 'events') || (page === 'album' && oldPage === 'gallery')) {
+          this._offsetPage = window.pageYOffset;
+        }
+        if((page === 'events' && oldPage === 'event') || (page === 'gallery' && oldPage === 'album')) {
+          window.scroll(0, this._offsetPage);
+        } else {
+          setTimeout(window.scroll, 200, 0, 0);
+        }
+       
       },
 
-      _openDialog: function(e) {
-        this.$.dialog.clearForm();
-        if(e.detail.event !== undefined) {
-          this.$.dialog.setEvent(e.detail.event);
-        }
-        this.$.dialog.open();
+      _getOffset: function(page, oldPage) {
+        this._pageOffset = (page === 'event' && oldPage === 'events') ? window.pageYOffset : 0;
+      },
+
+      _changeSection: function (category) {
+        category = category === 'album' ? 'gallery' : category;
+        category = category === 'event' ? 'events' : category;
+        this.pageSection = category;
+
+        
+      },
+
+      _openDialog: function (e) {
+        this.$.dialog.openForm(e.detail.event);
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       },
+
+      _showToast: function(e) {
+        this.$.toast.text = e.detail.text;
+        this.$.toast.open();
+      }
 
     });
   </script>

@@ -13,11 +13,7 @@ if (!webComponentsSupported) {
   finishLazyLoading();
 }
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
+
 
 function finishLazyLoading() {
 
