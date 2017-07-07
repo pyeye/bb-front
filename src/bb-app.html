@@ -12,28 +12,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 
-<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
-
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
-
-<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-
-
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+
 <link rel="import" href="bb-icons.html">
+<link rel="import" href="bb-analytics.html">
 
 
 
@@ -53,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-button-ink-color: var(--app-accent-color);
         --paper-icon-button-ink-color: var(--app-accent-color);
         --paper-spinner-color: var(--app-accent-color);
-        --paper-toast-background-color: var(--app-accent-color);
+        --paper-toast-background-color: #388E3C;
       }
 
       [hidden] {
@@ -119,6 +117,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-dialog {
         background-color: #202020;
+      }
+
+      paper-toast iron-icon {
+        margin-right: 8px;
+        margin-bottom: 2px;
       }
 
       .drawer-list {
@@ -240,6 +243,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
+     <bb-analytics></bb-analytics>
+
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <app-drawer-layout responsive-width="1050px">
@@ -250,7 +255,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="flex-drawer">
             <div class="flex-logo">
               <div class="logo">
-                <img src="http://95.85.60.177/img/static/bb_logo_black.png" alt="" />
+                <img src="https://borisbar.ru/img/static/bb_logo_black.jpg" alt="" />
               </div>
             </div>
             <div class="flex-nav">
@@ -326,13 +331,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <bb-about name="about">
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
         </bb-about>
+        <bb-reservation id="reserv" reservation-event="[[reservationEvent]]" name="reservation"></bb-reservation>
       </neon-animated-pages>
 
     </app-drawer-layout>
 
-    <bb-reservation-form id="dialog" with-backdrop="{{!smallScreen}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation"></bb-reservation-form>
+    <bb-reservation-dialog id="dialog" with-backdrop="{{!smallScreen}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation"></bb-reservation-dialog>
 
-     <paper-toast id="toast" horizontal-align="right" always-on-top duration="5000"></paper-toast>
+     <paper-toast id="toast" horizontal-align="right" always-on-top duration="5000">
+       <iron-icon icon="done"></iron-icon> [[toastText]]
+     </paper-toast>
 
   </template>
 
@@ -381,10 +389,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _scroll: function(page, oldPage) {
-        if((page === 'event' && oldPage === 'events') || (page === 'album' && oldPage === 'gallery')) {
+        if((page === 'event' && oldPage === 'events') || 
+          (page === 'album' && oldPage === 'gallery') ||
+          (page === 'reservation' && oldPage === 'events')) {
           this._offsetPage = window.pageYOffset;
         }
-        if((page === 'events' && oldPage === 'event') || (page === 'gallery' && oldPage === 'album')) {
+        if((page === 'events' && oldPage === 'event') || 
+          (page === 'gallery' && oldPage === 'album') ||
+          (page === 'events' && oldPage === 'reservation')) {
           window.scroll(0, this._offsetPage);
         } else {
           setTimeout(window.scroll, 200, 0, 0);
@@ -405,14 +417,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _openDialog: function (e) {
-        this.$.dialog.openForm(e.detail.event);
+        if(this.smallScreen) {
+          this.reservationEvent = e.detail.event || {};
+          this.set('route.path', "/reservation");
+        } else {
+          this.$.dialog.setEvent(e.detail.event);
+          this.$.dialog.open();
+        }
+        
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       },
 
       _showToast: function(e) {
-        this.$.toast.text = e.detail.text;
+        this.toastText = e.detail.text;
         this.$.toast.open();
       }
 
