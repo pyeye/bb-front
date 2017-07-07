@@ -23,9 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
 <link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+
 <link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 
 <link rel="import" href="bb-icons.html">
@@ -41,7 +40,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #FFFFFF;
         background-color: #202020;
         margin: 16px;
-
         --paper-spinner-color: #fff;
         --iron-icon-fill-color: #FFFFFF;
         --paper-toast-background-color: var(--app-accent-color);
@@ -53,32 +51,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --paper-checkbox-unchecked-ink-color: #fff;
         --paper-checkbox-checked-color: var(--app-primary-color);
         --paper-checkbox-checked-ink-color: var(--app-primary-color);
-        --gold-phone-input-country-code: {}
+      }
+
+      [visible] {
+        opacity: 1 !important;
       }
 
       [hidden] {
-        display: none;
+        display: none !important;
       }
 
-      .reservation-icons iron-icon {
-        --iron-icon-height: 21px;
-        --iron-icon-width: 21px;
+      paper-button iron-icon {
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
         --iron-icon-fill-color: #FFFFFF;
+        margin-bottom: 2px;
       }
 
       paper-spinner-lite {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
       }
 
       .loading-box {
-        width: 28px;
-        height: 24px;
+        width: 24px;
+        height: 20px;
         text-align: left;
+        margin-bottom: 2px;
       }
 
       paper-button {
-        background: #026a1b;
+        background: #388E3C;
         color: #fff;
       }
 
@@ -86,11 +89,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: var(--app-primary-color);
       }
 
-      paper-button[disabled] {
-        background: #eaeaea;
-        color: #a8a8a8;
+      paper-button.reset {
+        background: #3F51B5;
+      }
+
+      paper-button[not-valid] {
+        background: #81C784;
         cursor: auto;
-        pointer-events: none;
       }
 
       .form-container {
@@ -105,13 +110,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-right: 10px;
       }
 
+      .secondary-actions {
+        @apply --layout-horizontal;
+      }
+
       .form-header {
         @apply --layout-horizontal;
         @apply --layout-center;
         @apply --layout-center-justified;
         @apply --paper-font-headline;
-        margin-bottom: 16px;
-        margin-top: 24px;
+        margin-bottom: 14px;
+        margin-top: 36px;
         font-family: 'Oswald', sans-serif !important;
         letter-spacing: 3px;
         text-transform: uppercase;
@@ -122,10 +131,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply --layout-center;
         @apply --layout-center-justified;
         @apply --paper-font-headline;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
         font-family: 'Oswald', sans-serif !important;
         letter-spacing: 3px;
         text-transform: uppercase;
+      }
+
+      .form-errors {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        @apply --paper-font-subhead;
+        color: var(--app-primary-color);
+        font-size: 16px;
+        opacity: 0;
+        text-transform: uppercase;
+        font-family: 'Oswald', sans-serif !important;
+        letter-spacing: 1px;
       }
 
       .form-header iron-icon {
@@ -172,7 +194,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .form-block {
-        margin-bottom: 16px;
+        margin: 16px 0;
       }
 
       paper-dialog-scrollable {
@@ -181,23 +203,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 320px;
       }
 
-      @media (max-width: 1450px) {
-         :host {
-
-          top: 50px;
-        }
-      }
+      
 
       @media (max-width: 550px) {
-         :host {
 
-          margin: 0;
-          top: 0;
-          bottom: 0;
-          width: 100%;
-          height: 100vh;
-          overflow: auto;
+        :host {
+          margin-top: 0;
         }
+         
 
         .form-item {
           width: 90%;
@@ -207,10 +220,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         .action-bar {
           margin-right: 0;
+          @apply --layout-vertical;
         }
 
         paper-button {
-          width: 50%;
+          margin-top: 6px;
+          margin-left: auto;
+          margin-right: auto;
+          width: 90%;
+    
         }
 
 
@@ -230,10 +248,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 20px;
           margin-bottom: 0;
         }
+
+        .cancel {
+          margin-right: 3px;
+        }
+
+        .reset {
+          margin-left: 3px;
+        }
+
+        .secondary-actions {
+        width: 90%;
+        margin: 0 auto;
+          }
+
+        .secondary-btn {
+          width: 50%;
+        }
       }
     </style>
 
-    <iron-ajax id="ajax" url="http://95.85.60.177/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
+    <iron-ajax id="ajax" url="https://borisbar.ru/api/v1/reservation/" method="POST" content-type="application/json" handle-as="json"
       loading={{loading}} on-response="handleResponse"></iron-ajax>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
@@ -245,12 +280,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="form-title">Забить стол</div>
       <iron-icon icon="star"></iron-icon>
     </div>
-    <template is="dom-if" if="[[_showEvent(event)]]">
-      <div class="form-header-event-name">
+
+      <div class="form-header-event-name" hidden$="[[_isEmpty(event)]]">
         на [[event.name]]
       </div>
-    </template>
-
+    
+      <div class="form-errors" visible$="[[errors]]">
+        Заполни все поля формы
+    </div>
+    
+    
 
 
 
@@ -358,11 +397,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="action-bar">
-      <paper-button raised dialog-dismiss class="cancel">
+      <div class="secondary-actions"> 
+      <paper-button raised class="cancel secondary-btn" on-tap="_closeButtonHandler">
         <iron-icon class="reservation-icons" icon="close"></iron-icon>
         Закрыть
       </paper-button>
-      <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]" dialog-confirm>
+      <paper-button raised class="reset secondary-btn" on-tap="_clearForm">
+        <iron-icon class="reservation-icons" icon="replay"></iron-icon>
+        Очистить
+      </paper-button>
+      </div>
+      
+      <paper-button raised on-tap="submitForm" not-valid$="[[!validators.summary]]">
         <div class="loading-box">
           <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
           <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
@@ -412,11 +458,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         errors: {
-          type: Object,
+          type: Boolean,
+          value: false,
         },
 
         event: {
           type: Object,
+          value: function() {
+            return {}
+          }
         },
 
         active: {
@@ -489,11 +539,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_formTimeEndChanged(form.time_end)',
         '_formPeopleChanged(form.count_people)',
         '_formValid(validators.name, validators.date, validators.phone_number, validators.count_people, validators.time_start, validators.time_end)',
-      ],
-
-      behaviors: [
-        Polymer.PaperDialogBehavior,
-        Polymer.NeonAnimationRunnerBehavior
+        '_formValidSummary(validators.summary)',
       ],
 
       _formTimeInitial: function (newValue, oldValue) {
@@ -528,6 +574,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.set('validators.summary', (name && date && phone_number && count_people && time_start && time_end));
       },
 
+      _formValidSummary: function(validSummary) {
+        if(validSummary && this.errors) {
+          this.errors = false;
+        }
+      },
+
       _initialDate: function () {
         var d = new Date();
         var date = d.getDate();
@@ -547,45 +599,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
 
-      openForm: function(event) {
-        this._clearForm();
-        if (event !== undefined) {
-          this._setEvent(event);
+      setEvent: function(event) {
+        var is_empty;
+        is_empty = this._isEmpty(event);
+        this.errors = false;
+        if (event === undefined || is_empty) {
+          this._resetEvent();
+        } else {
+          this.event = event;
+          this.set('form.date', this.event.date.original);
+          this.set('form.time_start', this.event.start);
+          this.$.time_start.selected = this.time_range.indexOf(this.event.start);
         }
-        this.open();
-        this.$.i1.focus();
-      },
-
-      _setEvent: function (event) {
-        this.event = event;
-        this.set('form.date', this.event.date.original);
-        this.set('form.time_start', this.event.start);
-        this.$.time_start.selected = this.time_range.indexOf(this.event.start)
       },
 
       _clearForm: function () {
+        this.errors = false;
         this._resetForm();
         this._resetEvent();
       },
 
-      submitForm: function () {
-        this.$.ajax.body = JSON.stringify(this.form);
-        this.$.ajax.generateRequest();
+      _closeButtonHandler: function() {
+        this.fire('close-form');
       },
 
-      handleResponse: function (request) {
-        this.fire('reservation-form-send', {
-          'text': "Заявка отправлена.",
-        });
+      submitForm: function () {
+        if(!this.validators.summary) {
+          this.errors = true;
+          if(this.smallScreen) {
+            scroll(0, 0);
+          }   
+        } else {
+          this.$.ajax.body = JSON.stringify(this.form);
+          this.$.ajax.generateRequest();
+        }
         
       },
 
-      _showEvent: function (event) {
-        for (var key in event) {
-          if (hasOwnProperty.call(event, key)) return true;
+      handleResponse: function (request) {
+        this.fire('submit-form');
+        this._clearForm();
+      },
+
+      _isEmpty: function (obj) {
+        for (var key in obj) {
+          if (hasOwnProperty.call(obj, key)) return false;
         }
 
-        return false;
+        return true;
       },
 
       _resetForm: function () {
