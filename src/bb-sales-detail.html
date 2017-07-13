@@ -51,8 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       iron-icon {
-        --iron-icon-height: 16px;
-        --iron-icon-width: 16px;
+        --iron-icon-height: 18px;
+        --iron-icon-width: 18px;
       }
 
       .content {
@@ -129,8 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .sale-info-day-bottom {
-        @apply --paper-font-headline;
-        border-bottom: 4px solid #fff;
+        @apply --paper-font-display1;
+        line-height: 46px;
+        border-bottom: 3px solid #fff;
         position: relative;
         margin: 16px;
         font-family: 'Oswald', sans-serif;
@@ -138,9 +139,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .sale-info-description {
-        width: 85%;
-        @apply --paper-font-subhead;
-        margin-top: 16px;
+        @apply --paper-font-headline;
+        font-family: 'Oswald', sans-serif;
+        letter-spacing: 1px;
+        margin-top: 14px;
+        margin-left: 10px;
       }
 
       paper-tabs {
@@ -203,34 +206,60 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       @media (max-width: 768px) {
         .sale-info-day-bottom {
-          font-size: 20px;
+          font-size: 28px;
           margin: 16px;
           letter-spacing: 3px;
         }
+
+        .sale-info-description {
+        font-size: 22px;
+      }
       }
 
       @media (max-width: 550px) {
         .sale-info-day-bottom {
-          font-size: 16px;
-          margin: 4px;
-          letter-spacing: 0.8px;
-          border-bottom: 0px solid #fff;
+          font-size: 24px;
+          line-height: 40px;
+          letter-spacing: 1px;
+
         }
         .sale-info-text {
           margin-top: 18px;
         }
         .sale-info-box {
-          padding: 16px 4px;
+          padding: 16px 8px;
         }
         iron-icon {
-          --iron-icon-height: 12px;
-          --iron-icon-width: 12px;
+          --iron-icon-height: 14px;
+          --iron-icon-width: 14px;
         }
 
         .sale-info-description {
-          @apply --paper-font-body1;
+          font-family: 'Oswald', sans-serif;
+          font-size: 16px;
+        }
+}
+        @media (max-width: 330px) {
+        .sale-info-day-bottom {
+          font-size: 20px;
+          line-height: 30px;
+          letter-spacing: 1px;
+
+        }
+
+        .sale-info-box {
+          padding: 16px 6px;
+        }
+        
+
+        .sale-info-description {
+          font-family: 'Oswald', sans-serif;
+          font-size: 15px;
+          margin-left: 4px;
+          letter-spacing: 0.6px;
         }
       }
+      
     </style>
 
 
@@ -240,20 +269,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div class="sale-info-box" id="box">
-      <template is="dom-repeat" items="[[sales]]" as="sale">
+      
         <div class="sale-info-text">
           <div class="sale-info-day">
             <iron-icon icon="star"></iron-icon>
-            <div class="sale-info-day-bottom">[[sale.name]]</div>
+            <div class="sale-info-day-bottom">[[name]]</div>
             <iron-icon icon="star"></iron-icon>
           </div>
-          <div class="sale-info-description" hidden$="[[_showDescription()]]">
-            <marked-element markdown="[[sale.info]]">
-              <div slot="markdown-html custom"></div>
-            </marked-element>
+          <template is="dom-repeat" items="[[sales]]" as="sale">
+          <div class="sale-info-description">
+            – [[sale.name]]
           </div>
+           </template>
         </div>
-      </template>
+     
 
 
     </div>
@@ -313,7 +342,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _dayChanged: function (day) {
         var img, index;
-
         if (day === this.name) {
           index = this._randomInteger(0, this.sales.length - 1);
           img = this.smallScreen ? this.sales[index].image.thumbnail : this.sales[index].image.original;

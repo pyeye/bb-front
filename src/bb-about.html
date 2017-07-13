@@ -22,6 +22,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-nav.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-tab.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-toolbar.html">
 
 <link rel="import" href="bb-about-news.html">
 <link rel="import" href="bb-about-concept.html">
@@ -37,6 +40,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
+
+      [hidden] {
+        display: none;
+      }
+
       app-header {
         background-color: var(--app-primary-color);
         color: #FAFAFA;
@@ -47,12 +55,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-toolbar.tall {
-        height: 300px;
+        height: 250px;
         padding-left: 20px;
       }
       sample-content {
         padding-top: 212px;
       }
+
+      bottom-nav {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+      
 
       [main-title] {
         font-weight: normal;
@@ -188,7 +203,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
     </style>
 
-
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+    
     <app-header-layout>
       <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
         <app-toolbar>
@@ -201,9 +217,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-header>
 
 
-      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container>
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container hidden$="[[smallScreen]]">
           <paper-tab group="news">Жизнь</paper-tab>
-          <paper-tab group="concept">Бар</paper-tab>
+          <paper-tab group="concept">Концепция</paper-tab>
           <paper-tab group="interior">Интерьер</paper-tab>
           <paper-tab group="job">Вакансии</paper-tab>
       </paper-tabs>
@@ -215,7 +231,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <bb-about-interior group="interior"></bb-about-interior>
           <bb-about-job group="job"></bb-about-job>
         </neon-animated-pages>
-      
+
+   
+      <bottom-nav hidden$="[[!smallScreen]]">
+          <bottom-toolbar selected="{{tab}}" attr-for-selected="group" on-tap="_goToTop">
+             <bottom-tab group="news"  label="Жизнь" icon="news"></bottom-tab>
+             <bottom-tab group="concept"  label="Бар" icon="favi"></bottom-tab>
+             <bottom-tab group="interior"  label="Интерьер" icon="burst"></bottom-tab>
+             <bottom-tab group="job"  label="Вакансии" icon="person-add"></bottom-tab>
+          </bottom-toolbar>
+      </bottom-nav>
     </app-header-layout>
 
 
@@ -254,7 +279,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       behaviors: [
         Polymer.NeonAnimatableBehavior,
-        Polymer.IronResizableBehavior],
+        Polymer.IronResizableBehavior
+      ],
+
+      _goToTop: function(e) {
+        scroll(0,0);
+      },
 
 
     });

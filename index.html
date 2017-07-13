@@ -57,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     opacity: 0;
     will-change: opacity;
     z-index: -111;
-    background-color: #252525;
+    background-color: #232323;
   }
 
   #splash-logo {
@@ -82,7 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   height: 3px;
   display: block;
   width: 100%;
-  background-color: #E57373;
+  background-color: #232323;
   border-radius: 2px;
   background-clip: padding-box;
   
@@ -97,8 +97,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       left: 0;
       bottom: 0;
       will-change: left, right;
-      -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
-              animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+      -webkit-animation: indeterminate 3.6s cubic-bezier(0.65, 0.815, 0.735, 0.1) infinite;
+              animation: indeterminate 3.6s cubic-bezier(0.65, 0.815, 0.735, 0.1) infinite; }
     .progress .indeterminate:after {
       content: '';
       position: absolute;
@@ -107,31 +107,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       left: 0;
       bottom: 0;
       will-change: left, right;
-      -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-              animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-      -webkit-animation-delay: 1.15s;
-              animation-delay: 1.15s; }
+      -webkit-animation: indeterminate-short 3.6s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+              animation: indeterminate-short 3.6s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+      -webkit-animation-delay: 2.35s;
+              animation-delay: 2.35s; }
 
 @-webkit-keyframes indeterminate {
   0% {
-    left: -35%;
+    left: -100%;
     right: 100%; }
   60% {
     left: 100%;
-    right: -90%; }
+    right: -100%; }
   100% {
     left: 100%;
-    right: -90%; } }
+    right: -100%; } }
 @keyframes indeterminate {
   0% {
-    left: -35%;
+    left: -100%;
     right: 100%; }
   60% {
     left: 100%;
-    right: -90%; }
+    right: -100%; }
   100% {
     left: 100%;
-    right: -90%; } }
+    right: -100%; } }
 @-webkit-keyframes indeterminate-short {
   0% {
     left: -200%;

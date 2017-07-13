@@ -21,13 +21,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
+
+<link rel="import" href="../bower_components/bottom-nav/bottom-nav.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-tab.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-toolbar.html">
 
 <link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-album.html">
@@ -40,6 +43,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style is="custom-style" include="app-grid-style">
+
+      [hidden] {
+        display: none;
+      }
+
       app-header {
         background-color: var(--app-primary-color);
         color: #FAFAFA;
@@ -51,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-toolbar.tall {
-        height: 300px;
+        height: 250px;
         padding-left: 20px;
       }
 
@@ -155,6 +163,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-toolbar {
         color: white;
       }
+
+       bottom-nav {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+
 
        :host {
         display: block;
@@ -277,6 +292,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+
     <app-header-layout>
       <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
         <app-toolbar>
@@ -300,7 +317,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div id="ripple"></div>
 
-      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group">
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" hidden$="[[smallScreen]]">
         <paper-tab group="report">Фотоотчеты</paper-tab>
         <paper-tab group="instagram">#BorisBar</paper-tab>
       </paper-tabs>
@@ -312,9 +329,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </neon-animated-pages>
       </div>
 
-
-
-
+      <bottom-nav hidden$="[[!smallScreen]]">
+          <bottom-toolbar selected="{{tab}}" attr-for-selected="group" on-tap="_goToTop">
+             <bottom-tab  show-label group="report"  label="Фотоотчеты" icon="camera"></bottom-tab>
+             <bottom-tab  show-label group="instagram"  label="#BorisBar" icon="hash"></bottom-tab>
+          </bottom-toolbar>
+      </bottom-nav>
 
     </app-header-layout>
 
@@ -342,17 +362,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         animationConfig: {
           value: function () {
             return {
-              'entry': [{
-                name: 'ripple-animation',
-                id: 'gallery-ripple',
-                toPage: this,
-              }, {
-                name: 'hero-animation',
-                id: 'gallery-hero',
-                toPage: this,
-              }, {
+              'entry': [ {
+                                name: 'cascaded-animation',
+                                animation: 'slide-from-bottom-animation',
+                            }, {
                 name: 'fade-in-animation',
                 node: this.$.ncontent,
+                timing: {
+                                    delay: 250
+                                },
               }, {
                 name: 'fade-in-animation',
                 node: this.$.fleft,
@@ -374,22 +392,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        sharedElements: {
-          value: function () {
-            return {
-              'gallery-hero': this.$.header,
-              'gallery-ripple': this.$.ripple,
-            }
-          }
-        },
       },
 
       behaviors: [
-        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.NeonAnimatableBehavior,
+        Polymer.NeonAnimationRunnerBehavior,
         Polymer.IronResizableBehavior
       ],
 
+      listeners: {
+        'image-nodes-ready': '_doAnimation',
+      },
 
+      _doAnimation: function(e) {
+        this.animationConfig.entry[0].nodes = e.detail.nodes;
+        this.playAnimation('entry');
+      },
 
       attached: function () {
         this._updateGridStyles = this._updateGridStyles || function () {
@@ -400,6 +418,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       detached: function () {
         window.removeEventListener('resize', this._updateGridStyles);
+      },
+
+      _goToTop: function(e) {
+        scroll(0,0);
       },
 
 

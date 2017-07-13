@@ -1,9 +1,25 @@
 {
   "name": "Boris Bar",
   "short_name": "Boris Bar",
-  "start_url": "/?homescreen=1",
+  "start_url": "/?home=1",
   "display": "standalone",
-  "background_color": "#252525",
+  "background_color": "#232323",
   "theme_color": "#F44336",
-    "icons": []
+    "icons": [{
+      "src": "images/bb_logo_black_128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "images/bb_logo_black_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },{
+      "src": "images/bb_logo_black_384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },{
+      "src": "images/bb_logo_black_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }]
 }

@@ -15,6 +15,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -58,8 +59,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 100%;
-        max-height: 650px;
+        height: 100vh;
         --app-box-background-front-layer: {
           background-image: var(--background-img);
           background-repeat: no-repeat;
@@ -71,7 +71,7 @@
 
       .content {
         position: relative;
-        margin: 450px auto 5px;
+        margin: 650px auto 5px;
         width: 80%;
         max-width: 1000px;
       }
@@ -214,8 +214,16 @@
       }
 
 
+    @media (max-width: 1450px) {
+
+        .content {
+          margin: 450px auto 5px;
+        }
+      }
+
 
       @media (max-width: 1050px) {
+
 
         .content {
           margin: 350px auto 5px;
@@ -320,7 +328,7 @@
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <app-header-layout>
+    <app-header-layout id="layout">
       <app-header id="header" effects="fade-background" reveals>
         <app-toolbar>
           <a href="/events" tabindex="-1">
@@ -387,7 +395,8 @@
             </div>
           </div>
         </paper-card>
-        <paper-fab icon="event-available" on-tap="_openReservationForm"></paper-fab>
+        <paper-fab id="fab" icon="event-available" on-tap="_openReservationForm"></paper-fab>
+        <paper-tooltip for="fab">Забить стол</paper-tooltip>
       </div>
     </app-header-layout>
 
@@ -406,14 +415,10 @@
           notify: true,
           observer: '_eventChanged'
         },
-        page: {
+        active: {
           type: String,
-          observer: '_pageChanged'
         },
-        pageInit: {
-          type: Boolean,
-          value: false,
-        },
+
         name: {
           type: String,
         },
@@ -511,12 +516,6 @@
         return null;
       },
 
-      _pageChanged: function (page) {
-        if (page === this.name && !this.pageInit) {
-          this.pageInit = true;
-        }
-      },
-
       handleResponse: function (request) {
         var index, len, date;
         var response = request.detail.response;
@@ -572,6 +571,7 @@
         }
         this.customStyle['--background-img'] = 'url(' + img + ')';
         this.updateStyles();
+        this.$.layout.resetLayout();
       },
 
       _randomInteger: function (min, max) {

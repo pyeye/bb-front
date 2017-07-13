@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .content {
         transition: opacity 0.3s;
-        opacity: 0;
+        
         width: 100%;
         margin: 16px auto;
         @apply --layout-vertical;
@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-ajax id="ajax" auto url="https://borisbar.ru/api/v1/news/" handle-as="json" on-response="handleResponse"></iron-ajax>
 
 
-    <div class="content" has-content$="[[_isDefined(news)]]">
+    <div class="content">
 
       
 

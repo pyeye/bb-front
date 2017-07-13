@@ -16,13 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 
 <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+
+<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
@@ -32,6 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="bb-icons.html">
+<link rel="import" href="bb-event.html">
 
 
 
@@ -211,6 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             iron-icon.card-icon {
                 margin-bottom: 3px;
+                margin-right: 4px;
                 color: var(--app-primary-color);
                 --iron-icon-height: 20px;
                 --iron-icon-width: 20px;
@@ -327,10 +332,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     margin: 16px 0 0 0;
                 }
 
+                .card-date {
+                    margin-right: 8px;
+                }
+
+                .card-time {
+                    padding-left: 8px;
+                }
+
                 .content {
                     width: 95%;
                 }
             }
+
+            
         </style>
 
         <app-header-layout>
@@ -353,7 +368,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-header>
 
             <iron-ajax id="ajax" auto url="https://borisbar.ru/api/v1/events/" handle-as="json" on-response="handleResponse"></iron-ajax>
-
+            <iron-media-query query="max-width: 330px" query-matches="{{ultraSmallScreen}}"></iron-media-query>
             <app-localstorage-document key="events" data={{events}}></app-localstorage-document>
 
             <div id="ripple"></div>
@@ -362,12 +377,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <template is="dom-repeat" items="[[events]]" as="event" initial-count="8" on-dom-change="_doAnimation">
                     <paper-material class="card" elevation="2" animated="true" on-tap="_heroAnimationHandler">
                         <a class="link" href="/event/[[event.pk]]">
-                            <iron-image class="card-image" sizing="cover" preload fade src="[[_getImage(event)]]"></iron-image>
+                            <iron-image class="card-image" sizing="cover" fade src="[[_getImage(event)]]"></iron-image>
 
                             <div class="card-content">
                                 <div class="card-row">
                                     <div class="card-date">
-                                        <iron-icon class="card-icon" icon="event"></iron-icon> [[event.date.day]] [[event.date.month]], [[event.date.weekday]]
+                                        <iron-icon class="card-icon" icon="event"></iron-icon>[[event.date.day]] [[event.date.month]], [[_getWeekday(event)]]
                                     </div>
                                     <div class="card-time">
                                         <iron-icon class="card-icon" icon="access-time"></iron-icon> [[event.start]]
@@ -415,17 +430,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 animationConfig: {
                     value: function () {
                         return {
-                            'entry': [{
-                                name: 'ripple-animation',
-                                id: 'events-ripple',
-                                toPage: this,
-                            }, {
-                                name: 'hero-animation',
-                                id: 'events-hero',
-                                toPage: this,
-                            }, {
+                            'entry': [ {
                                 name: 'cascaded-animation',
                                 animation: 'slide-from-bottom-animation',
+                                timing: {
+                                    delay: 150
+                                },
                             }, {
                                 name: 'fade-in-animation',
                                 node: this.$.events,
@@ -460,8 +470,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 sharedElements: {
                     value: function () {
                         return {
-                            'events-hero': this.$.header,
-                            'events-ripple': this.$.ripple,
+                           
                         }
                     }
                 },
@@ -500,14 +509,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var items, itemsArray;
                 items = Polymer.dom(this.root).querySelectorAll('.card');
                 itemsArray = Array.prototype.slice.call(items);
-                this.animationConfig.entry[2].nodes = itemsArray;
+                this.animationConfig.entry[0].nodes = itemsArray;
+                this.playAnimation('entry');
+            },
+
+            _getWeekday: function(event) {
+                return this.ultraSmallScreen ? event.date.weekday_short : event.date.weekday;
             },
 
             behaviors: [
                 Polymer.NeonSharedElementAnimatableBehavior,
+                Polymer.NeonAnimationRunnerBehavior,
                 Polymer.IronResizableBehavior
             ],
-
 
             handleTap: function (e) {
                 this.fire('open-reservation-dialog', {
@@ -517,7 +531,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             handleResponse: function (request) {
                 var response = request.detail.response;
-                var index, len, date, options;
+                var dot = '.';
+                var index, len, date, date_short, options, options_short;
 
                 options = {
                     weekday: 'long',
@@ -525,13 +540,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     month: 'long',
                 };
 
+                options_short = {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'long',
+                };
+
                 for (index = 0, len = response.length; index < len; ++index) {
                     date = new Date(response[index].date);
                     date = date.toLocaleString("ru", options).split(/ |,|\./g);
+                    date_short = new Date(response[index].date);
+                    date_short = date_short.toLocaleString("ru", options_short).split(/ |,|\./g);
                     response[index].date = {
                         'weekday': date[0],
                         'day': date[2],
                         'month': date[3],
+                        'weekday_short': date_short[0]  + dot,
                         'original': response[index].date,
                     };
                     if (response[index].sales.length >= 1) {

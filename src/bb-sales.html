@@ -24,8 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-
-
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
@@ -62,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-toolbar.tall {
-        height: 300px;
+        height: 250px;
         padding-left: 20px;
       }
 
@@ -139,14 +138,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .content {
         @apply --layout-vertical;
         width: 80%;
-        min-height: 500px;
+        min-height: 570px;
         margin-top: 16px;
         margin-bottom: 16px;
         margin-left: auto;
         margin-right: auto;
         color: #fff;
-
-
         background-image: var(--sale-background-image);
         background-position: center center;
         background-repeat: no-repeat;
@@ -184,11 +181,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: 3;
       }
 
-      .sale-nav {
-        @apply --layout-horizontal;
-        @apply --layout-center-justified;
-        z-index: 3;
-      }
 
       .sale-main {
         @apply --layout-flex;
@@ -274,6 +266,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-tabs {
+        z-index: 3;
+        -webkit-transform: translate3d(0,0,0);
+        -webkit-transform: translateZ(1px);
         --paper-tabs-selection-bar-color: #fff;
         --paper-tabs: {
           color: rgba(255, 255, 255, 0.8);
@@ -293,6 +288,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       @media (max-width: 1450px) {
+        .content {
+        min-height: 500px;
+      }
         app-toolbar.tall {
           height: 200px;
         }
@@ -393,14 +391,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="cover-layer"></div>
         <div class="sale-month">
           [[month]].
-        </div>
-        <div class="sale-nav">
-          <paper-tabs selected="{{day}}" attr-for-selected="name" noink>
+        </div>     
+          <paper-tabs selected="{{day}}" attr-for-selected="name" noink scrollable fit-container no-bar>
             <template is="dom-repeat" items="[[sales]]" as="sale">
               <paper-tab name="[[sale.day.name]]" on-tap="_rippleHandler">[[sale.day.name]]</paper-tab>
             </template>
           </paper-tabs>
-        </div>
         <div class="sale-main">
           <neon-animated-pages selected="[[day]]" attr-for-selected="name">
             <template is="dom-repeat" items="[[sales]]" as="sale">
@@ -408,7 +404,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
           </neon-animated-pages>
         </div>
-        <bb-ripple id="sripple" style="pointer-events: none;" initial-opacity="1" opacity-decay-velocity="1" max-radius="900">
+        <bb-ripple id="sripple" style="pointer-events: none;" initial-opacity="1" opacity-decay-velocity="1" max-radius="1300">
           </paper-ripple>
       </paper-material>
     </app-header-layout>
@@ -445,10 +441,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: function () {
             return {
-              'Именинникам': '#004D40',
-              'Понедельник': '#006064',
+              'Именинникам': '#37474F',
+              'Понедельник': '#494c39',
               'Вторник': '#263238',
-              'Среда': '#104414',
+              'Среда': '#403d2c',
               'Четверг': '#3E2723',
               'Пятница': '#37474F',
               'Суббота': '#403d2c',
@@ -495,6 +491,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       behaviors: [
         Polymer.NeonAnimatableBehavior,
+        Polymer.NeonAnimationRunnerBehavior,
         Polymer.IronResizableBehavior
       ],
 
@@ -518,7 +515,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       ready: function () {
-
+        this.playAnimation('entry');
 
       },
 

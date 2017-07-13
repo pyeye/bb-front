@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-right-animation.html">
 
@@ -47,15 +48,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     
-      <app-header-layout>
- <app-header id="header" effects="fade-background" reveals>
+      
+      <app-header id="header" effects="fade-background" reveals>
         <app-toolbar>
             <paper-icon-button on-tap="_closePage" icon="arrow-back"></paper-icon-button>
         </app-toolbar>
-        <div title></div>
       </app-header>
       <bb-reservation-form id="form"></bb-reservation-form>
-      </app-header-layout>
      
       
   </template>
@@ -96,6 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       behaviors: [
                 Polymer.NeonAnimatableBehavior,
+                Polymer.NeonAnimationRunnerBehavior,
                 Polymer.IronResizableBehavior
             ],
 
@@ -106,12 +106,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _submitPage: function() {
         window.history.back();
         this.fire('reservation-form-send', {
-          'text': "Заявка отправлена.",
+          'text': "Стол забит. Жди звонка",
         });
       },
 
       _eventChanged: function(event) {
         this.$.form.setEvent(event);
+      },
+
+      ready: function() {
+        this.playAnimation('entry');
       },
       
     });

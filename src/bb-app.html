@@ -31,8 +31,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 
 <link rel="import" href="bb-icons.html">
-<link rel="import" href="bb-analytics.html">
-
 
 
 <dom-module id="bb-app">
@@ -41,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <style>
        :host {
-        overflow: hidden;
+        overflow-x:hidden;
         @apply --layout-fullbleed;
         --app-primary-color: #F44336;
         --app-secondary-color: #212121;
@@ -238,6 +236,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 11px 9px;
       }
       }
+
+      @media (max-width: 330px) {
+        .logo img {
+          width: 130px;
+        }
+      }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -291,7 +295,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <span class="contacts contact-logo"> Boris Bar</span><br>
                 <span class="contacts"> Drinks & Food</span><br>
                 <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp 16:00 - 06:00</span><br>
-                <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp 8 (351) 220 - 20 - 20</span>
+                <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp 8 (912) 470 - 71 - 97</span><br>
+                <span class="contacts">  <iron-icon icon="mail"></iron-icon>&nbsp office@borisbar.ru</span>
               </div>
             </div>
             <div class="social">
@@ -301,7 +306,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </a>
               </div>
               <div class="social-icon-container">
-                <a target="_blank" href="https://www.instagram.com/boris_bar/">
+                <a target="_blank" href="https://www.instagram.com/boris__bar/">
                   <iron-icon class="social-icon" icon="instagram"></iron-icon>
                 </a>
               </div>
@@ -313,14 +318,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
 
-      <neon-animated-pages selected="[[page]]" attr-for-selected="name" fallback-selection="events">
+      <neon-animated-pages selected="[[page]]" attr-for-selected="name" selected-attribute="active" fallback-selection="events" animate-initial-selection>
         <bb-menu name="menu">
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
         </bb-menu>
         <bb-events name="events" page=[[page]]>
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
         </bb-events>
-        <bb-event route={{subroute}} page=[[page]] name="event"></bb-event>
+        <bb-event route={{subroute}} name="event"></bb-event>
         <bb-sales name="sales" page=[[page]]>
           <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
         </bb-sales>
@@ -397,7 +402,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if((page === 'events' && oldPage === 'event') || 
           (page === 'gallery' && oldPage === 'album') ||
           (page === 'events' && oldPage === 'reservation')) {
-          window.scroll(0, this._offsetPage);
+          setTimeout(window.scroll, 200, 0, this._offsetPage);
         } else {
           setTimeout(window.scroll, 200, 0, 0);
         }

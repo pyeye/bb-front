@@ -51,7 +51,11 @@
     "paper-carousel": "Redbility/paper-carousel#^1.2.5",
     "l2t-paper-slider": "Link2Twenty/l2t-paper-slider#^1.4.1",
     "lg-hash.js": "^1.0.0",
-    "iron-swipeable-pages": "GeoloeG/iron-swipeable-pages#^1.2.9"
+    "iron-swipeable-pages": "GeoloeG/iron-swipeable-pages#^1.2.9",
+    "paper-tooltip": "PolymerElements/paper-tooltip#^2.0.0",
+    "bottom-nav": "greenyouse/bottom-nav#^0.2.0",
+    "app-bottom-nav": "samthecodingman/app-bottom-nav#^0.0.4",
+    "vaadin-icons": "^4.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

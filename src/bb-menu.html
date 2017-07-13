@@ -17,9 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-left-animation.html">
@@ -27,6 +26,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-left-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-nav.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-tab.html">
+<link rel="import" href="../bower_components/bottom-nav/bottom-toolbar.html">
 
 <link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-menu-list.html">
@@ -46,6 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ;
       }
 
+      [hidden] {
+        display: none;
+      }
+
       app-header {
         background-color: var(--app-primary-color);
         color: #FFFFFF;
@@ -56,9 +62,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ;
       }
 
+        bottom-nav {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+
 
       app-toolbar.tall {
-        height: 300px;
+        height: 250px;
         padding-left: 20px;
       }
 
@@ -188,6 +200,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+
     <app-header-layout>
       <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
         <app-toolbar>
@@ -209,7 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div id="ripple"></div>
 
-      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container>
+      <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" scrollable fit-container hidden$="[[smallScreen]]">
         <paper-tab group="kitchen">Кухня</paper-tab>
         <paper-tab group="bar">Бар</paper-tab>
         <paper-tab group="hookah">Hookah</paper-tab>
@@ -222,6 +236,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <bb-menu-list group="hookah" tab=[[tab]]></bb-menu-list>
         <bb-menu-list group="special" tab=[[tab]]></bb-menu-list>
       </neon-animated-pages>
+
+      <bottom-nav hidden$="[[!smallScreen]]">
+          <bottom-toolbar selected="{{tab}}" attr-for-selected="group" on-tap="_goToTop">
+             <bottom-tab group="kitchen"  label="Кухня" icon="restaurant-menu"></bottom-tab>
+             <bottom-tab  group="bar"  label="Бар" icon="local-bar"></bottom-tab>
+             <bottom-tab  group="hookah"  label="Hookah" icon="hookah"></bottom-tab>
+             <bottom-tab  group="special"  label="Сезон" icon="sunny"></bottom-tab>
+          </bottom-toolbar>
+      </bottom-nav>
     </app-header-layout>
 
 
@@ -252,18 +275,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         animationConfig: {
           value: function () {
             return {
-              'entry': [{
-                name: 'ripple-animation',
-                id: 'menu-ripple',
-                toPage: this,
-              }, {
-                name: 'hero-animation',
-                id: 'menu-hero',
-                toPage: this,
-              }, {
-                name: 'slide-from-bottom-animation',
-                node: this.$.content,
-              }, {
+              'entry': [  {
                 name: 'fade-in-animation',
                 node: this.$.content,
                 timing: {
@@ -273,7 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 name: 'fade-in-animation',
                 node: this.$.tab,
                 timing: {
-                  delay: 250
+                  delay: 150
                 },
               }, {
                 name: 'fade-in-animation',
@@ -296,20 +308,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
 
-        sharedElements: {
-          value: function () {
-            return {
-              'menu-hero': this.$.header,
-              'menu-ripple': this.$.ripple,
-            }
-          }
-        },
+        
       },
 
       behaviors: [
-        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.NeonAnimatableBehavior,
+        Polymer.NeonAnimationRunnerBehavior,
         Polymer.IronResizableBehavior
       ],
+
+      ready: function() {
+        this.playAnimation('entry');
+      },
 
       _mainTapped: function (e) {
         this.middleEntryAnimation = 'slide-from-right-animation';
@@ -319,6 +329,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _otherTapped: function (e) {
         this.middleEntryAnimation = 'slide-from-left-animation';
         this.middleExitAnimation = 'slide-left-animation';
+      },
+
+       _goToTop: function(e) {
+        setTimeout(window.scroll, 200, 0, 0);
       },
     });
   </script>

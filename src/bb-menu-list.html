@@ -32,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     :host {
       display: block;
       
-      width: 85%;
+      width: 80%;
       position: relative;
       margin: 0 auto;
     }
@@ -98,13 +98,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       :host {
       
-      width: 90%;
+      width: 85%;
       
     }
       
     }
 
     @media (max-width: 1050px) {
+      :host {
+      
+      width: 90%;
+      
+    }
       .card {
         -webkit-flex-basis: 46%;
           flex-basis: 46%;
@@ -171,49 +176,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     }
 
-    .sale-badge {
-      position: absolute;
-      left: -5px; top: -5px;
-      z-index: 1;
-      overflow: hidden;
-      width: 75px; height: 75px;
-      text-align: right;
-    }
-    .sale-badge span {
-      font-size: 12px;
-      font-weight: bold;
-      color: #FFF;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 20px;
-      transform: rotate(-45deg);
-      -webkit-transform: rotate(-45deg);
-      width: 100px;
-      display: block;
-      background-color: var(--app-primary-color) ;
-      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-      position: absolute;
-      top: 19px; left: -21px;
-    }
-    .sale-badge span::before {
-      content: "";
-      position: absolute; left: 0px; top: 100%;
-      z-index: -1;
-      border-left: 3px solid #8F0808;
-      border-right: 3px solid transparent;
-      border-bottom: 3px solid transparent;
-      border-top: 3px solid #8F0808;
-    }
-    .sale-badge span::after {
-      content: "";
-      position: absolute; right: 0px; top: 100%;
-      z-index: -1;
-      border-left: 3px solid transparent;
-      border-right: 3px solid #8F0808;
-      border-bottom: 3px solid transparent;
-      border-top: 3px solid #8F0808;
-    }
-
 
   
     </style>
@@ -261,9 +223,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _tabChanged: function(tab) {
         if(tab === this.group && !this.tabInit) {
-          this._generateRequest(this.group);
+          //this._generateRequest(this.group);
           this.tabInit = true;
         }
+      },
+
+      ready: function() {
+        this._generateRequest(this.group);
       },
 
       _generateRequest: function(group) {

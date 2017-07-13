@@ -35,6 +35,7 @@
     "css": {"minify": true},
     "html": {"minify": true},
     "addServiceWorker": true,
-    "bundle": true
+    "bundle": true,
+    "swPrecacheConfig": "sw-precache-config.js"
   }]
 }

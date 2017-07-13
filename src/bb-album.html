@@ -17,7 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
-<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
@@ -36,6 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-grid-columns: 4;
         --app-grid-gutter: 5px;
         --app-grid-item-height: 20vw;
+        --app-header-image: url(https://borisbar.ru/img/static/homepage/gallery.jpg);
       }
 
       app-header {
@@ -49,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-toolbar.tall {
-        height: 300px;
+        height: 250px;
         padding-left: 20px;
       }
 
@@ -248,8 +250,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax id="ajax" handle-as="json" on-response="handleResponse"></iron-ajax>
 
-
-    <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+    <app-header-layout id="layout">
+<app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
       <app-toolbar>
         <a href="/gallery" tabindex="-1">
           <paper-icon-button icon="arrow-back"></paper-icon-button>
@@ -262,15 +264,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-toolbar>
       <app-toolbar class="tall">
         <div main-title>
-          <iron-icon icon="star"></iron-icon>
+          <iron-icon icon="star" id="fleft"></iron-icon>
           <div class="title-label">[[headerTitle]]</div>
-          <iron-icon icon="star"></iron-icon>
+          <iron-icon icon="star" id="fright"></iron-icon>
         </div>
       </app-toolbar>
     </app-header>
 
     <div id="ripple"></div>
     <div id="lightgallery" class="content"></div>
+    </app-header-layout>
+    
 
 
     <!--
@@ -292,8 +296,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         active: {
           type: Boolean,
-          value: false,
-          reflectToAttribute: true
+          observer: '_activeChange'
         },
 
         initial: {
@@ -315,11 +318,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function () {
             return {
               'entry': [{
+                name: 'cascaded-animation',
+                animation: 'fade-in-animation',
+
+              },{
                 name: 'fade-in-animation',
-                node: this,
+                node: this.$.header,
                 timing: {
                   delay: 100
-                }
+                },
+              }, {
+                name: 'fade-in-animation',
+                node: this.$.fleft,
+                timing: {
+                  delay: 400
+                },
+              }, {
+                name: 'fade-in-animation',
+                node: this.$.fright,
+                timing: {
+                  delay: 450
+                },
               }],
               'exit': {
                 name: 'fade-out-animation',
@@ -328,56 +347,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
-
-        sharedElements: {
-          value: function () {
-            return {
-              'album-hero': this.$.header,
-              'album-ripple': this.$.ripple,
-            }
-          }
-        },
       },
 
-      listeners: {
-        'bb-render-neon-page': '_renderNeonPage',
-      },
+
 
       observers: [
         '_albumPageChanged(albumData.album)'
       ],
 
-      behaviors: [Polymer.NeonSharedElementAnimatableBehavior,
+      behaviors: [
+        Polymer.NeonAnimatableBehavior,
+        Polymer.NeonAnimationRunnerBehavior,
         Polymer.IronResizableBehavior
       ],
 
-      _renderNeonPage: function (e) {
-        layout = document.createElement('app-header-layout');
-        layout.id = "layout";
-        childNodes = Polymer.dom(this.root).childNodes;
-
-        for (var i = 0; i < childNodes.length; i++) {
-          Polymer.dom(layout).appendChild(childNodes[i]);
+      _activeChange: function(active) {
+        if(active) {
+          this.initial = false;
+          while (Polymer.dom(this.$.lightgallery).firstChild) {
+            Polymer.dom(this.$.lightgallery).removeChild(Polymer.dom(this.$.lightgallery).firstChild);
+          }
         }
-        Polymer.dom(this.root).appendChild(layout);
-        this.unlisten(this, 'bb-render-neon-page', '_renderNeonPage');
-        this.initial = true;
       },
 
-      _albumPageChanged: function (album) {
-        if (album !== undefined && this.route.prefix === '/album') {
-          if (!this.initial) {
-            this._renderNeonPage();
-          }
+      _albumPageChanged: function (album, oldAlbum) {
+        if (album !== undefined && this.route.prefix === '/album' && !this.initial) {
           this.$.ajax.url = ['https://borisbar.ru/api/v1/albums', album].join('/') + '/';
           this.$.ajax.generateRequest();
+          this.initial = true;
         }
       },
 
       _albumChanged: function (album) {
-        this.headerTitle = album.name;
-        this.customStyle['--app-header-image'] = 'url(' + album.main_image.original + ')';
-        this.updateStyles();
         lightGallery(this.$.lightgallery, {
           'thumbnail': true,
           'hash': true,
@@ -386,9 +387,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleResponse: function (request) {
-        while (Polymer.dom(this.$.lightgallery).firstChild) {
-          Polymer.dom(this.$.lightgallery).removeChild(Polymer.dom(this.$.lightgallery).firstChild);
-        }
+         var items, itemsArray;
+
+         
+
+        this.headerTitle = request.detail.response.name;
+        this.customStyle['--app-header-image'] = 'url(https://borisbar.ru' + request.detail.response.main_image.original + ')';
+        this.updateStyles();
+        this.$.layout.resetLayout();
         var img = [];
         for (var i = 0; i < request.detail.response.images.length; i++) {
           img[i] = document.createElement('a');
@@ -398,6 +404,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           ] + ' />';
           Polymer.dom(this.$.lightgallery).appendChild(img[i]);
         }
+
+        items = Polymer.dom(this.root).querySelectorAll('.card-container');
+        itemsArray = Array.prototype.slice.call(items);
+        this.animationConfig.entry[0].nodes = itemsArray;
+        this.playAnimation('entry');
 
         this.album = request.detail.response;
         scroll(0, 0)
