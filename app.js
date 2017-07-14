@@ -1,7 +1,16 @@
 // 4. Dynamically load web components polyfills based on feature detection.
+var buttonPressed = false;
+var logoEl = document.getElementById('splash-logo');
 var webComponentsSupported = ('registerElement' in document
     && 'import' in document.createElement('link')
     && 'content' in document.createElement('template'));
+
+logoEl.style.backgroundImage = screen.width < 550 ? 'url(https://borisbar.ru/img/static/preload_s.jpg)' : 'url(https://borisbar.ru/img/static/preload.jpg)';
+
+document.getElementById("preloading-confirm").addEventListener("click", function(e) {
+	buttonPressed = true;
+  finishLazyLoading();
+});
 
 if (!webComponentsSupported) {
   var script = document.createElement('script');
@@ -22,10 +31,12 @@ if ('serviceWorker' in navigator) {
 
 function finishLazyLoading() {
 
-  Promise.all([ importsLoadedDeferred ])
+  if(buttonPressed) {
+    Promise.all([ importsLoadedDeferred ])
     .then(function(imports) {
         var loadEl = document.getElementById('splash');
         var htmlEl = document.querySelector('html');
+        var appEl = document.getElementById('app');
 
         // transitionend is not consistant (doesnt always trigger),
         // you can detect if its supported
@@ -43,7 +54,10 @@ function finishLazyLoading() {
         // });
 
         document.body.classList.remove('loading');
+        appEl.classList.remove('hidden');
+        appEl.setAttribute('init', true);
 
         // App is visible and ready to load some data!
     });
+  }
 }

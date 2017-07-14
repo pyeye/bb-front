@@ -1,4 +1,4 @@
- <!--
+<!--
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -10,13 +10,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!doctype html>
 <html lang="ru" class="no-scroll">
+
 <head>
   <title>Boris Bar - Food & Drinks</title>
   <base href="/">
   <meta charset="utf-8">
   <meta name="theme-color" content="#F44336">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  
+
   <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
   <link href="https://fonts.googleapis.com/css?family=Oswald:500&amp;subset=cyrillic" rel="stylesheet">
   <link rel="import" href="/src/bb-app.html" id="htmlImport" async>
@@ -33,144 +34,119 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="apple-mobile-web-app-title" content="Boris Bar">
 
   <script>
-  var importsLoadedDeferred = new Promise(function(resolve, reject) {
+    var importsLoadedDeferred = new Promise(function (resolve, reject) {
       var htmlImport = document.querySelector('#htmlImport');
       htmlImport.addEventListener('load', resolve);
     });
-    window.Polymer = window.Polymer || {dom: 'shadow'};
+    window.Polymer = window.Polymer || {
+      dom: 'shadow'
+    };
   </script>
 
   <style>
+    .no-scroll,
+    body.loading {
+      overflow: hidden;
+    }
 
-  .no-scroll,
-  body.loading {
-    overflow: hidden;
-  }
-  body.loading #splash {
-    opacity: 1;
-  }
+    body.loading #splash {
+      opacity: 1;
+    }
 
-  #splash {
-    width: 100%;
-    height: 100%;
-    transition: opacity 200ms cubic-bezier(0,0,0.2,1);
-    opacity: 0;
-    will-change: opacity;
-    z-index: -111;
-    background-color: #232323;
-  }
+    #app.hidden {
+      visibility: hidden;
+    }
 
-  #splash-logo {
-    width: 100%;
-    height: 100%;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 2;
-  }
 
-  #splash-logo img {
-    width: 180px;
-  }
-  .progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 3px;
-  display: block;
-  width: 100%;
-  background-color: #232323;
-  border-radius: 2px;
-  background-clip: padding-box;
-  
-  overflow: hidden; }
-  .progress .indeterminate {
-    background-color: #E53935; }
-    .progress .indeterminate:before {
-      content: '';
+    #splash {
       position: absolute;
-      background-color: inherit;
       top: 0;
-      left: 0;
+      right: 0;
       bottom: 0;
-      will-change: left, right;
-      -webkit-animation: indeterminate 3.6s cubic-bezier(0.65, 0.815, 0.735, 0.1) infinite;
-              animation: indeterminate 3.6s cubic-bezier(0.65, 0.815, 0.735, 0.1) infinite; }
-    .progress .indeterminate:after {
-      content: '';
-      position: absolute;
-      background-color: inherit;
-      top: 0;
       left: 0;
-      bottom: 0;
-      will-change: left, right;
-      -webkit-animation: indeterminate-short 3.6s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-              animation: indeterminate-short 3.6s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-      -webkit-animation-delay: 2.35s;
-              animation-delay: 2.35s; }
+      transition: opacity 400ms cubic-bezier(0, 0, 0.2, 1);
+      opacity: 0;
+      will-change: opacity;
+      z-index: 1;
+      -webkit-transform: translateZ(1px);
+      transform: translateZ(1px);
+      background-color: #232323;
+    }
 
-@-webkit-keyframes indeterminate {
-  0% {
-    left: -100%;
-    right: 100%; }
-  60% {
-    left: 100%;
-    right: -100%; }
-  100% {
-    left: 100%;
-    right: -100%; } }
-@keyframes indeterminate {
-  0% {
-    left: -100%;
-    right: 100%; }
-  60% {
-    left: 100%;
-    right: -100%; }
-  100% {
-    left: 100%;
-    right: -100%; } }
-@-webkit-keyframes indeterminate-short {
-  0% {
-    left: -200%;
-    right: 100%; }
-  60% {
-    left: 107%;
-    right: -8%; }
-  100% {
-    left: 107%;
-    right: -8%; } }
-@keyframes indeterminate-short {
-  0% {
-    left: -200%;
-    right: 100%; }
-  60% {
-    left: 107%;
-    right: -8%; }
-  100% {
-    left: 107%;
-    right: -8%; } }
+    #splash-logo {
+      width: 100%;
+      height: 100%;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Roboto', 'Noto', sans-serif;
-    line-height: 1.5;
-    height: 100vh;
-    background-color: #202020;
-  }
+    .preloading-info {
+      color: #fff;
+      font-size: 24px;
+      letter-spacing: 4px;
+      font-family: 'Oswald', sans-serif;
+      line-height: 34px;
+      margin: 16px 0;
+    }
 
+    .preloading-row {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .preloading-buttons {
+      font-size: 18px;
+      letter-spacing: 4px;
+      font-family: 'Oswald', sans-serif;
+      line-height: 34px;
+      color: #fff;
+      margin: 0 16px;
+      padding: 4px 16px;
+      border: 2px solid #fff;
+      text-transform: uppercase;
+      transition: all ease .3s;
+      cursor: pointer;
+    }
+
+    .preloading-buttons:hover {
+      color: #F44336;
+      border: 2px solid #F44336;
+    }
+
+     a {
+      text-decoration: none;
+    }
+
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Noto', sans-serif;
+      line-height: 1.5;
+      height: 100vh;
+      background-color: #202020;
+    }
   </style>
 
 </head>
+
 <body class="loading">
   <div id="splash">
     <div id="splash-logo">
-      <img src="https://borisbar.ru/img/static/bb_logo_black.jpg" alt="" />
-      <div class="progress">
-        <div class="indeterminate"></div>
+      <div class="preloading-info">18 ЕСТЬ?</div>
+      <div class="preloading-row">
+        <div class="preloading-buttons" id="preloading-confirm">да</div>
+        <a href="https://www.lego.com/ru-ru"><div class="preloading-buttons" id="preloading-dismiss">нет</div></a>
       </div>
+
     </div>
   </div>
 
@@ -178,7 +154,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
   <script src="bower_components/lg-hash.js/dist/lg-hash.min.js"></script>
 
-  <bb-app></bb-app>
+  <bb-app id="app" class="hidden"></bb-app>
   <script src="app.js" async></script>
 </body>
+
 </html>
