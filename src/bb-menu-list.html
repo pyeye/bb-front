@@ -19,7 +19,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-menu-category.html">
 
 
@@ -38,14 +37,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .content {
-      margin-top: 16px;
-      margin-bottom: 16px;
+      margin-top: 32px;
+      margin-bottom: 32px;
       transition: opacity 0.3s;
-      opacity: 0;
-    }
-
-    .content[has-content]{
-      opacity: 1;
     }
 
       .menu-category {
@@ -123,8 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
       }
       .content {
-      margin-top: 0;
-      margin-bottom: 0;
+      margin: 0 0 64px 0;
       
     }
       .card {
@@ -184,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                handle-as="json"
                last-response="{{categories}}"></iron-ajax>
 
-   <div class="content" has-content$="[[_isDefined(categories)]]">
+   <div class="content">
      <template is="dom-repeat" items="[[categories]]" as="category">
        <bb-menu-category category="[[category]]"></bb-menu-category>
      </template>
@@ -205,15 +198,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
         },
 
-        tab: {
-          type: String,
-          observer: '_tabChanged'
-        },
-
-        tabInit: {
-          type: Boolean,
-          value: false,
-        },
       },
 
       behaviors: [
@@ -221,12 +205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer.IronResizableBehavior
       ],
 
-      _tabChanged: function(tab) {
-        if(tab === this.group && !this.tabInit) {
-          //this._generateRequest(this.group);
-          this.tabInit = true;
-        }
-      },
+   
 
       ready: function() {
         this._generateRequest(this.group);

@@ -33,8 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
-
-<link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-event.html">
 
 
@@ -134,10 +132,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             app-toolbar {
                 color: white;
-            }
-
-            .content[has-content] {
-                opacity: 1;
             }
 
             .content {
@@ -373,7 +367,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <div id="ripple"></div>
 
-            <div class="content" has-content$="[[_isDefined(events)]]" id="events">
+            <div class="content" id="events">
                 <template is="dom-repeat" items="[[events]]" as="event" initial-count="8" on-dom-change="_doAnimation">
                     <paper-material class="card" elevation="2" animated="true" on-tap="_heroAnimationHandler">
                         <a class="link" href="/event/[[event.pk]]">

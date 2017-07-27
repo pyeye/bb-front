@@ -13,8 +13,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 
-<link rel="import" href="bb-icons.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-top-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+
 
 <dom-module id="bb-menu-category">
 
@@ -22,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <style>
              :host {
-                margin-bottom: 16px;
+                margin-bottom: 0;
                 display: block;
                 --iron-icon-fill-color: #FFFFFF;
                 --iron-icon-height: 18px;
@@ -32,20 +37,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             paper-material {
                 @apply --layout-vertical;
-                padding: 16px;
                 width: 80%;
-                margin: 32px auto 32px auto;
+                padding: 0;
+                    margin: 0 auto;
+
+                    margin-bottom: 0;
+                    border-bottom: 1px solid #191919;
                 background-color: #252525;
                 color: #FFFFFF;
-                
             }
+
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
+
+            .menu-list {
+                    display: none;
+                    background-color: #202020;
+                }
 
             [hidden] {
                 display: none;
             }
 
             .category-title {
-                margin: 8px 0 16px 0;
+                position: relative;
+                padding: 16px;
                 text-transform: uppercase;
                 font-family: 'Oswald', sans-serif !important;
                 @apply --paper-font-headline;
@@ -53,16 +70,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --layout-center-justified;
                 letter-spacing: 2px;
                 font-size: 26px;
+                cursor: pointer;
             }
+
+            .category-expend {
+                    position: absolute;
+                    right: 16px;
+                    top: 35%;
+                    --iron-icon-height: 18px;
+                    --iron-icon-width: 18px;
+                }
 
             iron-icon {
                 margin: auto 6px;
             }
 
+            .menu-price-measure-count{
+                margin-right: 4px;
+            }
+
             .menu-position {
                 padding: 16px;
                 @apply --layout-horizontal;
-                border-bottom: 1px solid #191919;
+                border-bottom: 1px solid #181818;
             }
 
             .menu-position:last-of-type {
@@ -79,6 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .menu-info {
                 @apply --layout-flex;
                 @apply --layout-vertical;
+                margin-right: 16px;
             }
 
             .menu-description {
@@ -89,17 +120,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .menu-price {
                 @apply --layout-horizontal;
+                min-width: 61px;
             }
 
             .menu-price-box {
                 @apply --layout-vertical;
 
-                margin-left: 16px;
+
             }
 
             .menu-price-value {
                 @apply --paper-font-headline;
-                text-align: center;
+                
             }
 
             .menu-price-measure {
@@ -107,13 +139,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --paper-font-body1;
             }
 
-            @media (max-width: 1450px) {
-                paper-material {
-                    
-                    
-                    margin: 32px 24px 32px 24px;
-                    width: auto;
-                }
+            @media (max-width: 1050px) {
+
+                 paper-material {
+                
+                width: 90%;
+                
+            }
+
+            .menu-info {
+        
+                margin-right: 8px;
+            }
+
+                
             }
 
             @media (max-width: 550px) {
@@ -125,26 +164,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     margin-bottom: 0;
                 }
 
+                
+
+
+
                 paper-material {
-                    padding: 8px;
+                    padding: 0;
                     margin: 0;
+                    width: 100%;
 
                     margin-bottom: 0;
+                    border-bottom: 1px solid #191919;
                 }
 
                 .menu-position {
-                    padding: 8px;
+                    padding: 16px;
                 }
 
                 .category-title {
-                    font-size: 20px;
-                    margin-top: 16px;
-                    margin-bottom: 16px;
+                    font-size: 18px;
+                    letter-spacing: 0.8px;
+                    padding: 16px;
+                    margin: 0;
+                    z-index: 1;
+                    
                 }
+
+                
 
                 .menu-title {
                     font-size: 18px;
                     line-height: 24px;
+                }
+
+                .menu-info {
+                    margin-right: 8px;
                 }
 
                 .menu-price-value {
@@ -152,41 +206,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 .menu-price {
                     @apply --layout-vertical;
+                    text-align: left;
+                    min-width: 52px;
                 }
             }
         </style>
 
+        <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+
         <iron-ajax id="ajax" handle-as="json" last-response="{{menu}}"></iron-ajax>
 
         <paper-material hidden$="[[_isDefined(menu)]]">
-            <div class="category-title">
-                <iron-icon icon="star"></iron-icon><div>[[category.name]]</div>
-                <iron-icon icon="star"></iron-icon>
+            <div class="category-title" on-tap="_tapHandler" id="title">
+                <iron-icon icon="star" hidden$="[[smallScreen]]"></iron-icon>
+                <div class="category-name">[[category.name]]</div>
+                <iron-icon icon="star" hidden$="[[smallScreen]]"></iron-icon>
+                <iron-icon class="category-expend" icon="[[expandIcon]]" ></iron-icon>
+                <paper-ripple></paper-ripple>
             </div>
-            <template is="dom-repeat" items="[[menu]]">
-                <div class="menu-position">
-                    <div class="menu-info">
-                        <div class="menu-title">[[item.name]]</div>
-                        <div class="menu-description">
-                            <div>[[item.description]]</div>
+            <div class="menu-list" id="list">
+                <template is="dom-repeat" items="[[menu]]">
+                    <div class="menu-position">
+                        <div class="menu-info">
+                            <div class="menu-title">[[item.name]]</div>
+                            <div class="menu-description">
+                                <div>[[item.description]]</div>
+                            </div>
+                        </div>
+
+                        <div class="menu-price">
+                            <template is="dom-repeat" items="[[item.prices]]" as="price">
+                                <div class="menu-price-box">
+                                    <div class="menu-price-value">[[price.value]] &#x20bd;</div>
+                                    <div class="menu-price-measure">
+                                        <div class="menu-price-measure-count">[[price.count]]</div>
+                                        <div>[[price.measure]]</div>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
-                    <div class="menu-price">
-                        <template is="dom-repeat" items="[[item.prices]]" as="price">
-                            <div class="menu-price-box">
-                                <div class="menu-price-value">[[price.value]] &#x20bd;</div>
-                                <div class="menu-price-measure">
-                                    <div>[[price.count]]</div>
-                                    <div>[[price.measure]]</div>
-                                </div>
+                </template>
+            </div>
 
-
-                            </div>
-
-                        </template>
-                    </div>
-                </div>
-            </template>
         </paper-material>
 
     </template>
@@ -195,13 +257,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'bb-menu-category',
 
+            behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+            listeners: {
+                'neon-animation-finish': '_onNeonAnimationFinish'
+            },
+
             properies: {
                 category: Object,
                 menu: Array,
+                opened: {
+                    type: Boolean,
+                },
+                expandIcon: {
+                    type: String,
+                    value: 'expand-more',
+                }
             },
 
             ready: function () {
+                this.expandIcon = 'expand-more';
+                this.opened = this.smallScreen ? false : true;
                 this._generateRequest(this.category);
+            },
+
+            _isDefined: function (menu) {
+                return menu.length == 0;
             },
 
             _generateRequest: function (category) {
@@ -209,8 +290,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.ajax.generateRequest();
             },
 
-            _isDefined: function (menu) {
-                return menu.length == 0;
+            _tapHandler: function (e) {
+                
+                    this._toggleList()
+           
+            },
+
+            _getHeight: function (el) {
+                var el_style = window.getComputedStyle(el),
+                    el_display = el_style.display,
+                    el_position = el_style.position,
+                    el_visibility = el_style.visibility,
+                    el_max_height = el_style.maxHeight.replace('px', '').replace('%', ''),
+
+                    wanted_height = 0;
+
+
+                // if its not hidden we just return normal height
+                if (el_display !== 'none' && el_max_height !== '0') {
+                    return el.offsetHeight;
+                }
+
+                // the element is hidden so:
+                // making the el block so we can meassure its height but still be hidden
+                el.style.position = 'absolute';
+                el.style.visibility = 'hidden';
+                el.style.display = 'block';
+
+                wanted_height = el.offsetHeight;
+
+                // reverting to the original values
+                el.style.display = el_display;
+                el.style.position = el_position;
+                el.style.visibility = el_visibility;
+
+                return wanted_height;
+            },
+
+            _toggleList: function () {
+                var el = this.$.list;
+                var el_max_height = 0;
+
+                if (el.getAttribute('data-max-height')) {
+                    
+                    // we've already used this before, so everything is setup
+                    if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
+                        el.style.maxHeight = el.getAttribute('data-max-height');
+                        this.$.title.style.boxShadow = '0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2)'
+                        this.expandIcon = 'expand-less';
+                    } else {
+                        this.expandIcon = 'expand-more';
+                        el.style.maxHeight = '0';
+                        this.$.title.style.boxShadow = '';
+                    }
+                } else {
+                    el_max_height = this._getHeight(el) + 'px';
+                    el.style['transition'] = 'max-height 0.4s ease-in-out';
+                    el.style.overflowY = 'hidden';
+                    el.style.maxHeight = '0';
+                    el.setAttribute('data-max-height', el_max_height);
+                    el.style.display = 'block';
+                    this.expandIcon = 'expand-less';
+                    this.$.title.style.boxShadow = '0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2)'
+                    // we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+                    setTimeout(function () {
+                        el.style.maxHeight = el_max_height;
+                    }, 10);
+                }
             },
 
         });

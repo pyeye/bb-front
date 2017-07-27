@@ -1,0 +1,269 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<dom-module id="bb-about-news-item">
+
+    <template>
+
+        <style>
+             :host {
+                display: block;
+            }
+
+            [hidden] {
+                display: none;
+            }
+
+
+
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
+
+
+
+            .material {
+                margin: 24px;
+                border-radius: 3px;
+                background-color: #252525;
+                color: #FFFFFF;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                min-height: 350px;
+                @apply --layout-horizontal;
+            }
+
+            .image {
+                width: 35%;
+            }
+
+            .text {
+                width: 65%;
+                padding: 16px;
+            }
+
+            .text-title {
+                @apply --paper-font-headline;
+                font-size: 28px;
+            }
+
+            .info {
+                margin: 8px 0 16px 0;
+                @apply --layout-horizontal;
+                @apply --paper-font-body1;
+                align-items: center;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .info-desc {
+                @apply --layout-horizontal;
+                @apply --layout-flex;
+            }
+
+            .category {
+                letter-spacing: 0.7px;
+            }
+
+            .date {
+                padding-left: 16px;
+                letter-spacing: 1px;
+            }
+
+            .category-border {
+                display: inline-block;
+                border-top: 1px solid var(--app-primary-color);
+                border-bottom: 1px solid var(--app-primary-color);
+            }
+
+            .description {
+                @apply --paper-font-body1;
+                font-size: 16px;
+            }
+
+            .info iron-icon {
+                --iron-icon-height: 24px;
+                --iron-icon-width: 24px;
+            }
+
+
+
+            iron-image {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+
+            @media (max-width: 550px) {
+                iron-image {
+
+                    height: 250px;
+                }
+                .image {
+                    width: 100%;
+                    height: 250px;
+                }
+                .text {
+                    position: relative;
+                    width: 100%;
+                    padding: 0 0 16px 0;
+                }
+                .text-title {
+                    padding: 8px 16px;
+                    font-size: 24px;
+                }
+                .description {
+                    padding: 0 16px;
+                }
+                .info {
+                    padding: 0 16px;
+                    font-size: 14px;
+                    margin: 0;
+                }
+                .material {
+                    @apply --layout-vertical;
+                    margin: 16px;
+                    min-height: 250px;
+                }
+
+                .description {
+                    font-size: 14px;
+                }
+            }
+        </style>
+
+        <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+        <div class="material">
+            <div class="image">
+                <iron-image class="card-image" sizing="cover" preload fade src="[[news.image.thumbnail]]"></iron-image>
+            </div>
+            <div class="text" on-tap="_supportTextHandler">
+                <div class="text-title">[[news.title]]</div>
+                <div class="info">
+                    <div class="info-desc">
+                        <div class="category">
+                            <div class="category-border">
+                                [[news.category.name]]
+                            </div>
+                        </div>
+                        <div class="date">
+                            [[news.date.short]]
+                        </div>
+                    </div>
+                    <iron-icon icon$="[[expandIcon]]" hidden$="[[!smallScreen]]">
+                        </icon-icon>
+
+                </div>
+                <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+                <div class="description" id="description" hidden$="[[smallScreen]]">
+                    <marked-element markdown="[[news.description]]">
+                        <div class="markdown-html custom"></div>
+                    </marked-element>
+                </div>
+            </div>
+
+        </div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'bb-about-news-item',
+
+            properties: {
+                expandIcon: {
+                    type: String,
+                    value: 'expand-more',
+                }
+
+            },
+
+            _supportTextHandler: function (e) {
+                if (this.smallScreen) {
+                    this._toggleList()
+
+                }
+
+            },
+
+            _getHeight: function (el) {
+                var el_style = window.getComputedStyle(el),
+                    el_display = el_style.display,
+                    el_position = el_style.position,
+                    el_visibility = el_style.visibility,
+                    el_max_height = el_style.maxHeight.replace('px', '').replace('%', ''),
+
+                    wanted_height = 0;
+
+
+                // if its not hidden we just return normal height
+                if (el_display !== 'none' && el_max_height !== '0') {
+                    return el.offsetHeight;
+                }
+
+                // the element is hidden so:
+                // making the el block so we can meassure its height but still be hidden
+                el.style.position = 'absolute';
+                el.style.visibility = 'hidden';
+                el.style.display = 'block';
+
+                wanted_height = el.offsetHeight;
+
+                // reverting to the original values
+                el.style.display = el_display;
+                el.style.position = el_position;
+                el.style.visibility = el_visibility;
+
+                return wanted_height;
+            },
+
+            _toggleList: function () {
+                var el = this.$.description;
+                var el_max_height = 0;
+
+                if (el.getAttribute('data-max-height')) {
+
+                    // we've already used this before, so everything is setup
+                    if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
+                        el.style.maxHeight = el.getAttribute('data-max-height');
+                        this.expandIcon = 'expand-less';
+                    } else {
+                        this.expandIcon = 'expand-more';
+                        el.style.maxHeight = '0';
+                    }
+                } else {
+                    el_max_height = this._getHeight(el) + 'px';
+                    el.style['transition'] = 'max-height 0.4s ease-in-out';
+                    el.style.overflowY = 'hidden';
+                    el.style.maxHeight = '0';
+                    el.setAttribute('data-max-height', el_max_height);
+                    el.style.display = 'block';
+                    this.expandIcon = 'expand-less';
+                    // we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+                    setTimeout(function () {
+                        el.style.maxHeight = el_max_height;
+                    }, 10);
+                }
+            },
+        });
+    </script>
+
+</dom-module>

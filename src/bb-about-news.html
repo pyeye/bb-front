@@ -18,7 +18,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="bb-icons.html">
+
+<link rel="import" href="bb-about-news-item.html">
 
 <dom-module id="bb-about-news">
 
@@ -201,36 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
     <div class="content" has-content$="[[_isDefined(news)]]">
         <template is="dom-repeat" items="[[news]]">
-            <paper-material class="material">
-                <div class="image">
-                    <iron-image class="card-image" sizing="cover" preload fade src="[[item.image.thumbnail]]"></iron-image>
-                </div>
-                <div class="text">
-                    <div class="text-title">[[item.title]]</div>
-                    <div class="info">
-                        <div class="info-desc">
-                            <div class="category">
-                                <div class="category-border">
-                                    [[item.category.name]]
-                                </div>
-                            </div>
-                            <div class="date">
-                                [[item.date.short]]
-                            </div>
-                        </div>
-                        <paper-icon-button icon="expand-more" hidden on-tap="_supportTextHandler"></paper-icon-button>
-                        
-                    </div>
-                    <div class="description">
-                        <div id="[[_makeId(item)]]">
-                            <marked-element markdown="[[item.description]]">
-                                <div class="markdown-html custom"></div>
-                            </marked-element>
-                        </div>
-                    </div>
-                </div>
-                
-            </paper-material>
+            <bb-about-news-item news="[[item]]"></bb-about-news-item>
         </template>
 
 
@@ -245,23 +217,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _isDefined: function(news) {
         return news != null;
-      },
-
-      _supportTextHandler: function(e) {
-          var pk, icon, support_text;
-          icon = Polymer.dom(e).localTarget.icon;
-          pk = '#id-' + e.model.__data__.item.pk
-          support_text = this.$$(pk);
-          Polymer.dom(e).localTarget.icon = icon == 'expand-more' ? 'expand-less' : 'expand-more';
-          support_text.classList.value = support_text.classList.value == 'show' ? 'hide' : 'show';
-      },
-
-      _makeInitialStyle: function() {
-          return this.smallScreen ? 'hide' : 'show';
-      },
-
-      _makeId: function(item) {
-        return 'id-' + item.pk;
       },
 
       handleResponse: function(request) {

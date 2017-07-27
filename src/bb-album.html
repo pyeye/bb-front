@@ -23,8 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
 
-<link rel="import" href="bb-icons.html">
 
 
 <dom-module id="bb-album">
@@ -272,7 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-header>
 
     <div id="ripple"></div>
-    <div id="lightgallery" class="content"></div>
+    <div  class="content"></div>
     </app-header-layout>
     
 
@@ -318,14 +318,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function () {
             return {
               'entry': [{
-                name: 'cascaded-animation',
-                animation: 'fade-in-animation',
-
-              },{
                 name: 'fade-in-animation',
-                node: this.$.header,
+                node: this,
                 timing: {
-                  delay: 100
+                  delay: 150
                 },
               }, {
                 name: 'fade-in-animation',
@@ -362,11 +358,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _activeChange: function(active) {
+        var gallery;
         if(active) {
           this.initial = false;
-          while (Polymer.dom(this.$.lightgallery).firstChild) {
-            Polymer.dom(this.$.lightgallery).removeChild(Polymer.dom(this.$.lightgallery).firstChild);
-          }
+          Polymer.dom(this.$.layout).removeChild(Polymer.dom(this.$.layout).lastChild); 
+          gallery = document.createElement('div')
+          gallery.className = 'content';
+          Polymer.dom(this.$.layout).appendChild(gallery);
         }
       },
 
@@ -379,22 +377,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _albumChanged: function (album) {
-        lightGallery(this.$.lightgallery, {
+        lightGallery(Polymer.dom(this.$.layout).lastChild, {
           'thumbnail': true,
           'hash': true,
         });
+        
 
       },
 
       handleResponse: function (request) {
-         var items, itemsArray;
-
-         
-
+         var items, itemsArray, gallery;
+         var fragment = document.createDocumentFragment();
+  
         this.headerTitle = request.detail.response.name;
         this.customStyle['--app-header-image'] = 'url(https://borisbar.ru' + request.detail.response.main_image.original + ')';
         this.updateStyles();
         this.$.layout.resetLayout();
+        
         var img = [];
         for (var i = 0; i < request.detail.response.images.length; i++) {
           img[i] = document.createElement('a');
@@ -402,13 +401,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           img[i]['innerHTML'] = '<img class="card-container" src=' + request.detail.response.images[i]['image'][
             'thumbnail'
           ] + ' />';
-          Polymer.dom(this.$.lightgallery).appendChild(img[i]);
+          fragment.appendChild(img[i]);
+          
         }
 
-        items = Polymer.dom(this.root).querySelectorAll('.card-container');
-        itemsArray = Array.prototype.slice.call(items);
-        this.animationConfig.entry[0].nodes = itemsArray;
-        this.playAnimation('entry');
+        Polymer.dom(Polymer.dom(this.$.layout).lastChild).appendChild(fragment);
 
         this.album = request.detail.response;
         scroll(0, 0)

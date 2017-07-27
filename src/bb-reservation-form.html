@@ -27,7 +27,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 
-<link rel="import" href="bb-icons.html">
 
 
 <dom-module id="bb-reservation-form">
@@ -95,6 +94,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-button[not-valid] {
         background: #81C784;
+      }
+
+      paper-button[processing] {
+        pointer-events: none;
         cursor: auto;
       }
 
@@ -408,7 +411,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-button>
       </div>
       
-      <paper-button raised on-tap="submitForm" not-valid$="[[!validators.summary]]">
+      <paper-button raised on-tap="submitForm" not-valid$="[[!validators.summary]]" processing$="[[loading]]">
         <div class="loading-box">
           <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
           <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>

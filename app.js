@@ -22,12 +22,6 @@ if (!webComponentsSupported) {
   finishLazyLoading();
 }
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
-
 
 function finishLazyLoading() {
 
@@ -55,7 +49,6 @@ function finishLazyLoading() {
 
         document.body.classList.remove('loading');
         appEl.classList.remove('hidden');
-        appEl.setAttribute('init', true);
 
         // App is visible and ready to load some data!
     });

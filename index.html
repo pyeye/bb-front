@@ -33,6 +33,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Boris Bar">
 
+  <meta property="og:title" content="Все свои" />
+  <meta property="og:type" content="main" />
+  <meta property="og:url" content="https://borisbar.ru/" />
+  <meta property="og:image" content="https://borisbar.ru/img/static/og_logo_black.jpg" />
+
   <script>
     var importsLoadedDeferred = new Promise(function (resolve, reject) {
       var htmlImport = document.querySelector('#htmlImport');
@@ -82,9 +87,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      background-position: center center;
+      background-position: center bottom;
       background-repeat: no-repeat;
       background-size: cover;
+    }
+
+    .cover {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #313131;
+      opacity: 0.6;
     }
 
     .preloading-info {
@@ -94,6 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       font-family: 'Oswald', sans-serif;
       line-height: 34px;
       margin: 16px 0;
+      z-index: 1;
     }
 
     .preloading-row {
@@ -101,6 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: -webkit-flex;
       display: flex;
       flex-direction: row;
+      z-index: 1;
     }
 
     .preloading-buttons {
@@ -134,6 +151,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       height: 100vh;
       background-color: #202020;
     }
+
+    @media (max-width: 550px) {
+        .preloading-info {
+            margin-top: 100px;
+        }
+      }
   </style>
 
 </head>
@@ -141,6 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body class="loading">
   <div id="splash">
     <div id="splash-logo">
+      <div class="cover"></div>
       <div class="preloading-info">18 ЕСТЬ?</div>
       <div class="preloading-row">
         <div class="preloading-buttons" id="preloading-confirm">да</div>

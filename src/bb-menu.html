@@ -30,7 +30,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/bottom-nav/bottom-tab.html">
 <link rel="import" href="../bower_components/bottom-nav/bottom-toolbar.html">
 
-<link rel="import" href="bb-icons.html">
 <link rel="import" href="bb-menu-list.html">
 
 <dom-module id="bb-menu">
@@ -231,10 +230,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-tabs>
 
       <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-        <bb-menu-list group="kitchen" tab=[[tab]]></bb-menu-list>
-        <bb-menu-list group="bar" tab=[[tab]]></bb-menu-list>
-        <bb-menu-list group="hookah" tab=[[tab]]></bb-menu-list>
-        <bb-menu-list group="special" tab=[[tab]]></bb-menu-list>
+        <bb-menu-list group="kitchen"></bb-menu-list>
+        <bb-menu-list group="bar"></bb-menu-list>
+        <bb-menu-list group="hookah"></bb-menu-list>
+        <bb-menu-list group="special"></bb-menu-list>
       </neon-animated-pages>
 
       <bottom-nav hidden$="[[!smallScreen]]">
